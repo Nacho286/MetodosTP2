@@ -3,10 +3,14 @@ char ch_cap ( char ch );
 bool pgmb_check_data ( int xsize, int ysize, unsigned char maxg, unsigned char *g );
 bool pgmb_example ( int xsize, int ysize, unsigned char *g );
 
+//bool pgmb_read ( string file_in_name, int &xsize, int &ysize, 
+//  unsigned char &maxg, unsigned char **g );
 bool pgmb_read ( string file_in_name, int &xsize, int &ysize, 
-  unsigned char &maxg, unsigned char **g );
+  unsigned char &maxg, vector<double> &g );
+// bool pgmb_read_data ( ifstream &file_in, int xsize, int ysize, 
+//   unsigned char *g );
 bool pgmb_read_data ( ifstream &file_in, int xsize, int ysize, 
-  unsigned char *g );
+  vector<double> &g );
 bool pgmb_read_header ( ifstream &file_in, int &xsize, int &ysize, 
   unsigned char &maxg );
 bool pgmb_read_test ( string file_in_name );

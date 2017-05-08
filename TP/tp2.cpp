@@ -25,12 +25,22 @@ vector<string> split(const string &s, char delim) {
 	return elems;
 }
 
+vector<vector<double> > trasponer(const vector<vector<double> >  &matriz, int filas, int cols){
+	vector<vector<double> > traspuesta(cols, vector<double>(filas));
+
+	for (int i = 0; i < cols; i++)
+		for (int j = 0; j < filas; j++)
+			traspuesta[i][j] = matriz[j][i];
+
+	return traspuesta;
+}
+
 int main(int args, char* argsv[]){
 	// Para probar, el argumento es la dir de una imagen
 	// int fils, cols;
 	// unsigned char maxG;
-	// unsigned char *g;
-	// if(pgmb_read(argsv[1], fils, cols, maxG, &g)){
+	// vector<double> imagen;
+	// if(pgmb_read(argsv[1], fils, cols, maxG, imagen)){
 	// 	cout << "Error al leer el archivo" << endl;
 	// 	return 1;
 	// }
@@ -40,9 +50,9 @@ int main(int args, char* argsv[]){
 
 	// for(int i = 0; i < fils * cols; i++){
 	// 	if (i % fils == fils - 1)
-	// 		cout << to_string(g[i]) + " " << endl;
+	// 		cout << to_string(imagen[i]) + " " << endl;
 	// 	else	
-	// 		cout << to_string(g[i]) + " ";
+	// 		cout << to_string(imagen[i]) + " ";
 	// }
 
 	// Primer argumento: archivo de entrada, donde la primera linea especifica:
@@ -62,10 +72,13 @@ int main(int args, char* argsv[]){
 	nimgp = stoi(datos[4]);
 	k     = stoi(datos[5]);
 
+	int n = p * nimgp;
+	int m = fils * cols;
 	int pos = 0;
-	unsigned char *imagenes[p * nimgp];			// Arreglo de punteros donde se almacena la posicion del vector de cada imagen (en filas)
-	//Haciendo módulo p de la posición se puede obtener a qué persona corresponde cada imagen
-	//Recordar que p empieza en 1 y la posición en 0, por lo que habría que sumarle 1 para saber a quién corresponde.
+	vector<vector<double> > X (n, vector<double>(m));
+	//Matriz donde cada fila corresponde a una imagen distinta
+	//Dividiendo la posicion por nimgp (y sumando 1) obtengo a qué persona pertenece la imagen
+	//Cada fila es un vector de tamaño m = fils * cols
 
 	//Cargo cada imagen en memoria:
 	for (int i = 0; i < p; i++){
@@ -73,13 +86,38 @@ int main(int args, char* argsv[]){
 		datos = split(linea, ' ');
 		for (int j = 1; j <= nimgp; j++){
 			string file = path + datos[0] + datos[j] + ".pgm";
-			if (pgmb_read(file, fils, cols, maxG, &(imagenes[pos]))){
+			if (pgmb_read(file, fils, cols, maxG, X[pos])){
 				cout << "Error al leer el archivo " << file << endl;
 				return 1;
 			}
 			pos++;
 		}
 	}
+	//Creo una copia para calcular la transformacion caracteristica de los vectores imagen despues
+	vector<vector<double> > imagenes = X;
+
+	//Calculo el promedio de las imagenes (se calcula por columnas)
+	vector<double> mu(m, 0.0);
+	for (int j = 0; j < m; j++){
+		for (int i = 0; i < n; i++)
+			mu[j] += X[i][j];
+		mu[j] = mu[j] / n;
+	}
+
+	//Calculo los valores de X
+	double raiz_n = sqrt(n - 1);
+	for (int i = 0; i < n; i++){
+		for (int j = 0; j < m; j++){
+			X[i][j] -= mu[j];
+			X[i][j] = X[i][j] / raiz_n;
+		}
+	}
+
+	//Calculo la traspuesta de X
+	vector<vector<double> > X_t = trasponer(X, n, m);
+
+	//Ahora hay que hacer X_t * X
+	//Podemos hacer un archivo aparte con todas las operaciones de matrices (si hace falta)
 
 	getline(entrada, linea);
 	int ntest = stoi(linea);			// Cantidad de imagenes a testear
@@ -88,8 +126,8 @@ int main(int args, char* argsv[]){
 		datos = split(linea, ' ');
 		string path_test = datos[0];
 		int persona = stoi(datos[1]);
-		unsigned char *imagen;
-		if (pgmb_read(path_test, fils, cols, maxG, &imagen)){
+		vector<double> imagen(fils * cols);
+		if (pgmb_read(path_test, fils, cols, maxG, imagen)){
 			cout << "Error al leer el archivo de prueba " << path_test << endl;
 			return 1;
 		}

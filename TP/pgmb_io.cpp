@@ -3,6 +3,7 @@
 # include <iomanip>
 # include <fstream>
 # include <cmath>
+# include <vector>
 
 using namespace std;
 
@@ -203,7 +204,7 @@ bool pgmb_example ( int xsize, int ysize, unsigned char *g )
 //****************************************************************************80
 
 bool pgmb_read ( string input_name, int &xsize, int &ysize, 
-  unsigned char &maxg, unsigned char **g )
+  unsigned char &maxg, vector<double> &g)
 
 //****************************************************************************80
 //
@@ -271,11 +272,12 @@ bool pgmb_read ( string input_name, int &xsize, int &ysize,
 //
 //  Allocate storage for the data.
 //
-  *g = new unsigned char [ xsize * ysize ];
+  //*g = new unsigned char [ xsize * ysize ];
+  //g.resize(xsize * ysize);
 //
 //  Read the data.
 //
-  error = pgmb_read_data ( input, xsize, ysize, *g );
+  error = pgmb_read_data ( input, xsize, ysize, g );
 
   if ( error )
   {
@@ -294,7 +296,7 @@ bool pgmb_read ( string input_name, int &xsize, int &ysize,
 //****************************************************************************80
 
 bool pgmb_read_data ( ifstream &input, int xsize, int ysize, 
-  unsigned char *g )
+  vector<double> &g)
 
 //****************************************************************************80
 //
@@ -329,18 +331,21 @@ bool pgmb_read_data ( ifstream &input, int xsize, int ysize,
   char c;
   bool error;
   int i;
-  unsigned char *indexg;
+  //unsigned char *indexg;
   int j;
+  int pos = 0;
 
-  indexg = g;
+  //indexg = g;
 
   for ( j = 0; j < ysize; j++ )
   {
     for ( i = 0; i < xsize; i++ )
     {
       input.read ( &c, 1 );
-      *indexg = ( unsigned char ) c;
-      indexg = indexg + 1;
+      g[pos] = ( double ) (unsigned char) c;
+      //*indexg = ( unsigned char ) c;
+      //indexg = indexg + 1;
+      pos++;
       error = input.eof();
       if ( error )
       {
@@ -518,7 +523,7 @@ bool pgmb_read_test ( string input_name )
 //
 //  Read the data.
 //
-  error = pgmb_read ( input_name, xsize, ysize, maxg, &g );
+  //error = pgmb_read ( input_name, xsize, ysize, maxg, &g );
 
   if ( error )
   {
