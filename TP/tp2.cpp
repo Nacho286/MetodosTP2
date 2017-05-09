@@ -7,7 +7,12 @@
 
 using namespace std;
 
+#include "matrices.h"
 #include "pgmb_io.hpp"
+
+bool isZero(double value){
+	return (abs(value) <= 1.0e-7);
+}
 
 template<typename Out>
 void split(const string &s, char delim, Out result) {
@@ -25,22 +30,12 @@ vector<string> split(const string &s, char delim) {
 	return elems;
 }
 
-vector<vector<double> > trasponer(const vector<vector<double> >  &matriz, int filas, int cols){
-	vector<vector<double> > traspuesta(cols, vector<double>(filas));
-
-	for (int i = 0; i < cols; i++)
-		for (int j = 0; j < filas; j++)
-			traspuesta[i][j] = matriz[j][i];
-
-	return traspuesta;
-}
-
 int main(int args, char* argsv[]){
 	// Para probar, el argumento es la dir de una imagen
 	// int fils, cols;
 	// unsigned char maxG;
 	// vector<double> imagen;
-	// if(pgmb_read(argsv[1], fils, cols, maxG, imagen)){
+	// if(pgmb_read(argsv[1], fils, cols, maxG, imagen, true)){
 	// 	cout << "Error al leer el archivo" << endl;
 	// 	return 1;
 	// }
@@ -48,11 +43,18 @@ int main(int args, char* argsv[]){
 	// cout << "Filas: " << to_string(fils) << endl;
 	// cout << "Cols: " << to_string(cols) << endl;
 
-	// for(int i = 0; i < fils * cols; i++){
-	// 	if (i % fils == fils - 1)
-	// 		cout << to_string(imagen[i]) + " " << endl;
-	// 	else	
+	// for (int i = 0; i < cols; i++){
+	// 	if (i != cols - 1)
 	// 		cout << to_string(imagen[i]) + " ";
+	// 	else
+	// 		cout << to_string(imagen[i]) + " " << endl;
+	// }
+	// int ult_fila = (cols - 1) * (fils - 1);
+	// for (int j = ult_fila; j < ult_fila + cols; j++){
+	// 	if (j != ult_fila + cols - 1)
+	// 		cout << to_string(imagen[j]) + " ";
+	// 	else
+	// 		cout << to_string(imagen[j]) + " " << endl;
 	// }
 
 	// Primer argumento: archivo de entrada, donde la primera linea especifica:
@@ -86,13 +88,14 @@ int main(int args, char* argsv[]){
 		datos = split(linea, ' ');
 		for (int j = 1; j <= nimgp; j++){
 			string file = path + datos[0] + datos[j] + ".pgm";
-			if (pgmb_read(file, fils, cols, maxG, X[pos])){
+			if (pgmb_read(file, fils, cols, maxG, X[pos], false)){
 				cout << "Error al leer el archivo " << file << endl;
 				return 1;
 			}
 			pos++;
 		}
 	}
+
 	//Creo una copia para calcular la transformacion caracteristica de los vectores imagen despues
 	vector<vector<double> > imagenes = X;
 
@@ -110,14 +113,20 @@ int main(int args, char* argsv[]){
 		for (int j = 0; j < m; j++){
 			X[i][j] -= mu[j];
 			X[i][j] = X[i][j] / raiz_n;
+			if (isZero(X[i][j]))
+				X[i][j] = 0.0;
 		}
 	}
 
 	//Calculo la traspuesta de X
-	vector<vector<double> > X_t = trasponer(X, n, m);
+	vector<vector<double> > X_t = matrices::trasponer(X, n, m);
 
-	//Ahora hay que hacer X_t * X
-	//Podemos hacer un archivo aparte con todas las operaciones de matrices (si hace falta)
+	//Calculo M; si existe un parametro mas, hago la multiplicacion al revés (X * X_t)
+	vector<vector<double> > M(m, vector<double>(m));
+	if (args < 4)
+		M = matrices::multiplicar(X_t, X, n, m);
+	else
+		M = matrices::multiplicar(X, X_t, m, n);	
 
 	getline(entrada, linea);
 	int ntest = stoi(linea);			// Cantidad de imagenes a testear
@@ -126,8 +135,8 @@ int main(int args, char* argsv[]){
 		datos = split(linea, ' ');
 		string path_test = datos[0];
 		int persona = stoi(datos[1]);
-		vector<double> imagen(fils * cols);
-		if (pgmb_read(path_test, fils, cols, maxG, imagen)){
+		vector<double> imagen(m);
+		if (pgmb_read(path_test, fils, cols, maxG, imagen, false)){
 			cout << "Error al leer el archivo de prueba " << path_test << endl;
 			return 1;
 		}

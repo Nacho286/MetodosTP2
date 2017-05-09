@@ -204,7 +204,7 @@ bool pgmb_example ( int xsize, int ysize, unsigned char *g )
 //****************************************************************************80
 
 bool pgmb_read ( string input_name, int &xsize, int &ysize, 
-  unsigned char &maxg, vector<double> &g)
+  unsigned char &maxg, vector<double> &g, bool resize)
 
 //****************************************************************************80
 //
@@ -273,7 +273,8 @@ bool pgmb_read ( string input_name, int &xsize, int &ysize,
 //  Allocate storage for the data.
 //
   //*g = new unsigned char [ xsize * ysize ];
-  //g.resize(xsize * ysize);
+  if (resize)
+    g.resize(xsize * ysize);
 //
 //  Read the data.
 //
