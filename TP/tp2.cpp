@@ -31,32 +31,6 @@ vector<string> split(const string &s, char delim) {
 }
 
 int main(int args, char* argsv[]){
-	// Para probar, el argumento es la dir de una imagen
-	// int fils, cols;
-	// unsigned char maxG;
-	// vector<double> imagen;
-	// if(pgmb_read(argsv[1], fils, cols, maxG, imagen, true)){
-	// 	cout << "Error al leer el archivo" << endl;
-	// 	return 1;
-	// }
-
-	// cout << "Filas: " << to_string(fils) << endl;
-	// cout << "Cols: " << to_string(cols) << endl;
-
-	// for (int i = 0; i < cols; i++){
-	// 	if (i != cols - 1)
-	// 		cout << to_string(imagen[i]) + " ";
-	// 	else
-	// 		cout << to_string(imagen[i]) + " " << endl;
-	// }
-	// int ult_fila = (cols - 1) * (fils - 1);
-	// for (int j = ult_fila; j < ult_fila + cols; j++){
-	// 	if (j != ult_fila + cols - 1)
-	// 		cout << to_string(imagen[j]) + " ";
-	// 	else
-	// 		cout << to_string(imagen[j]) + " " << endl;
-	// }
-
 	// Primer argumento: archivo de entrada, donde la primera linea especifica:
 	// path de los datos, x, y, #personas, #imagenes por persona, #componentes principales
 	string path, linea;
@@ -78,7 +52,7 @@ int main(int args, char* argsv[]){
 	int m = fils * cols;
 	int pos = 0;
 	vector<vector<double> > X (n, vector<double>(m));
-	//Matriz donde cada fila corresponde a una imagen distinta
+	// Matriz de n x m donde cada fila corresponde a una imagen distinta
 	//Dividiendo la posicion por nimgp (y sumando 1) obtengo a qué persona pertenece la imagen
 	//Cada fila es un vector de tamaño m = fils * cols
 
@@ -122,11 +96,17 @@ int main(int args, char* argsv[]){
 	vector<vector<double> > X_t = matrices::trasponer(X, n, m);
 
 	//Calculo M; si existe un parametro mas, hago la multiplicacion al revés (X * X_t)
+	int dim_M = m;
 	vector<vector<double> > M(m, vector<double>(m));
 	if (args < 4)
-		M = matrices::multiplicar(X_t, X, n, m);
-	else
-		M = matrices::multiplicar(X, X_t, m, n);	
+		M = matrices::multiplicar(X_t, X, m, n);
+	else{
+		dim_M = n;
+		M.resize(n, vector<double>(n));
+		M = matrices::multiplicar(X, X_t, n, m);	
+	}
+
+	//Ahora resta calcular los autovectores/autovalores y calcular la transformacion caracteristica de cada imagen
 
 	getline(entrada, linea);
 	int ntest = stoi(linea);			// Cantidad de imagenes a testear
