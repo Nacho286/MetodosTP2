@@ -109,7 +109,7 @@ namespace matrices{
 				v[j] = v[j] / norma_v;
 	}
 
-
+	//v es el autovector del autovalor que se devuelve. Por que tiene sentido?
 	double metodo_potencia(const vector<vector<double> >  &A, vector<double> &v, int n, int m, int k){
 		for (int i = 0; i < k; i++){
 			vector<double> Av = multiplicar_vector(A, v, n, m);
@@ -148,10 +148,24 @@ namespace matrices{
 
 	}
 
-	vecotr<vector<double> > deflacion(const vector<vector<double> > &A, vector<double> &V, int n , int m, int lambda){
-
+	vector<vector<double> > deflacion(const vector<vector<double> > &A, vector<double> &V, int n , int m, int lambda){
 		return suma(A,multipicar_por_escalar(-lambda,multiplicar(v,v,n)));
 
+
+	vector<double> encontrarAutovalores(const vector<vector<double> > &A, int n, vector<vector<double> > &V){
+		vector<double> lst_autovalores(n); 
+		//Deberia ser aleatorio
+		//Uhm...
+		vector<vector<double> > A_i(A);
+		for(int i ⁼ 0; i<n;i++){
+			//X_0 un vector cualquiera que tenga la primer coordenada en la base de autovectores no nula. En principio, este podria no andar...
+			vector<double> x_0(n,1);
+			lambda_i = autoValorMaximo(A_i,x_0,n,n);
+			V.push_back(x_0);
+			lst_autovalores.push_back(lambda_i);
+			A_i = deflacion(A_i,v,n,n,lambda_i);
+		}
+		return lst_autovalores;
 
 	}
 
