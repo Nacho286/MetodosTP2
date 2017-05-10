@@ -27,6 +27,8 @@ namespace matrices{
 	}
 
 	// A (n x m) * v (m x 1) = w (n x 1)
+	//--No es un caso particular de la funcion anterior?
+
 	vector<double> multiplicar_vector(const vector<vector<double> >  &A, const vector<double> &v, int n, int m){
 		vector<double> w(n);
 		for (int i = 0; i < n; i++){
@@ -59,6 +61,18 @@ namespace matrices{
 	//A (n x m), v (m x 1), k = cant. de iteraciones
 	//Necesariamente n = m; caso contrario, no coincide la dimension de Av (n x 1) con v (m x 1)
 	//Esto implica que el metodo de la potencia solo esta definido para matrices cuadradas?
+	//--En clase vimos para cuadradas creo.
+	vector<double> normalizar(const vector<double> &v){
+
+			//Normalizo al vector
+			//Aca es muy importante que n = m, sino no funciona ni a palos
+			double norma_v = norma_v(v, v.size(), 2);			
+			for (int j = 0; j < n; j++)
+				v[j] = v[j] / norma_v;
+	}
+
+
+	
 	double metodo_potencia(const vector<vector<double> >  &A, vector<double> &v, int n, int m, int k){
 		for (int i = 0; i < k; i++){
 			vector<double> Av = multiplicar_vector(A, v, n, m);
@@ -69,7 +83,9 @@ namespace matrices{
 			//Aca es muy importante que n = m, sino no funciona ni a palos
 			for (int j = 0; j < n; j++)
 				v[j] = Av[j] / norma_Av;
-		}
+			//v = normalizar(Av);
+
+		 }
 
 		vector<double> Av = multiplicar_vector(A, v, n, m);
 		double v_Av  = producto_escalar(v, Av, n);
@@ -79,4 +95,4 @@ namespace matrices{
 
 		return lambda;
 	}
-}
+}  
