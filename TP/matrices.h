@@ -29,8 +29,21 @@ namespace matrices{
 		return C;
 	}
 
+	// v*vt = C(nxn)
+	vector<vector<double> > multiplicar(const vector<double>  &v1, const vector<double>  &v2, int n){
+		vector<vector<double> > C(n, vector<double>(n));
+		for (int i = 0; i < n; i++){
+			for (int j = 0; j < n; j++){				
+					elem += v1[i] * v2[j];
+					C[i][j] = elem;
+			}
+		}
+		return C;
+	}
+
+
 	// A (n x m) * v (m x 1) = w (n x 1)
-	//--No es un caso particular de la funcion anterior?
+	//--se podria hacer overloading
 
 	vector<double> multiplicar_vector(const vector<vector<double> >  &A, const vector<double> &v, int n, int m){
 		vector<double> w(n);
@@ -43,6 +56,27 @@ namespace matrices{
 
 		return w;
 	}
+
+	//En teoria modifica la referencia de A. Podría hacerse una copia, pero no le veo demasiado sentido
+	vector<vector<double> > multipicar_por_escalar(vector<vector<double> > &A, const int lambda,int n, int m){
+		for (int i = 0; i < n; i++){
+			for (int j = 0; j < m; j++){				
+					A[i][j] *= lambda ;
+			}
+		}	
+		return A;
+	}
+
+	vector<vector<double> > suma(const vector<vector<double> > &A, const vector<vector<double> > &B, int n){
+		vector<vector<double> > C(n, vector<double>(n));
+		for (int i = 0; i < n; i++){
+			for (int j = 0; j < n; j++){				
+					Ci][j] = A[i][j] + B[i][j];
+			}
+		}	
+		return C;
+	}
+
 
 	double norma_v(const vector<double> &v, int n, int p){
 		double res = 0.0;
@@ -113,6 +147,14 @@ namespace matrices{
 		}
 
 	}
+
+	vecotr<vector<double> > deflacion(const vector<vector<double> > &A, vector<double> &V, int n , int m, int lambda){
+
+		return suma(A,multipicar_por_escalar(-lambda,multiplicar(v,v,n)));
+
+
+	}
+
 
 
 
