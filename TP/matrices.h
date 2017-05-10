@@ -2,6 +2,9 @@ using namespace std;
 
 namespace matrices{
 
+	#define LIMITE 100;
+	#define UMBRAL  1.0e-2;
+	#define PASO_CONVERGENCIA 10;
 	vector<vector<double> > trasponer(const vector<vector<double> >  &matriz, int filas, int cols){
 		vector<vector<double> > traspuesta(cols, vector<double>(filas));
 		for (int i = 0; i < cols; i++)
@@ -58,6 +61,7 @@ namespace matrices{
 		return res;
 	}
 
+
 	//A (n x m), v (m x 1), k = cant. de iteraciones
 	//Necesariamente n = m; caso contrario, no coincide la dimension de Av (n x 1) con v (m x 1)
 	//Esto implica que el metodo de la potencia solo esta definido para matrices cuadradas?
@@ -72,7 +76,6 @@ namespace matrices{
 	}
 
 
-	
 	double metodo_potencia(const vector<vector<double> >  &A, vector<double> &v, int n, int m, int k){
 		for (int i = 0; i < k; i++){
 			vector<double> Av = multiplicar_vector(A, v, n, m);
@@ -95,4 +98,22 @@ namespace matrices{
 
 		return lambda;
 	}
+
+	double autoValorMaximo(const vector<vector<double> >  &A, vector<double> &v, int n, int m){
+		//Algo que no esta bueno es que el metodo tiene que calcular de vuelta todas las matrices...
+		//Este metodo se podría usar como heuristica para encontrar un k adecuado. 
+		//Habria que ver si ese k sirve para todo autovalor de la matriz.
+		double anterior = 0;
+		for(int k = 0; k < LIMITE;k+=PASO_CONVERGENCIA){
+			double actual =  metodo_potencia(A,v,n,m,k)
+			if(abs(actual -  anterior) < UMBRAL)
+				return actual;
+			else
+				anterior = actual;
+		}
+
+	}
+
+
+
 }  
