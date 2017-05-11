@@ -1,10 +1,11 @@
 using namespace std;
 
+#define LIMITE 100
+#define UMBRAL 1.0e-2
+#define PASO_CONVERGENCIA 10
+
 namespace matrices{
 
-	#define LIMITE 100;
-	#define UMBRAL  1.0e-2;
-	#define PASO_CONVERGENCIA 10;
 	vector<vector<double> > trasponer(const vector<vector<double> >  &matriz, int filas, int cols){
 		vector<vector<double> > traspuesta(cols, vector<double>(filas));
 		for (int i = 0; i < cols; i++)
@@ -29,23 +30,18 @@ namespace matrices{
 		return C;
 	}
 
-	// v*vt = C(nxn)
-	vector<vector<double> > multiplicar(const vector<double>  &v1, const vector<double>  &v2, int n){
+	// v * v_t = C (n x n)
+	vector<vector<double> > multiplicar(const vector<double>  &v, const vector<double>  &v_t, int n){
 		vector<vector<double> > C(n, vector<double>(n));
-		for (int i = 0; i < n; i++){
-			for (int j = 0; j < n; j++){				
-					elem += v1[i] * v2[j];
-					C[i][j] = elem;
-			}
-		}
+		for (int i = 0; i < n; i++)
+			for (int j = 0; j < n; j++)
+				C[i][j] = v[i] * v_t[j];
+
 		return C;
 	}
 
-
 	// A (n x m) * v (m x 1) = w (n x 1)
-	//--se podria hacer overloading
-
-	vector<double> multiplicar_vector(const vector<vector<double> >  &A, const vector<double> &v, int n, int m){
+	vector<double> multiplicar(const vector<vector<double> >  &A, const vector<double> &v, int n, int m){
 		vector<double> w(n);
 		for (int i = 0; i < n; i++){
 			double sum = 0.0;
@@ -57,23 +53,20 @@ namespace matrices{
 		return w;
 	}
 
-	//En teoria modifica la referencia de A. Podría hacerse una copia, pero no le veo demasiado sentido
-	vector<vector<double> > multipicar_por_escalar(vector<vector<double> > &A, const int lambda,int n, int m){
-		for (int i = 0; i < n; i++){
-			for (int j = 0; j < m; j++){				
-					A[i][j] *= lambda ;
-			}
-		}	
-		return A;
+	// A * lambda
+	void multipicar_por_escalar(vector<vector<double> > &A, double lambda, int n, int m){
+		for (int i = 0; i < n; i++)
+			for (int j = 0; j < m; j++)				
+				A[i][j] *= lambda;
 	}
 
-	vector<vector<double> > suma(const vector<vector<double> > &A, const vector<vector<double> > &B, int n){
-		vector<vector<double> > C(n, vector<double>(n));
-		for (int i = 0; i < n; i++){
-			for (int j = 0; j < n; j++){				
-					Ci][j] = A[i][j] + B[i][j];
-			}
-		}	
+	// A (n x m) + B (n x m) = C (n x m)
+	vector<vector<double> > sumar(const vector<vector<double> > &A, const vector<vector<double> > &B, int n, int m){
+		vector<vector<double> > C(n, vector<double>(m));
+		for (int i = 0; i < n; i++)
+			for (int j = 0; j < m; j++)		
+				C[i][j] = A[i][j] + B[i][j];
+
 		return C;
 	}
 
@@ -95,40 +88,30 @@ namespace matrices{
 		return res;
 	}
 
+	void normalizar(vector<double> &v, int n){
+			double norma2 = norma_v(v, n, 2);			
+			for (int j = 0; j < n; j++)
+				v[j] = v[j] / norma2;
+	}
 
 	//A (n x m), v (m x 1), k = cant. de iteraciones
 	//Necesariamente n = m; caso contrario, no coincide la dimension de Av (n x 1) con v (m x 1)
 	//Esto implica que el metodo de la potencia solo esta definido para matrices cuadradas?
 	//--En clase vimos para cuadradas creo.
-	vector<double> normalizar(const vector<double> &v){
-
-			//Normalizo al vector
-			//Aca es muy importante que n = m, sino no funciona ni a palos
-			double norma_v = norma_v(v, v.size(), 2);			
-			for (int j = 0; j < n; j++)
-				v[j] = v[j] / norma_v;
-	}
-
 	//v es el autovector del autovalor que se devuelve. Por que tiene sentido?
 	double metodo_potencia(const vector<vector<double> >  &A, vector<double> &v, int n, int m, int k){
 		for (int i = 0; i < k; i++){
-			vector<double> Av = multiplicar_vector(A, v, n, m);
+			vector<double> Av = multiplicar(A, v, n, m);
+			normalizar(Av, n);
+			v = Av;
+		}
 
-			double norma_Av = norma_v(Av, n, 2);
+		vector<double> Av = multiplicar(A, v, n, m);
 
-			//Normalizo al vector
-			//Aca es muy importante que n = m, sino no funciona ni a palos
-			for (int j = 0; j < n; j++)
-				v[j] = Av[j] / norma_Av;
-			//v = normalizar(Av);
+		double v_t_Av  = producto_escalar(v, Av, n);
+		double v_t_v   = producto_escalar(v, v, n);		// Esto equivale a la norma 2 de v al cuadrado 
 
-		 }
-
-		vector<double> Av = multiplicar_vector(A, v, n, m);
-		double v_Av  = producto_escalar(v, Av, n);
-		double v_t_v = producto_escalar(v, v, n);
-
-		double lambda = v_Av / v_t_v;
+		double lambda = v_t_Av / v_t_v;
 
 		return lambda;
 	}
@@ -137,39 +120,37 @@ namespace matrices{
 		//Algo que no esta bueno es que el metodo tiene que calcular de vuelta todas las matrices...
 		//Este metodo se podría usar como heuristica para encontrar un k adecuado. 
 		//Habria que ver si ese k sirve para todo autovalor de la matriz.
-		double anterior = 0;
-		for(int k = 0; k < LIMITE;k+=PASO_CONVERGENCIA){
-			double actual =  metodo_potencia(A,v,n,m,k)
-			if(abs(actual -  anterior) < UMBRAL)
+		double anterior = 0.0;
+		for (int k = PASO_CONVERGENCIA; k < LIMITE; k += PASO_CONVERGENCIA){
+			double actual = metodo_potencia(A, v, n, m, k);
+			// Para la primera iteracion:
+			// Qué pasa si actual es realmente chico pero no es el autovalor que buscamos?
+			if (abs(actual - anterior) < UMBRAL)
 				return actual;
 			else
 				anterior = actual;
 		}
-
 	}
 
-	vector<vector<double> > deflacion(const vector<vector<double> > &A, vector<double> &V, int n , int m, int lambda){
-		return suma(A,multipicar_por_escalar(-lambda,multiplicar(v,v,n)));
-
+	//El proceso solo esta definido para matrices simetricas (por lo tanto, cuadradas)
+	vector<vector<double> > deflacion(const vector<vector<double> > &A, const vector<double> &v, int n, double lambda){
+		vector<vector<double> > B = multipicar_por_escalar(multiplicar(v, v, n), -lambda, n, n);
+		return sumar(A, B, n, n);
+	}
 
 	vector<double> encontrarAutovalores(const vector<vector<double> > &A, int n, vector<vector<double> > &V){
-		vector<double> lst_autovalores(n); 
-		//Deberia ser aleatorio
-		//Uhm...
-		vector<vector<double> > A_i(A);
-		for(int i ⁼ 0; i<n;i++){
+		vector<double> lst_autovalores(n);
+
+		//vector<vector<double> > A_i(A); ????
+		vector<vector<double> > A_i = A;
+		for (int i = 0; i < n; i++){
 			//X_0 un vector cualquiera que tenga la primer coordenada en la base de autovectores no nula. En principio, este podria no andar...
-			vector<double> x_0(n,1);
-			lambda_i = autoValorMaximo(A_i,x_0,n,n);
-			V.push_back(x_0);
+			vector<double> x_0(n, 1.0);
+			double lambda_i = autoValorMaximo(A_i, x_0, n, n);
+			V.push_back(x_0);								// V[i] = x_0
 			lst_autovalores.push_back(lambda_i);
-			A_i = deflacion(A_i,v,n,n,lambda_i);
+			A_i = deflacion(A_i, x_0, n, lambda_i);
 		}
 		return lst_autovalores;
-
 	}
-
-
-
-
 }  
