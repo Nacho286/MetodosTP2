@@ -121,7 +121,11 @@ namespace matrices{
 		//Este metodo se podría usar como heuristica para encontrar un k adecuado. 
 		//Habria que ver si ese k sirve para todo autovalor de la matriz.
 		double anterior = 0.0;
+		//Necesito que en cada iteracion se utilice el x_0 generado de manera random
+		//Sino no estamos reproduciendo la instancia original
+		vector<double> v_original = v;
 		for (int k = PASO_CONVERGENCIA; k <= LIMITE; k += PASO_CONVERGENCIA){
+			v = v_original;
 			double actual = metodo_potencia(A, v, n, m, k);
 			// Para la primera iteracion:
 			// Qué pasa si actual es realmente chico pero no es el autovalor que buscamos?
