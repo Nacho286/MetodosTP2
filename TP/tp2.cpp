@@ -60,6 +60,7 @@ int main(int args, char* argsv[]){
 	for (int i = 0; i < p; i++){
 		getline(entrada, linea);
 		datos = split(linea, ' ');
+		//¿No faltaria un vector que me identifique cada imagen con la persona?
 		for (int j = 1; j <= nimgp; j++){
 			string file = path + datos[0] + datos[j] + ".pgm";
 			if (pgmb_read(file, fils, cols, maxG, X[pos], false)){
@@ -107,7 +108,13 @@ int main(int args, char* argsv[]){
 	}
 
 	//Ahora resta calcular los autovectores/autovalores y calcular la transformacion caracteristica de cada imagen
-
+	vector<vector<double> > autoVectores(k,dim_M);
+	vector<double> autoValores(dim_M)=matrices::encontrarAutovalores(M,autoVectores,dim_M,k);
+	vector<vector<double> > tc(k,n);
+	for(int i=0;i<n;i++){
+		tc.push_back(transformacionCaracteristica(autoVectores,imagenes[i]),k);
+	}
+	
 	getline(entrada, linea);
 	int ntest = stoi(linea);			// Cantidad de imagenes a testear
 	for (int i = 0; i < ntest; i++){
@@ -120,11 +127,47 @@ int main(int args, char* argsv[]){
 			cout << "Error al leer el archivo de prueba " << path_test << endl;
 			return 1;
 		}
-
+		vector<double> tc_check=transformacionCaracteristica(autoVectores,imagen);
+		
+		int persona=encontrarPersona(tc,tc_check,k,1,nimgp,p);
 		//Aca hay que hacer la magia y ver si le embocamos a "persona"
 	}
 
 	// Aca se escribe el archivo de salida, con las raices cuadradas de los k autovalores
 
 	return 0;
+}
+
+vector<double> transformacionCaracteristica(vector<vector<double> > autoVectores,vector<double> imagen,int size){
+	vector<double> tc;
+	for(int i=0;i<size;i++){
+			tc.push_back(matrices::producto_escalar(autoVectores[i],imagen);
+	}
+	return tc;
+}
+
+int encontrarPersona(vector<vector<double>> tc, vector<double> tc_check,int cantImg,int cantVectores,int knn, int cantImgsXPersona, int cantPersonas){
+		vector<int> normas(cantImg); 
+		struct compare{
+			bool operator()(const int& l, const int& r){  
+				return normas[l] < normas[r];  
+			}
+		}
+		priority_queue<int,vector<int>, compare > pq; 
+		for(int i=0;i<cantImg;i++){
+			normas.push_back(matrices::norma_v(matrices::resta(tc[i],tc_check),cantVectores,2));
+			pq.push(i);
+		}
+		vector<int> personas(cantPersonas,0);
+		for(int i=0;i<knn;i++){
+			personas[normas.pop()/cantImgsXPersona]+=1;
+		}
+		int maxComun=0;
+		for(int i=0;i<cantPersonas;i++{
+			if(personas[MaxComun]<personas[i]){
+				maxComun=i;
+			}
+		}
+		return maxComun;
+		
 }

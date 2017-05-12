@@ -70,6 +70,17 @@ namespace matrices{
 		return C;
 	}
 
+	
+	// A (n x m) - B (n x m) = C (n x m)
+	vector<vector<double> > restar(const vector<vector<double> > &A, const vector<vector<double> > &B, int n, int m){
+		vector<vector<double> > C(n, vector<double>(m));
+		for (int i = 0; i < n; i++)
+			for (int j = 0; j < m; j++)		
+				C[i][j] = A[i][j] - B[i][j];
+
+		return C;
+	}
+
 
 	double norma_v(const vector<double> &v, int n, int p){
 		double res = 0.0;
