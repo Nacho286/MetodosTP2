@@ -108,9 +108,9 @@ int main(int args, char* argsv[]){
 	}
 
 	//Ahora resta calcular los autovectores/autovalores y calcular la transformacion caracteristica de cada imagen
-	vector<vector<double> > autoVectores(k,dim_M);
+	vector<vector<double> > autoVectores(k);
 	vector<double> autoValores(dim_M)=matrices::encontrarAutovalores(M,autoVectores,dim_M,k);
-	vector<vector<double> > tc(k,n);
+	vector<vector<double> > tc(k);
 	for(int i=0;i<n;i++){
 		tc.push_back(transformacionCaracteristica(autoVectores,imagenes[i]),k);
 	}
@@ -153,18 +153,18 @@ int encontrarPersona(vector<vector<double>> tc, vector<double> tc_check,int cant
 				return normas[l] < normas[r];  
 			}
 		}
-		priority_queue<int,vector<int>, compare > pq; 
+		std::priority_queue<int,vector<int>, compare > cola; 
 		for(int i=0;i<cantImg;i++){
-			normas.push_back(matrices::norma_v(matrices::resta(tc[i],tc_check),cantVectores,2));
-			pq.push(i);
+			normas.push_back(matrices::norma_v(matrices::restar(tc[i],tc_check,1,cantVectores),cantVectores,2));
+			cola.push(i);
 		}
 		vector<int> personas(cantPersonas,0);
 		for(int i=0;i<knn;i++){
-			personas[normas.pop()/cantImgsXPersona]+=1;
+			personas[cola.pop()/cantImgsXPersona]+=1;
 		}
 		int maxComun=0;
-		for(int i=0;i<cantPersonas;i++{
-			if(personas[MaxComun]<personas[i]){
+		for(int i=0;i<cantPersonas;i++){
+			if(personas[maxComun]<personas[i]){
 				maxComun=i;
 			}
 		}
