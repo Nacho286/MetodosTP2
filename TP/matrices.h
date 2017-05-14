@@ -81,6 +81,14 @@ namespace matrices{
 		return C;
 	}
 
+	// A (1 x m) - B (1 x m) = C (1 x m)
+	vector<double> restarVector(const vector<double> &A, const vector<double> &B, int m){
+		vector<double>  C(m);
+		for (int i = 0; i < m; i++)
+			C[i] = A[i] - B[i];
+
+		return C;
+	}
 
 	double norma_v(const vector<double> &v, int n, int p){
 		double res = 0.0;

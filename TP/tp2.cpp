@@ -4,11 +4,22 @@
 #include <sstream>
 #include <vector>
 #include <cmath>
+#include <utility> 
+#include <queue>   
 
 using namespace std;
 
 #include "matrices.h"
 #include "pgmb_io.hpp"
+
+struct par{
+	int a;
+    double b;
+    bool operator<(const par& rhs) const
+    {
+        return b < rhs.b;
+    }
+};
 
 bool isZero(double value){
 	return (abs(value) <= 1.0e-7);
@@ -38,31 +49,29 @@ vector<double> transformacionCaracteristica(vector<vector<double> > autoVectores
 	return tc;
 }
 
-// int encontrarPersona(vector<vector<double>> tc, vector<double> tc_check,int cantImg,int cantVectores,int knn, int cantImgsXPersona, int cantPersonas){
-// 		vector<double> normas(cantImg); 
-// 		struct compare{
-// 			bool operator()(const int& l, const int& r){  
-// 				return normas[l] < normas[r];  
-// 			}
-// 		}
-// 		std::priority_queue<int,vector<int>, compare > cola; 
-// 		for(int i=0;i<cantImg;i++){
-// 			normas.push_back(matrices::norma_v(matrices::restar(tc[i],tc_check,1,cantVectores),cantVectores,2));
-// 			cola.push(i);
-// 		}
-// 		vector<int> personas(cantPersonas,0);
-// 		for(int i=0;i<knn;i++){
-// 			personas[cola.pop()/cantImgsXPersona]+=1;
-// 		}
-// 		int maxComun=0;
-// 		for(int i=0;i<cantPersonas;i++){
-// 			if(personas[maxComun]<personas[i]){
-// 				maxComun=i;
-// 			}
-// 		}
-// 		return maxComun;
-		
-// }
+int encontrarPersona(vector<vector<double>> tc, vector<double> tc_check,int cantImg,int cantVectores,int knn, int cantImgsXPersona, int cantPersonas){
+
+//	vector<double> normas(cantImg); 
+	std::priority_queue<par> cola;
+	for(int i=0;i<cantImg;i++){
+		vector<double> resta = matrices::restarVector(tc[i],tc_check,cantVectores);
+//		normas.push_back(matrices::norma_v(resta,cantVectores,2));
+		par p={i,matrices::norma_v(resta,cantVectores,2)};
+		cola.push(p);
+	}
+	vector<int> personas(cantPersonas,0);
+	for(int i=0;i<knn;i++){
+		personas[(cola.top().a)/cantImgsXPersona]+=1;
+		cola.pop();
+	}
+	int maxComun=0;
+	for(int i=0;i<cantPersonas;i++){
+		if(personas[maxComun]<personas[i]){
+			maxComun=i;
+		}
+	}
+	return maxComun;
+}
 
 int main(int args, char* argsv[]){
 	// Primer argumento: archivo de entrada, donde la primera linea especifica:
@@ -163,12 +172,18 @@ int main(int args, char* argsv[]){
 		}
 		vector<double> tc_check=transformacionCaracteristica(autoVectores,imagen,k,m);
 		
-		//persona=encontrarPersona(tc,tc_check,k,1,nimgp,p);
+		int parecido=encontrarPersona(tc,tc_check,n,k,1,nimgp,p);
 		//Aca hay que hacer la magia y ver si le embocamos a "persona"
 	}
 
 	// Aca se escribe el archivo de salida, con las raices cuadradas de los k autovalores
-
+	string file_name = "autovalores.txt";
+	ofstream archivoSalida;
+	archivoSalida.open(file_name, ios::out | ios::app);
+	for(int i=0;i<k;i++){
+		archivoSalida << to_string(autoValores[i])+"\n";	
+	}	
+	archivoSalida.close();
 	return 0;
 }
 
