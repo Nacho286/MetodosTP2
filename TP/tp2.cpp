@@ -30,6 +30,40 @@ vector<string> split(const string &s, char delim) {
 	return elems;
 }
 
+vector<double> transformacionCaracteristica(vector<vector<double> > autoVectores,vector<double> imagen,int size,int sizeImg){
+	vector<double> tc;
+	for(int i=0;i<size;i++){
+			tc.push_back(matrices::producto_escalar(autoVectores[i],imagen,sizeImg));
+	}
+	return tc;
+}
+
+// int encontrarPersona(vector<vector<double>> tc, vector<double> tc_check,int cantImg,int cantVectores,int knn, int cantImgsXPersona, int cantPersonas){
+// 		vector<double> normas(cantImg); 
+// 		struct compare{
+// 			bool operator()(const int& l, const int& r){  
+// 				return normas[l] < normas[r];  
+// 			}
+// 		}
+// 		std::priority_queue<int,vector<int>, compare > cola; 
+// 		for(int i=0;i<cantImg;i++){
+// 			normas.push_back(matrices::norma_v(matrices::restar(tc[i],tc_check,1,cantVectores),cantVectores,2));
+// 			cola.push(i);
+// 		}
+// 		vector<int> personas(cantPersonas,0);
+// 		for(int i=0;i<knn;i++){
+// 			personas[cola.pop()/cantImgsXPersona]+=1;
+// 		}
+// 		int maxComun=0;
+// 		for(int i=0;i<cantPersonas;i++){
+// 			if(personas[maxComun]<personas[i]){
+// 				maxComun=i;
+// 			}
+// 		}
+// 		return maxComun;
+		
+// }
+
 int main(int args, char* argsv[]){
 	// Primer argumento: archivo de entrada, donde la primera linea especifica:
 	// path de los datos, x, y, #personas, #imagenes por persona, #componentes principales
@@ -109,10 +143,10 @@ int main(int args, char* argsv[]){
 
 	//Ahora resta calcular los autovectores/autovalores y calcular la transformacion caracteristica de cada imagen
 	vector<vector<double> > autoVectores(k);
-	vector<double> autoValores(dim_M)=matrices::encontrarAutovalores(M,autoVectores,dim_M,k);
+	vector<double> autoValores = matrices::encontrarAutovalores(M,autoVectores,dim_M,k);
 	vector<vector<double> > tc(k);
 	for(int i=0;i<n;i++){
-		tc.push_back(transformacionCaracteristica(autoVectores,imagenes[i]),k);
+		tc.push_back(transformacionCaracteristica(autoVectores,imagenes[i],k,m));
 	}
 	
 	getline(entrada, linea);
@@ -127,9 +161,9 @@ int main(int args, char* argsv[]){
 			cout << "Error al leer el archivo de prueba " << path_test << endl;
 			return 1;
 		}
-		vector<double> tc_check=transformacionCaracteristica(autoVectores,imagen);
+		vector<double> tc_check=transformacionCaracteristica(autoVectores,imagen,k,m);
 		
-		int persona=encontrarPersona(tc,tc_check,k,1,nimgp,p);
+		//persona=encontrarPersona(tc,tc_check,k,1,nimgp,p);
 		//Aca hay que hacer la magia y ver si le embocamos a "persona"
 	}
 
@@ -138,36 +172,6 @@ int main(int args, char* argsv[]){
 	return 0;
 }
 
-vector<double> transformacionCaracteristica(vector<vector<double> > autoVectores,vector<double> imagen,int size){
-	vector<double> tc;
-	for(int i=0;i<size;i++){
-			tc.push_back(matrices::producto_escalar(autoVectores[i],imagen);
-	}
-	return tc;
-}
 
-int encontrarPersona(vector<vector<double>> tc, vector<double> tc_check,int cantImg,int cantVectores,int knn, int cantImgsXPersona, int cantPersonas){
-		vector<int> normas(cantImg); 
-		struct compare{
-			bool operator()(const int& l, const int& r){  
-				return normas[l] < normas[r];  
-			}
-		}
-		std::priority_queue<int,vector<int>, compare > cola; 
-		for(int i=0;i<cantImg;i++){
-			normas.push_back(matrices::norma_v(matrices::restar(tc[i],tc_check,1,cantVectores),cantVectores,2));
-			cola.push(i);
-		}
-		vector<int> personas(cantPersonas,0);
-		for(int i=0;i<knn;i++){
-			personas[cola.pop()/cantImgsXPersona]+=1;
-		}
-		int maxComun=0;
-		for(int i=0;i<cantPersonas;i++){
-			if(personas[maxComun]<personas[i]){
-				maxComun=i;
-			}
-		}
-		return maxComun;
-		
-}
+
+
