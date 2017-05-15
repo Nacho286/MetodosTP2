@@ -161,7 +161,7 @@ int main(int args, char* argsv[]){
 		vector<vector<double> > autoVectores_V(k, vector<double>(m));
 		for (int i = 0; i < k; i++){
 			vector<double> Xt_u_i = matrices::multiplicar(X_t, autoVectores[i], m, n);
-			if (autoValores[i] != 0.0){
+			if (!isZero(autoValores[i])){
 				for (int j = 0; j < m; j++)
 					Xt_u_i[j] = Xt_u_i[j] / sqrt(autoValores[i]);
 			}
