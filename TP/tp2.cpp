@@ -104,6 +104,7 @@ int main(int args, char* argsv[]){
 		getline(entrada, linea);
 		datos = split(linea, ' ');
 		//¿No faltaria un vector que me identifique cada imagen con la persona?
+		//--Dividiendo la posicion por nimgp (y sumando 1) obtengo a qué persona pertenece la imagen
 		for (int j = 1; j <= nimgp; j++){
 			string file = path + datos[0] + datos[j] + ".pgm";
 			if (pgmb_read(file, fils, cols, maxG, X[pos], false)){
@@ -139,10 +140,10 @@ int main(int args, char* argsv[]){
 	//Calculo la traspuesta de X
 	vector<vector<double> > X_t = matrices::trasponer(X, n, m);
 
-	//Calculo M; si existe un parametro mas = 1, hago la multiplicacion al revés (X * X_t)
-	int dim_M = m;
+	//Calculo M; si existe un parametro mas = 1, hago la multiplicacion (X_t * X)
+	int dim_M = n;
 	if (args > 3 && stoi(argsv[3]) == 1)
-		dim_M = n;
+		dim_M = m;
 
 	vector<vector<double> > M(dim_M, vector<double>(dim_M));
 	if (dim_M == m)
@@ -155,6 +156,20 @@ int main(int args, char* argsv[]){
 	//A M no lo volvemos a usar, ahora el método "encontrarAutovalores" lo modifica en la deflación.
 	//Nos ahorramos de copiar la matriz entera.
 	vector<double> autoValores = matrices::encontrarAutovalores(M, autoVectores, dim_M, k);
+	//Si hice la cuenta al revés, calculo los autovectores que corresponden usar
+	if (dim_M == n){
+		vector<vector<double> > autoVectores_V(k, vector<double>(m));
+		for (int i = 0; i < k; i++){
+			vector<double> Xt_u_i = matrices::multiplicar(X_t, autoVectores[i], m, n);
+			if (autoValores[i] != 0.0){
+				for (int j = 0; j < m; j++)
+					Xt_u_i[j] = Xt_u_i[j] / sqrt(autoValores[i]);
+			}
+			autoVectores_V[i] = Xt_u_i;
+		}
+		autoVectores.resize(k, vector<double>(m));
+		autoVectores = autoVectores_V;
+	}
 	// vector<vector<double> > tc(k);
 	// for(int i=0;i<n;i++){
 	// 	tc.push_back(transformacionCaracteristica(autoVectores,imagenes[i],k,m));
@@ -185,8 +200,8 @@ int main(int args, char* argsv[]){
 	for(int i = 0; i < k; i++){
 		cout << "sqrt(Autovalor " + to_string(i) + "): " + to_string(sqrt(autoValores[i])) << endl;
 		archivoSalida << to_string(sqrt(autoValores[i])) + "\n";	
-	}	
-	archivoSalida.close();
+	}
+	archivoSalida.close();	
 
 	return 0;
 }

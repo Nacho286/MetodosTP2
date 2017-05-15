@@ -80,7 +80,7 @@ namespace matrices{
 		return C;
 	}
 
-	// A (1 x m) - B (1 x m) = C (1 x m)
+	// A (m x 1) - B (m x 1) = C (m x 1)
 	vector<double> restarVector(const vector<double> &A, const vector<double> &B, int m){
 		vector<double>  C(m);
 		for (int i = 0; i < m; i++)
@@ -115,7 +115,7 @@ namespace matrices{
 			return res;
 	}
 
-	//A (n x m), v (m x 1), k = cant. de iteraciones
+	//A (n x m), v (m x 1)
 	//Necesariamente n = m; caso contrario, no coincide la dimension de Av (n x 1) con v (m x 1)
 	double metodo_potencia(const vector<vector<double> >  &A, vector<double> &v, int n, int m){
 		double anterior = 0.0;
@@ -142,27 +142,6 @@ namespace matrices{
 		return actual;
 	}
 
-
-	// double autoValorMaximo(const vector<vector<double> >  &A, vector<double> &v, int n, int m){
-	// 	//Algo que no esta bueno es que el metodo tiene que calcular de vuelta todas las matrices...
-	// 	//Este metodo se podría usar como heuristica para encontrar un k adecuado. 
-	// 	//Habria que ver si ese k sirve para todo autovalor de la matriz.
-	// 	double anterior = 0.0;
-	// 	//Necesito que en cada iteracion se utilice el x_0 generado de manera random
-	// 	//Sino no estamos reproduciendo la instancia original
-	// 	vector<double> v_original = v;
-	// 	for (int k = PASO_CONVERGENCIA; k <= LIMITE; k += PASO_CONVERGENCIA){
-	// 		v = v_original;
-	// 		double actual = metodo_potencia(A, v, n, m, k);
-	// 		// Para la primera iteracion:
-	// 		// Qué pasa si actual es realmente chico pero no es el autovalor que buscamos?
-	// 		if (abs(actual - anterior) < UMBRAL)
-	// 			return actual;
-	// 		else
-	// 			anterior = actual;
-	// 	}
-	// }
-
 	vector<vector<double> > deflacion(const vector<vector<double> > &A, const vector<double> &v, int n, double lambda){
 		vector<vector<double> > B = multiplicar(v, v, n);
 		multipicar_por_escalar(B, -lambda, n, n);
@@ -178,7 +157,6 @@ namespace matrices{
 		//Declaro el vector por fuera del bucle porque sino se indefine cuando se sale del scope para llamar a "metodo_potencia"
 		vector<double> x_0(n);
 
-		//Uso while porque for da a entender que estamos recorriendo algo
 		int i = 0;
 		while (i < alpha){
 			//X_0 vector con elementos aleatorios entre 0 y 1
@@ -186,13 +164,10 @@ namespace matrices{
 			for (int j = 0; j < n; j++){
 				double r = ((double) rand() / RAND_MAX);
 				x_0[j] = r;
-				//x_0.push_back(r);
 			}
 			double lambda_i = metodo_potencia(A, x_0, n, n);
 			V[i] = x_0;
-			//V.push_back(x_0);	
 			lst_autovalores[i] = lambda_i;						
-			//lst_autovalores.push_back(lambda_i);
 			A = deflacion(A, x_0, n, lambda_i);
 			i++;
 		}
