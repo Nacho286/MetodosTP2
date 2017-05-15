@@ -139,25 +139,28 @@ int main(int args, char* argsv[]){
 	//Calculo la traspuesta de X
 	vector<vector<double> > X_t = matrices::trasponer(X, n, m);
 
-	//Calculo M; si existe un parametro mas, hago la multiplicacion al revés (X * X_t)
+	//Calculo M; si existe un parametro mas = 1, hago la multiplicacion al revés (X * X_t)
 	int dim_M = m;
-	vector<vector<double> > M(m, vector<double>(m));
-	if (args < 4)
-		M = matrices::multiplicar(X_t, X, m, n);
-	else{
+	if (args > 3 && stoi(argsv[3]) == 1)
 		dim_M = n;
-		M.resize(n, vector<double>(n));
-		M = matrices::multiplicar(X, X_t, n, m);	
-	}
 
-	//Ahora resta calcular los autovectores/autovalores y calcular la transformacion caracteristica de cada imagen
-	vector<vector<double> > autoVectores(k);
-	vector<double> autoValores = matrices::encontrarAutovalores(M,autoVectores,dim_M,k);
-	vector<vector<double> > tc(k);
-	for(int i=0;i<n;i++){
-		tc.push_back(transformacionCaracteristica(autoVectores,imagenes[i],k,m));
-	}
+	vector<vector<double> > M(dim_M, vector<double>(dim_M));
+	if (dim_M == m)
+		M = matrices::multiplicar(X_t, X, m, n);
+	else
+		M = matrices::multiplicar(X, X_t, n, m);
+
+	vector<vector<double> > autoVectores(k, vector<double>(dim_M));
+
+	//A M no lo volvemos a usar, ahora el método "encontrarAutovalores" lo modifica en la deflación.
+	//Nos ahorramos de copiar la matriz entera.
+	vector<double> autoValores = matrices::encontrarAutovalores(M, autoVectores, dim_M, k);
+	// vector<vector<double> > tc(k);
+	// for(int i=0;i<n;i++){
+	// 	tc.push_back(transformacionCaracteristica(autoVectores,imagenes[i],k,m));
+	// }
 	
+	cout << "Leyendo imagenes a probar..." << endl;
 	getline(entrada, linea);
 	int ntest = stoi(linea);			// Cantidad de imagenes a testear
 	for (int i = 0; i < ntest; i++){
@@ -170,20 +173,21 @@ int main(int args, char* argsv[]){
 			cout << "Error al leer el archivo de prueba " << path_test << endl;
 			return 1;
 		}
-		vector<double> tc_check=transformacionCaracteristica(autoVectores,imagen,k,m);
+		//vector<double> tc_check=transformacionCaracteristica(autoVectores,imagen,k,m);
 		
-		int parecido=encontrarPersona(tc,tc_check,n,k,1,nimgp,p);
+		//int parecido=encontrarPersona(tc,tc_check,n,k,1,nimgp,p);
 		//Aca hay que hacer la magia y ver si le embocamos a "persona"
 	}
 
 	// Aca se escribe el archivo de salida, con las raices cuadradas de los k autovalores
-	string file_name = "autovalores.txt";
 	ofstream archivoSalida;
-	archivoSalida.open(file_name, ios::out | ios::app);
-	for(int i=0;i<k;i++){
-		archivoSalida << to_string(autoValores[i])+"\n";	
+	archivoSalida.open(argsv[2]);
+	for(int i = 0; i < k; i++){
+		cout << "sqrt(Autovalor " + to_string(i) + "): " + to_string(sqrt(autoValores[i])) << endl;
+		archivoSalida << to_string(sqrt(autoValores[i])) + "\n";	
 	}	
 	archivoSalida.close();
+
 	return 0;
 }
 

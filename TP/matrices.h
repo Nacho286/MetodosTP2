@@ -1,8 +1,7 @@
 using namespace std;
 
-#define LIMITE 100
-#define UMBRAL 1.0e-2
-#define PASO_CONVERGENCIA 10
+#define LIMITE 1000
+#define UMBRAL 1.0e-7
 
 namespace matrices{
 
@@ -107,53 +106,62 @@ namespace matrices{
 		return res;
 	}
 
-	void normalizar(vector<double> &v, int n){
+	vector<double> normalizar(const vector<double> &v, int n){
+			vector<double> res(n);
 			double norma2 = norma_v(v, n, 2);			
 			for (int j = 0; j < n; j++)
-				v[j] = v[j] / norma2;
+				res[j] = v[j] / norma2;
+
+			return res;
 	}
 
 	//A (n x m), v (m x 1), k = cant. de iteraciones
 	//Necesariamente n = m; caso contrario, no coincide la dimension de Av (n x 1) con v (m x 1)
-	//Esto implica que el metodo de la potencia solo esta definido para matrices cuadradas?
-	//--En clase vimos para cuadradas creo.
-	//v es el autovector del autovalor que se devuelve. Por que tiene sentido?
-	double metodo_potencia(const vector<vector<double> >  &A, vector<double> &v, int n, int m, int k){
-		for (int i = 0; i < k; i++){
-			vector<double> Av = multiplicar(A, v, n, m);
-			normalizar(Av, n);
-			v = Av;
-		}
-
-		vector<double> Av = multiplicar(A, v, n, m);
-
-		double v_t_Av  = producto_escalar(v, Av, n);
-		double v_t_v   = producto_escalar(v, v, n);		// Esto equivale a la norma 2 de v al cuadrado 
-
-		double lambda = v_t_Av / v_t_v;
-
-		return lambda;
-	}
-
-	double autoValorMaximo(const vector<vector<double> >  &A, vector<double> &v, int n, int m){
-		//Algo que no esta bueno es que el metodo tiene que calcular de vuelta todas las matrices...
-		//Este metodo se podría usar como heuristica para encontrar un k adecuado. 
-		//Habria que ver si ese k sirve para todo autovalor de la matriz.
+	double metodo_potencia(const vector<vector<double> >  &A, vector<double> &v, int n, int m){
 		double anterior = 0.0;
-		//Necesito que en cada iteracion se utilice el x_0 generado de manera random
-		//Sino no estamos reproduciendo la instancia original
-		vector<double> v_original = v;
-		for (int k = PASO_CONVERGENCIA; k <= LIMITE; k += PASO_CONVERGENCIA){
-			v = v_original;
-			double actual = metodo_potencia(A, v, n, m, k);
-			// Para la primera iteracion:
-			// Qué pasa si actual es realmente chico pero no es el autovalor que buscamos?
-			if (abs(actual - anterior) < UMBRAL)
+		double actual = 0.0;
+
+		for (int i = 0; i < LIMITE; i++){
+			vector<double> Av = multiplicar(A, v, n, m);
+			v = normalizar(Av, n);
+
+			Av = multiplicar(A, v, n, m);
+
+			double v_t_Av  = producto_escalar(v, Av, n);
+			double v_t_v   = producto_escalar(v, v, n);		// Esto equivale a la norma 2 de v al cuadrado 
+
+			actual = v_t_Av / v_t_v;
+
+			if (abs(actual - anterior) < UMBRAL){
+				cout << "#Iteraciones: " + to_string(i) << endl;
 				return actual;
-			else
-				anterior = actual;
+			}else
+			 	anterior = actual;
 		}
+
+		return actual;
 	}
+
+
+	// double autoValorMaximo(const vector<vector<double> >  &A, vector<double> &v, int n, int m){
+	// 	//Algo que no esta bueno es que el metodo tiene que calcular de vuelta todas las matrices...
+	// 	//Este metodo se podría usar como heuristica para encontrar un k adecuado. 
+	// 	//Habria que ver si ese k sirve para todo autovalor de la matriz.
+	// 	double anterior = 0.0;
+	// 	//Necesito que en cada iteracion se utilice el x_0 generado de manera random
+	// 	//Sino no estamos reproduciendo la instancia original
+	// 	vector<double> v_original = v;
+	// 	for (int k = PASO_CONVERGENCIA; k <= LIMITE; k += PASO_CONVERGENCIA){
+	// 		v = v_original;
+	// 		double actual = metodo_potencia(A, v, n, m, k);
+	// 		// Para la primera iteracion:
+	// 		// Qué pasa si actual es realmente chico pero no es el autovalor que buscamos?
+	// 		if (abs(actual - anterior) < UMBRAL)
+	// 			return actual;
+	// 		else
+	// 			anterior = actual;
+	// 	}
+	// }
 
 	vector<vector<double> > deflacion(const vector<vector<double> > &A, const vector<double> &v, int n, double lambda){
 		vector<vector<double> > B = multiplicar(v, v, n);
@@ -164,24 +172,28 @@ namespace matrices{
 
 	// alpha determina cuantos autovalores/autovectores se encuentran
 	// V (alpha x n) = matriz donde cada fila es un autovector de M distinto
-	vector<double> encontrarAutovalores(const vector<vector<double> > &A, vector<vector<double> > &V, int n, int alpha){
+	vector<double> encontrarAutovalores(vector<vector<double> > &A, vector<vector<double> > &V, int n, int alpha){
 		vector<double> lst_autovalores(alpha);
-		vector<vector<double> > A_i = A;
+		
+		//Declaro el vector por fuera del bucle porque sino se indefine cuando se sale del scope para llamar a "metodo_potencia"
+		vector<double> x_0(n);
 
 		//Uso while porque for da a entender que estamos recorriendo algo
 		int i = 0;
 		while (i < alpha){
 			//X_0 vector con elementos aleatorios entre 0 y 1
 			//Esto disminuye la probabilidad de que resulte ortogonal al autovector que queremos encontrar
-			vector<double> x_0(n);
 			for (int j = 0; j < n; j++){
 				double r = ((double) rand() / RAND_MAX);
-				x_0.push_back(r);
+				x_0[j] = r;
+				//x_0.push_back(r);
 			}
-			double lambda_i = autoValorMaximo(A_i, x_0, n, n);
-			V.push_back(x_0);							
-			lst_autovalores.push_back(lambda_i);
-			A_i = deflacion(A_i, x_0, n, lambda_i);
+			double lambda_i = metodo_potencia(A, x_0, n, n);
+			V[i] = x_0;
+			//V.push_back(x_0);	
+			lst_autovalores[i] = lambda_i;						
+			//lst_autovalores.push_back(lambda_i);
+			A = deflacion(A, x_0, n, lambda_i);
 			i++;
 		}
 
