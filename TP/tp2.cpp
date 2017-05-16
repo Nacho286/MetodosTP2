@@ -41,34 +41,35 @@ vector<string> split(const string &s, char delim) {
 	return elems;
 }
 
-vector<double> transformacionCaracteristica(vector<vector<double> > autoVectores,vector<double> imagen,int size,int sizeImg){
-	vector<double> tc;
-	for(int i=0;i<size;i++){
-			tc.push_back(matrices::producto_escalar(autoVectores[i],imagen,sizeImg));
-	}
+vector<double> transformacionCaracteristica(const vector<vector<double> > &autoVectores, const vector<double> &imagen, int k, int sizeImg){
+	vector<double> tc(k);
+	for(int i = 0; i < k; i++)
+			tc.push_back(matrices::producto_escalar(autoVectores[i], imagen, sizeImg));
+
 	return tc;
 }
 
-int encontrarPersona(vector<vector<double>> tc, vector<double> tc_check,int cantImg,int cantVectores,int knn, int cantImgsXPersona, int cantPersonas){
+int encontrarPersona(const vector<vector<double> > &tc, const vector<double> &tc_check, int cantImg, int cantVectores, int knn, int nimgp, int cantPersonas){
 
 //	vector<double> normas(cantImg); 
 	std::priority_queue<par> cola;
-	for(int i=0;i<cantImg;i++){
-		vector<double> resta = matrices::restarVector(tc[i],tc_check,cantVectores);
+	for (int i = 0; i < cantImg; i++){
+		vector<double> resta = matrices::restarVector(tc[i], tc_check, cantVectores);
 //		normas.push_back(matrices::norma_v(resta,cantVectores,2));
-		par p={i,matrices::norma_v(resta,cantVectores,2)};
+		par p = {i, matrices::norma_v(resta, cantVectores, 2)};
 		cola.push(p);
 	}
-	vector<int> personas(cantPersonas,0);
-	for(int i=0;i<knn;i++){
-		personas[(cola.top().a)/cantImgsXPersona]+=1;
+
+	vector<int> personas(cantPersonas, 0);
+	for (int i = 0; i < knn; i++){
+		personas[(cola.top().a) / nimgp] += 1;
 		cola.pop();
 	}
-	int maxComun=0;
-	for(int i=0;i<cantPersonas;i++){
-		if(personas[maxComun]<personas[i]){
-			maxComun=i;
-		}
+
+	int maxComun = 0;
+	for (int i = 0; i < cantPersonas; i++){
+		if (personas[maxComun] < personas[i])
+			maxComun = i;
 	}
 	return maxComun;
 }
@@ -116,7 +117,8 @@ int main(int args, char* argsv[]){
 	}
 
 	//Creo una copia para calcular la transformacion caracteristica de los vectores imagen despues
-	vector<vector<double> > imagenes = X;
+	//X no se modifica nunca, no hacemos la copia
+	//vector<vector<double> > imagenes = X;
 
 	//Calculo el promedio de las imagenes (se calcula por columnas)
 	vector<double> mu(m, 0.0);
@@ -170,12 +172,12 @@ int main(int args, char* argsv[]){
 		autoVectores.resize(k, vector<double>(m));
 		autoVectores = autoVectores_V;
 	}
-	// vector<vector<double> > tc(k);
-	// for(int i=0;i<n;i++){
-	// 	tc.push_back(transformacionCaracteristica(autoVectores,imagenes[i],k,m));
-	// }
+
+	vector<vector<double> > tc(n, vector<double>(k));
+	//Matriz de n x k donde cada fila es el vector de la tc de cada imagen
+	for(int i = 0; i < n; i++)
+	 	tc[i] = transformacionCaracteristica(autoVectores, X[i], k, m);
 	
-	cout << "Leyendo imagenes a probar..." << endl;
 	getline(entrada, linea);
 	int ntest = stoi(linea);			// Cantidad de imagenes a testear
 	for (int i = 0; i < ntest; i++){
@@ -188,13 +190,18 @@ int main(int args, char* argsv[]){
 			cout << "Error al leer el archivo de prueba " << path_test << endl;
 			return 1;
 		}
-		//vector<double> tc_check=transformacionCaracteristica(autoVectores,imagen,k,m);
+		vector<double> tc_check = transformacionCaracteristica(autoVectores, imagen, k, m);
 		
-		//int parecido=encontrarPersona(tc,tc_check,n,k,1,nimgp,p);
-		//Aca hay que hacer la magia y ver si le embocamos a "persona"
+		//Puede ser que tc_check se desreferencie cuando se llama a encontrarPersona
+		//Si da error, verificar que dicho vector tenga valores no nulos dentro de encontrarPersona
+		int parecido = encontrarPersona(tc, tc_check, n, k, 1, nimgp, p);
+		parecido++;
+		if (parecido != persona)
+			cout << "Imagen " + path_test + " NO coincide. Persona: " + to_string(persona) + ". Parecido: " + to_string(parecido) << endl;
+		else
+			cout << "OK" << endl;	
 	}
 
-	// Aca se escribe el archivo de salida, con las raices cuadradas de los k autovalores
 	ofstream archivoSalida;
 	archivoSalida.open(argsv[2]);
 	for(int i = 0; i < k; i++){
