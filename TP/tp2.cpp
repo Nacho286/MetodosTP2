@@ -17,7 +17,7 @@ struct par{
     double b;
     bool operator<(const par& rhs) const
     {
-        return b < rhs.b;
+        return b > rhs.b;
     }
 };
 
@@ -42,10 +42,10 @@ vector<string> split(const string &s, char delim) {
 }
 
 vector<double> transformacionCaracteristica(const vector<vector<double> > &autoVectores, const vector<double> &imagen, int k, int sizeImg){
-	vector<double> tc(k);
-	for(int i = 0; i < k; i++)
-			tc.push_back(matrices::producto_escalar(autoVectores[i], imagen, sizeImg));
-
+	vector<double> tc(k,0);
+	for(int i = 0; i < k; i++){
+		tc[i]=matrices::producto_escalar(autoVectores[i], imagen, sizeImg);	
+	}
 	return tc;
 }
 
@@ -54,15 +54,17 @@ int encontrarPersona(const vector<vector<double> > &tc, const vector<double> &tc
 //	vector<double> normas(cantImg); 
 	std::priority_queue<par> cola;
 	for (int i = 0; i < cantImg; i++){
+
 		vector<double> resta = matrices::restarVector(tc[i], tc_check, cantVectores);
-//		normas.push_back(matrices::norma_v(resta,cantVectores,2));
 		par p = {i, matrices::norma_v(resta, cantVectores, 2)};
+		//cout<<"Norma: "<<i<<" "<<matrices::norma_v(resta, cantVectores, 2)<<endl;
 		cola.push(p);
 	}
 
 	vector<int> personas(cantPersonas, 0);
 	for (int i = 0; i < knn; i++){
 		personas[(cola.top().a) / nimgp] += 1;
+		//cout<<"Cola: "<<cola.top().a<<" "<<(cola.top().a/ nimgp)+1<<" "<<cola.top().b<<endl;		
 		cola.pop();
 	}
 
