@@ -174,7 +174,11 @@ int main(int args, char* argsv[]){
 		autoVectores.resize(k, vector<double>(m));
 		autoVectores = autoVectores_V;
 	}
-
+	vector<double> mv= matrices::multiplicar(M,autoVectores[0],dim_M,dim_M);
+	for(int i=0;i<dim_M;i++){
+		double aux=autoValores[0]*autoVectores[0][i];
+		cout<<mv[i]<<" "<<aux<<endl;
+	}
 	vector<vector<double> > tc(n, vector<double>(k));
 	//Matriz de n x k donde cada fila es el vector de la tc de cada imagen
 	for(int i = 0; i < n; i++)
@@ -196,7 +200,7 @@ int main(int args, char* argsv[]){
 		
 		//Puede ser que tc_check se desreferencie cuando se llama a encontrarPersona
 		//Si da error, verificar que dicho vector tenga valores no nulos dentro de encontrarPersona
-		int parecido = encontrarPersona(tc, tc_check, n, k, 1, nimgp, p);
+		int parecido = encontrarPersona(tc, tc_check, n, k, nimgp, nimgp, p);
 		parecido++;
 		if (parecido != persona)
 			cout << "Imagen " + path_test + " NO coincide. Persona: " + to_string(persona) + ". Parecido: " + to_string(parecido) << endl;
