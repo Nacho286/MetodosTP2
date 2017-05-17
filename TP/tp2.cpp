@@ -34,7 +34,6 @@ void split(const string &s, char delim, Out result) {
     	*(result++) = item;
 }	
 
-
 vector<string> split(const string &s, char delim) {
 	vector<string> elems;
 	split(s, delim, back_inserter(elems));
@@ -42,29 +41,25 @@ vector<string> split(const string &s, char delim) {
 }
 
 vector<double> transformacionCaracteristica(const vector<vector<double> > &autoVectores, const vector<double> &imagen, int k, int sizeImg){
-	vector<double> tc(k,0);
-	for(int i = 0; i < k; i++){
-		tc[i]=matrices::producto_escalar(autoVectores[i], imagen, sizeImg);	
-	}
+	vector<double> tc(k);
+	for(int i = 0; i < k; i++)
+		tc[i] = matrices::producto_escalar(autoVectores[i], imagen, sizeImg);	
+
 	return tc;
 }
 
 int encontrarPersona(const vector<vector<double> > &tc, const vector<double> &tc_check, int cantImg, int cantVectores, int knn, int nimgp, int cantPersonas){
 
-//	vector<double> normas(cantImg); 
 	std::priority_queue<par> cola;
 	for (int i = 0; i < cantImg; i++){
-
 		vector<double> resta = matrices::restarVector(tc[i], tc_check, cantVectores);
 		par p = {i, matrices::norma_v(resta, cantVectores, 2)};
-		//cout<<"Norma: "<<i<<" "<<matrices::norma_v(resta, cantVectores, 2)<<endl;
 		cola.push(p);
 	}
 
 	vector<int> personas(cantPersonas, 0);
 	for (int i = 0; i < knn; i++){
-		personas[(cola.top().a) / nimgp] += 1;
-		//cout<<"Cola: "<<cola.top().a<<" "<<(cola.top().a/ nimgp)+1<<" "<<cola.top().b<<endl;		
+		personas[(cola.top().a) / nimgp] += 1;		
 		cola.pop();
 	}
 
@@ -73,6 +68,7 @@ int encontrarPersona(const vector<vector<double> > &tc, const vector<double> &tc
 		if (personas[maxComun] < personas[i])
 			maxComun = i;
 	}
+	
 	return maxComun;
 }
 
@@ -106,8 +102,6 @@ int main(int args, char* argsv[]){
 	for (int i = 0; i < p; i++){
 		getline(entrada, linea);
 		datos = split(linea, ' ');
-		//¿No faltaria un vector que me identifique cada imagen con la persona?
-		//--Dividiendo la posicion por nimgp (y sumando 1) obtengo a qué persona pertenece la imagen
 		for (int j = 1; j <= nimgp; j++){
 			string file = path + datos[0] + datos[j] + ".pgm";
 			if (pgmb_read(file, fils, cols, maxG, X[pos], false)){
@@ -118,9 +112,8 @@ int main(int args, char* argsv[]){
 		}
 	}
 
-	//Creo una copia para calcular la transformacion caracteristica de los vectores imagen despues
-	//X no se modifica nunca, no hacemos la copia
-	//vector<vector<double> > imagenes = X;
+	//Hago una copia de X para calcular la transformacion caracteristica despues
+	vector<vector<double> > imagenes = X;
 
 	//Calculo el promedio de las imagenes (se calcula por columnas)
 	vector<double> mu(m, 0.0);
@@ -156,10 +149,8 @@ int main(int args, char* argsv[]){
 		M = matrices::multiplicar(X, X_t, n, m);
 
 	vector<vector<double> > autoVectores(k, vector<double>(dim_M));
-
-	//A M no lo volvemos a usar, ahora el método "encontrarAutovalores" lo modifica en la deflación.
-	//Nos ahorramos de copiar la matriz entera.
 	vector<double> autoValores = matrices::encontrarAutovalores(M, autoVectores, dim_M, k);
+
 	//Si hice la cuenta al revés, calculo los autovectores que corresponden usar
 	if (dim_M == n){
 		vector<vector<double> > autoVectores_V(k, vector<double>(m));
@@ -174,18 +165,15 @@ int main(int args, char* argsv[]){
 		autoVectores.resize(k, vector<double>(m));
 		autoVectores = autoVectores_V;
 	}
-	vector<double> mv= matrices::multiplicar(M,autoVectores[0],dim_M,dim_M);
-	for(int i=0;i<dim_M;i++){
-		double aux=autoValores[0]*autoVectores[0][i];
-		cout<<mv[i]<<" "<<aux<<endl;
-	}
+
 	vector<vector<double> > tc(n, vector<double>(k));
 	//Matriz de n x k donde cada fila es el vector de la tc de cada imagen
 	for(int i = 0; i < n; i++)
-	 	tc[i] = transformacionCaracteristica(autoVectores, X[i], k, m);
+	 	tc[i] = transformacionCaracteristica(autoVectores, imagenes[i], k, m);
 	
 	getline(entrada, linea);
 	int ntest = stoi(linea);			// Cantidad de imagenes a testear
+	char exitos = 0;
 	for (int i = 0; i < ntest; i++){
 		getline(entrada, linea);
 		datos = split(linea, ' ');
@@ -198,20 +186,21 @@ int main(int args, char* argsv[]){
 		}
 		vector<double> tc_check = transformacionCaracteristica(autoVectores, imagen, k, m);
 		
-		//Puede ser que tc_check se desreferencie cuando se llama a encontrarPersona
-		//Si da error, verificar que dicho vector tenga valores no nulos dentro de encontrarPersona
 		int parecido = encontrarPersona(tc, tc_check, n, k, nimgp, nimgp, p);
 		parecido++;
-		if (parecido != persona)
-			cout << "Imagen " + path_test + " NO coincide. Persona: " + to_string(persona) + ". Parecido: " + to_string(parecido) << endl;
-		else
+		if (parecido != persona){
+			cout << path_test + " NO coincide. Persona: " + to_string(persona) + ". Parecido: " + to_string(parecido) << endl;
+		}else{
 			cout << "OK" << endl;	
+			exitos++;
+		}
 	}
+	cout << "#Exitos: " + to_string(exitos) << endl;
 
 	ofstream archivoSalida;
 	archivoSalida.open(argsv[2]);
 	for(int i = 0; i < k; i++){
-		cout << "sqrt(Autovalor " + to_string(i) + "): " + to_string(sqrt(autoValores[i])) << endl;
+		cout << "sqrt(Autovalor " + to_string(i + 1) + "): " + to_string(sqrt(autoValores[i])) << endl;
 		archivoSalida << to_string(sqrt(autoValores[i])) + "\n";	
 	}
 	archivoSalida.close();	
