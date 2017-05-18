@@ -58,9 +58,12 @@ int encontrarPersona(const vector<vector<double> > &tc, const vector<double> &tc
 	}
 
 	vector<int> personas(cantPersonas, 0);
+	personas[(cola.top().a) / nimgp] += 1;	
 	for (int i = 0; i < knn; i++){
 		personas[(cola.top().a) / nimgp] += 1;		
+		cout<<((cola.top().a) / nimgp)+1<<" "<<cola.top().b <<endl;
 		cola.pop();
+
 	}
 
 	int maxComun = 0;
@@ -186,7 +189,7 @@ int main(int args, char* argsv[]){
 		}
 		vector<double> tc_check = transformacionCaracteristica(autoVectores, imagen, k, m);
 		
-		int parecido = encontrarPersona(tc, tc_check, n, k, nimgp, nimgp, p);
+		int parecido = encontrarPersona(tc, tc_check, n, k,nimgp, nimgp, p);
 		parecido++;
 		if (parecido != persona){
 			cout << path_test + " NO coincide. Persona: " + to_string(persona) + ". Parecido: " + to_string(parecido) << endl;
