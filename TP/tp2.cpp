@@ -61,7 +61,7 @@ int encontrarPersona(const vector<vector<double> > &tc, const vector<double> &tc
 	personas[(cola.top().a) / nimgp] += 1;	
 	for (int i = 0; i < knn; i++){
 		personas[(cola.top().a) / nimgp] += 1;		
-		cout<<((cola.top().a) / nimgp)+1<<" "<<cola.top().b <<endl;
+		//cout<<((cola.top().a) / nimgp)+1<<" "<<cola.top().b <<endl;
 		cola.pop();
 
 	}
