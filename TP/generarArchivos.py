@@ -9,9 +9,9 @@ cantImgXPersonas = int(sys.argv[3])
 cantAutovalores = int(sys.argv[4])
 cantTest = int(sys.argv[5])
 
-archivo= "test_"+ ("Big_" if size==0 else "Red_") + str(cantPersonas)+"_"+str(cantImgXPersonas)+"_"+str(cantAutovalores)+"_"+str(cantTest)
+archivo= "test_"+ ("Big_" if size==0 else "Red_") + str(cantPersonas)+"_"+str(cantImgXPersonas)+"_"+str(cantAutovalores)+"_"+str(cantTest)+".in"
 archivoW=open(archivo,"w")
-archivoW.write("../data/ImagenesCaras/ "+ ("112 92 " if size==0 else "28 23 ") + str(cantPersonas)+" "+str(cantImgXPersonas)+" "+str(cantAutovalores)+"\n")
+archivoW.write("../data/ImagenesCaras"+(""if size==0 else"Red")+"/ "+ ("112 92 " if size==0 else "28 23 ") + str(cantPersonas)+" "+str(cantImgXPersonas)+" "+str(cantAutovalores)+"\n")
 fotos={}
 for i in range(1,cantPersonas+1):
 	aux="s"+str(i)+"/ "
@@ -23,7 +23,7 @@ for i in range(1,cantPersonas+1):
 	archivoW.write(aux)
 archivoW.write(str(cantTest)+"\n")
 for i in range(1,cantTest+1):
-	aux="../data/ImagenesCaras/s"+str(i)+"/"
+	aux="../data/ImagenesCaras"+(""if size==0 else"Red")+"/s"+str(i)+"/"
 	lista=[x for x in range(1,11) if x not in fotos[i]]
 	aux+=str(ran.choice(lista))+".pgm "+str(i)+"\n"
 	archivoW.write(aux)
