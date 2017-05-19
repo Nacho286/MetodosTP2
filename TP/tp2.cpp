@@ -57,10 +57,19 @@ int encontrarPersona(const vector<vector<double> > &tc, const vector<double> &tc
 		cola.push(p);
 	}
 
-	vector<int> personas(cantPersonas, 0);
-	personas[(cola.top().a) / nimgp] += 1;	
+	vector<double> personas(cantPersonas, 0);
+	//personas[(cola.top().a) / nimgp] += 1;	
 	for (int i = 0; i < knn; i++){
-		personas[(cola.top().a) / nimgp] += 1;		
+		personas[(cola.top().a) / nimgp] += 1;
+/*		if(i==0){
+			personas[(cola.top().a) / nimgp] += (2.0/3.0);	
+		}
+		else if(i==1){
+			personas[(cola.top().a) / nimgp] += (1.0/6.0);	
+		}		
+		else{
+			personas[(cola.top().a) / nimgp] += ((1.0/(6.0))*(knn-2));
+		}*/
 		//cout<<((cola.top().a) / nimgp)+1<<" "<<cola.top().b <<endl;
 		cola.pop();
 
@@ -205,15 +214,17 @@ int main(int args, char* argsv[]){
 	}
 
 	vector<vector<double> > tc(n, vector<double>(k));
+	vector<int> parecidos(1001,0);
 	//Matriz de n x k donde cada fila es el vector de la tc de cada imagen
 	for(int i = 0; i < n; i++)
 	 	tc[i] = transformacionCaracteristica(autoVectores, imagenes[i], k, m);
 	
 	getline(entrada, linea);
 	int ntest = stoi(linea);			// Cantidad de imagenes a testear
-	char exitosDis = 0;
-	char exitosMan = 0;
-	char exitosHam = 0;
+	int exitosDis = 0;
+	int exitosMan = 0;
+	int exitosHam = 0;
+	
 	for (int i = 0; i < ntest; i++){
 		getline(entrada, linea);
 		datos = split(linea, ' ');
@@ -229,6 +240,7 @@ int main(int args, char* argsv[]){
 		int parecidoMan = encontrarPersona(tc, tc_check, n, k,nimgp, nimgp, p,1);
 		int parecidoDis = encontrarPersona(tc, tc_check, n, k,nimgp, nimgp, p,2);
 		int parecidoHam = encontrarPersonaHamming(tc, tc_check, n, k,nimgp, nimgp, p,750);	
+			
 		parecidoMan++;
 		parecidoDis++;
 		parecidoHam++;
@@ -254,11 +266,11 @@ int main(int args, char* argsv[]){
 		
 	}
 	
-	cout<< endl;
+	
 	cout << "#Exitos Norma 2: " + to_string(exitosDis) << endl;
 	cout << "#Exitos Manhattan : " + to_string(exitosMan) << endl;
 	cout << "#Exitos Hamming : " + to_string(exitosHam) << endl;
-
+	
 	ofstream archivoSalida;
 	archivoSalida.open(argsv[2]);
 	for(int i = 0; i < k; i++){
