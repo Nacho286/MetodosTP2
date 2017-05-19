@@ -252,7 +252,7 @@ int main(int args, char* argsv[]){
 		}
 	}
 	cout << "#Exitos Norma 2: " + to_string(exitosDis) << endl;
-	cout << "#Exitos Manhattan : " + to_string(exitosDis) << endl;
+	cout << "#Exitos Manhattan : " + to_string(parecidoMan) << endl;
 	cout << "#Exitos Hamming : " + to_string(exitosHam) << endl;
 
 	ofstream archivoSalida;
