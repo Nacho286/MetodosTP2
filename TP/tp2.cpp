@@ -48,12 +48,47 @@ vector<double> transformacionCaracteristica(const vector<vector<double> > &autoV
 	return tc;
 }
 
-int encontrarPersona(const vector<vector<double> > &tc, const vector<double> &tc_check, int cantImg, int cantVectores, int knn, int nimgp, int cantPersonas){
+int encontrarPersona(const vector<vector<double> > &tc, const vector<double> &tc_check, int cantImg, int cantVectores, int knn, int nimgp, int cantPersonas,int norma){
 
 	std::priority_queue<par> cola;
 	for (int i = 0; i < cantImg; i++){
 		vector<double> resta = matrices::restarVector(tc[i], tc_check, cantVectores);
-		par p = {i, matrices::norma_v(resta, cantVectores, 2)};
+		par p = {i, matrices::norma_v(resta, cantVectores, norma)};
+		cola.push(p);
+	}
+
+	vector<int> personas(cantPersonas, 0);
+	personas[(cola.top().a) / nimgp] += 1;	
+	for (int i = 0; i < knn; i++){
+		personas[(cola.top().a) / nimgp] += 1;		
+		//cout<<((cola.top().a) / nimgp)+1<<" "<<cola.top().b <<endl;
+		cola.pop();
+
+	}
+
+	int maxComun = 0;
+	for (int i = 0; i < cantPersonas; i++){
+		if (personas[maxComun] < personas[i])
+			maxComun = i;
+	}
+	
+	return maxComun;
+}
+
+int encontrarPersonaHamming(const vector<vector<double> > &tc, const vector<double> &tc_check, int cantImg, int cantVectores, int knn, int nimgp, int cantPersonas,int cota){
+
+	std::priority_queue<par> cola;
+	for (int i = 0; i < cantImg; i++){
+		vector<double> resta = matrices::restarVector(tc[i], tc_check, cantVectores);
+		for(int j=0;j<cantVectores;j++){
+			if(abs(resta[j])<cota){
+				resta[j]=0;
+			}
+			else{
+				resta[j]=1;
+			}
+		}
+		par p = {i, matrices::norma_v(resta, cantVectores, 1)};
 		cola.push(p);
 	}
 
@@ -176,7 +211,9 @@ int main(int args, char* argsv[]){
 	
 	getline(entrada, linea);
 	int ntest = stoi(linea);			// Cantidad de imagenes a testear
-	char exitos = 0;
+	char exitosDis = 0;
+	char exitosMan = 0;
+	char exitosHam = 0;
 	for (int i = 0; i < ntest; i++){
 		getline(entrada, linea);
 		datos = split(linea, ' ');
@@ -189,16 +226,34 @@ int main(int args, char* argsv[]){
 		}
 		vector<double> tc_check = transformacionCaracteristica(autoVectores, imagen, k, m);
 		
-		int parecido = encontrarPersona(tc, tc_check, n, k,nimgp, nimgp, p);
-		parecido++;
-		if (parecido != persona){
-			cout << path_test + " NO coincide. Persona: " + to_string(persona) + ". Parecido: " + to_string(parecido) << endl;
+		int parecidoMan = encontrarPersona(tc, tc_check, n, k,nimgp, nimgp, p,1);
+		int parecidoDis = encontrarPersona(tc, tc_check, n, k,nimgp, nimgp, p,2);
+		int parecidoHam = encontrarPersonaHamming(tc, tc_check, n, k,nimgp, nimgp, p,750);
+		parecidoMan++;
+		parecidoDis++;
+		parecidoHam++;
+		if (parecidoDis != persona){
+			cout << path_test + " Norma 2 NO coincide. Persona: " + to_string(persona) + ". Parecido: " + to_string(parecidoDis) << endl;
 		}else{
-			cout << "OK" << endl;	
-			exitos++;
+			cout << to_string(persona) +" OK Con Norma 2" << endl;	
+			exitosDis++;
+		}
+		if (parecidoMan != persona){
+			cout << path_test + " Manhattan NO coincide. Persona: " + to_string(persona) + ". Parecido: " + to_string(parecidoDis) << endl;
+		}else{
+			cout << to_string(persona) +" OK Con Manhattan" << endl;	
+			exitosMan++;
+		}
+		if (parecidoHam != persona){
+			cout << path_test + " Hamming NO coincide. Persona: " + to_string(persona) + ". Parecido: " + to_string(parecidoDis) << endl;
+		}else{
+			cout << to_string(persona) +" OK Con Hamming" << endl;	
+			exitosHam++;
 		}
 	}
-	cout << "#Exitos: " + to_string(exitos) << endl;
+	cout << "#Exitos Norma 2: " + to_string(exitosDis) << endl;
+	cout << "#Exitos Manhattan : " + to_string(exitosDis) << endl;
+	cout << "#Exitos Hamming : " + to_string(exitosHam) << endl;
 
 	ofstream archivoSalida;
 	archivoSalida.open(argsv[2]);

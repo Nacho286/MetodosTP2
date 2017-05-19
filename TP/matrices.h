@@ -94,7 +94,7 @@ namespace matrices{
 		for (int i = 0; i < n; i++)
 			res += pow(abs(v[i]), p);
 
-		return sqrt(res);
+		return pow(res,pow(p,-1));
 	}
 
 	//v_t (1 x n) * w (n x 1) = a (1 x 1)
