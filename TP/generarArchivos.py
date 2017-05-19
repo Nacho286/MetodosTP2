@@ -13,19 +13,30 @@ archivo= "test_"+ ("Big_" if size==0 else "Red_") + str(cantPersonas)+"_"+str(ca
 archivoW=open(archivo,"w")
 archivoW.write("../data/ImagenesCaras"+(""if size==0 else"Red")+"/ "+ ("112 92 " if size==0 else "28 23 ") + str(cantPersonas)+" "+str(cantImgXPersonas)+" "+str(cantAutovalores)+"\n")
 fotos={}
+fotosPrueba={}
 for i in range(1,cantPersonas+1):
 	aux="s"+str(i)+"/ "
 	ranNum= ran.sample(range(1,11),cantImgXPersonas)
 	fotos[i]=ranNum
+	fotosPrueba[i]=[x for x in range(1,11) if x not in fotos[i]]
 	for j in ranNum:
 		aux+=str(j)+" "
 	aux+="\n"
 	archivoW.write(aux)
+
 archivoW.write(str(cantTest)+"\n")
 for i in range(1,cantTest+1):
-	aux="../data/ImagenesCaras"+(""if size==0 else"Red")+"/s"+str(i)+"/"
-	lista=[x for x in range(1,11) if x not in fotos[i]]
-	aux+=str(ran.choice(lista))+".pgm "+str(i)+"\n"
+	
+	j=ran.choice(range(1,cantPersonas+1))
+
+	while(len(fotosPrueba[j])==0):
+		j=ran.choice(range(1,cantPersonas+1))	
+	aux="../data/ImagenesCaras"+(""if size==0 else"Red")+"/s"+str(j)+"/"
+	lista=fotosPrueba[j]
+	d=ran.choice(lista)
+	lista.remove(d)
+	fotosPrueba[j]=lista
+	aux+=str(d)+".pgm "+str(j)+"\n"
 	archivoW.write(aux)
 
 

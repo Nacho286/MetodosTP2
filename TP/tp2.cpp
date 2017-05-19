@@ -228,31 +228,35 @@ int main(int args, char* argsv[]){
 		
 		int parecidoMan = encontrarPersona(tc, tc_check, n, k,nimgp, nimgp, p,1);
 		int parecidoDis = encontrarPersona(tc, tc_check, n, k,nimgp, nimgp, p,2);
-		int parecidoHam = encontrarPersonaHamming(tc, tc_check, n, k,nimgp, nimgp, p,750);
+		int parecidoHam = encontrarPersonaHamming(tc, tc_check, n, k,nimgp, nimgp, p,750);	
 		parecidoMan++;
 		parecidoDis++;
 		parecidoHam++;
+		cout<< endl;
+		if (parecidoMan != persona){
+			cout << path_test + " Manhattan NO coincide. Persona: " + to_string(persona) + ". Parecido: " + to_string(parecidoMan) << endl;
+		}else{
+			cout << to_string(persona) +" OK Con Manhattan" << endl;	
+			exitosMan++;
+		}
 		if (parecidoDis != persona){
 			cout << path_test + " Norma 2 NO coincide. Persona: " + to_string(persona) + ". Parecido: " + to_string(parecidoDis) << endl;
 		}else{
 			cout << to_string(persona) +" OK Con Norma 2" << endl;	
 			exitosDis++;
 		}
-		if (parecidoMan != persona){
-			cout << path_test + " Manhattan NO coincide. Persona: " + to_string(persona) + ". Parecido: " + to_string(parecidoDis) << endl;
-		}else{
-			cout << to_string(persona) +" OK Con Manhattan" << endl;	
-			exitosMan++;
-		}
 		if (parecidoHam != persona){
-			cout << path_test + " Hamming NO coincide. Persona: " + to_string(persona) + ". Parecido: " + to_string(parecidoDis) << endl;
+			cout << path_test + " Hamming NO coincide. Persona: " + to_string(persona) + ". Parecido: " + to_string(parecidoHam) << endl;
 		}else{
 			cout << to_string(persona) +" OK Con Hamming" << endl;	
 			exitosHam++;
 		}
+		
 	}
+	
+	cout<< endl;
 	cout << "#Exitos Norma 2: " + to_string(exitosDis) << endl;
-	cout << "#Exitos Manhattan : " + to_string(parecidoMan) << endl;
+	cout << "#Exitos Manhattan : " + to_string(exitosMan) << endl;
 	cout << "#Exitos Hamming : " + to_string(exitosHam) << endl;
 
 	ofstream archivoSalida;
