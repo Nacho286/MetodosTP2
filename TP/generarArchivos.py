@@ -39,6 +39,6 @@ for i in range(1,cantTest+1):
 	aux+=str(d)+".pgm "+str(j)+"\n"
 	archivoW.write(aux)
 
-
-
+archivoW.close()
+os.system('./main '+archivo+' Test.out');
 
