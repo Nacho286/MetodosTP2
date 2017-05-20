@@ -97,7 +97,7 @@ vector<vector<double> >	tablasDeConfusion(const vector<vector<double> > m, int s
 			if(j!= i)
 				t_kunfusion[0][1] += m[i][j]; //fn
 		
-		for(k=0;k<size;k++)
+		for(int k=0;k<size;k++)
 			if(k!=i)
 				t_kunfusion[1][0] += m[k][i]; //fp
 
