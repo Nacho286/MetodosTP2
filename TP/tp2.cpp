@@ -84,6 +84,33 @@ int encontrarPersona(const vector<vector<double> > &tc, const vector<double> &tc
 	return maxComun;
 }
 
+//En cada posicion del vector hay una tabla de 2x2(interpretada como vector chorizo) de confusion
+// Es decir [tp,fn,fp,tn]
+vector<vector<double> >	tablasDeConfusion(const vector<vector<double> > m, int size){
+	vector<vector<double> > tablas(size,vector<double>(4));
+	
+	for(int i = 0;i<size;i++){
+		vector<double> t_kunfusion(4);
+		t_kunfusion[0][0] = m[i][i]; //tp
+
+		for(int j = 0;j<size;j++)
+			if(j!= i)
+				t_kunfusion[0][1] += m[i][j]; //fn
+		
+		for(k=0;k<size;k++)
+			if(k!=i)
+				t_kunfusion[1][0] += m[k][i]; //fp
+
+		for (int r = 0; r < size; r++)
+			for(int s = 0; s < size;s++)
+				if(s!=i && r != i)
+					t_kunfusion[1][1] += m[r][s]; //tn
+		tablas.push_back(t_kunfusion);
+	}
+	
+	return tablas;
+
+}
 int encontrarPersonaHamming(const vector<vector<double> > &tc, const vector<double> &tc_check, int cantImg, int cantVectores, int knn, int nimgp, int cantPersonas,int cota){
 
 	std::priority_queue<par> cola;
@@ -282,6 +309,7 @@ int main(int args, char* argsv[]){
 		
 	}
 	
+
 	//matrices::mostrarMatriz(matriz_kunfusionHam,p,p);
 
 	
