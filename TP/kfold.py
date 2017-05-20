@@ -39,6 +39,6 @@ for j in range(0,5):
 			if (i==j):
 				kfold = kfolds[i]
 				for foto in kfold[persona]: 
-					aux="../data/ImagenesCaras"+(""if size==0 else"Red")+"/s"+str(persona)+"/ "+str(foto)+"\n"
+					aux="../data/ImagenesCaras"+(""if size==0 else"Red")+"/s"+str(persona)+"/"+str(foto)+".pgm "+str(persona)+"\n"
 					archivoW.write(aux)
 	archivoW.close()
