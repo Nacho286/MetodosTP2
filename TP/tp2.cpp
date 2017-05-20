@@ -91,21 +91,21 @@ vector<vector<double> >	tablasDeConfusion(const vector<vector<double> > m, int s
 	
 	for(int i = 0;i<size;i++){
 		vector<double> t_kunfusion(4);
-		t_kunfusion[0][0] = m[i][i]; //tp
+		t_kunfusion[0] = m[i][i]; //tp
 
 		for(int j = 0;j<size;j++)
 			if(j!= i)
-				t_kunfusion[0][1] += m[i][j]; //fn
+				t_kunfusion[1] += m[i][j]; //fn
 		
 		for(int k=0;k<size;k++)
 			if(k!=i)
-				t_kunfusion[1][0] += m[k][i]; //fp
+				t_kunfusion[2] += m[k][i]; //fp
 
 		for (int r = 0; r < size; r++)
 			for(int s = 0; s < size;s++)
 				if(s!=i && r != i)
-					t_kunfusion[1][1] += m[r][s]; //tn
-		tablas.push_back(t_kunfusion);
+					t_kunfusion[3] += m[r][s]; //tn
+		tablas[i]= (t_kunfusion);
 	}
 	
 	return tablas;
@@ -309,9 +309,58 @@ int main(int args, char* argsv[]){
 		
 	}
 	
+	//Reportar resultados: precision, recall, specifity,f1 en ese orden
+	vector<vector<double> > tablasHam(tablasDeConfusion(matriz_kunfusionHam,p));
+ 	vector<vector<double> > tablasp1(tablasDeConfusion(matriz_kunfusionp1,p));
+ 	vector<vector<double> > tablasp2(tablasDeConfusion(matriz_kunfusionp2,p));
+
+ 	//[precision, recall, spec,f1]
+ 	vector<double> resultadosHam(4);
+ 	vector<double> resultadosP1(4);
+ 	vector<double> resultadosP2(4);
+
+ 	//[tp,fn,fp,tn]
+ 	for(int i = 0;i<p;i++){
+ 		//precision_i
+ 		resultadosHam[0] += tablasHam[i][0]/(tablasHam[i][0]+tablasHam[i][2])/p;
+ 		resultadosP1 [0] += tablasp1[i][0]/(tablasp1[i][0]+tablasp1[i][2])/p; 
+ 		resultadosP2 [0] += tablasp2[i][0]/(tablasp2[i][0]+tablasp2[i][2])/p;
+
+ 		//recall_i
+ 		resultadosHam[1] += tablasHam[i][0]/(tablasHam[i][0]+tablasHam[i][1])/p;
+ 		resultadosP1 [1] += tablasp1[i][0]/(tablasp1[i][0]+tablasp1[i][1])/p; 
+ 		resultadosP2 [1] += tablasp2[i][0]/(tablasp2[i][0]+tablasp2[i][1])/p;
+
+ 		//specificity_i
+ 		resultadosHam[2] += tablasHam[i][3]/(tablasHam[i][3]+tablasHam[i][2])/p;
+ 		resultadosP1 [2] += tablasp1[i][3]/(tablasp1[i][3]+tablasp1[i][2])/p; 
+ 		resultadosP2 [2] += tablasp2[i][3]/(tablasp2[i][3]+tablasp2[i][2])/p;
+
+ 		//f1_i
+		resultadosHam[3] += (2*(resultadosHam[0]*resultadosHam[1]/(resultadosHam[0]+resultadosHam[1])))/p;
+ 		resultadosP1 [3] += (2*(resultadosP1[0]*resultadosP1[1]/(resultadosP1[0]+resultadosP1[1])))/p;
+ 		resultadosP2 [3] += (2*(resultadosP2[0]*resultadosP2[1]/(resultadosP2[0]+resultadosP2[1])))/p;
+
+ 	}
+
+ 	ofstream results;
+	results.open("resultados.out");
+
+	for(int i = 0;i<4;i++)
+		results<< resultadosHam[i] << " ";
+	results<<endl;
+
+	for(int i = 0;i<4;i++)
+		results<< resultadosP1[i]<< " ";
+	results<<endl;
+	
+	for(int i = 0;i<4;i++)
+		results<< resultadosP2[i]<< " ";
+	results<<endl;
+	
+	results.close();
 
 	//matrices::mostrarMatriz(matriz_kunfusionHam,p,p);
-
 	
 	cout << "#Exitos Norma 2: " + to_string(exitosDis) << endl;
 	cout << "#Exitos Manhattan : " + to_string(exitosMan) << endl;
