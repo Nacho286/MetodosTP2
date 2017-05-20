@@ -216,6 +216,12 @@ int main(int args, char* argsv[]){
 	vector<vector<double> > tc(n, vector<double>(k));
 	vector<int> parecidos(1001,0);
 	//Matriz de n x k donde cada fila es el vector de la tc de cada imagen
+	
+	//La matriz de confusion es cuadrada y la dimension corresponde a la cantidad de clases
+	vector<vector<double> > matriz_kunfusionHam(p,vector<double>(p));
+	vector<vector<double> > matriz_kunfusionp1(p,vector<double>(p));
+	vector<vector<double> > matriz_kunfusionp2(p,vector<double>(p));
+
 	for(int i = 0; i < n; i++)
 	 	tc[i] = transformacionCaracteristica(autoVectores, imagenes[i], k, m);
 	
@@ -237,6 +243,8 @@ int main(int args, char* argsv[]){
 		}
 		vector<double> tc_check = transformacionCaracteristica(autoVectores, imagen, k, m);
 		
+
+
 		int parecidoMan = encontrarPersona(tc, tc_check, n, k,nimgp, nimgp, p,1);
 		int parecidoDis = encontrarPersona(tc, tc_check, n, k,nimgp, nimgp, p,2);
 		int parecidoHam = encontrarPersonaHamming(tc, tc_check, n, k,nimgp, nimgp, p,750);	
@@ -245,27 +253,37 @@ int main(int args, char* argsv[]){
 		parecidoDis++;
 		parecidoHam++;
 		cout<< endl;
+
 		if (parecidoMan != persona){
 			cout << path_test + " Manhattan NO coincide. Persona: " + to_string(persona) + ". Parecido: " + to_string(parecidoMan) << endl;
+			matriz_kunfusionp1[persona-1][parecidoMan-1] +=1;
 		}else{
 			cout << to_string(persona) +" OK Con Manhattan" << endl;	
 			exitosMan++;
+			matriz_kunfusionp1[persona-1][persona-1] += 1;
 		}
 		if (parecidoDis != persona){
 			cout << path_test + " Norma 2 NO coincide. Persona: " + to_string(persona) + ". Parecido: " + to_string(parecidoDis) << endl;
+			matriz_kunfusionp2[persona-1][parecidoDis-1] +=1;
 		}else{
 			cout << to_string(persona) +" OK Con Norma 2" << endl;	
 			exitosDis++;
+			matriz_kunfusionp2[persona-1][persona-1] += 1;
 		}
 		if (parecidoHam != persona){
 			cout << path_test + " Hamming NO coincide. Persona: " + to_string(persona) + ". Parecido: " + to_string(parecidoHam) << endl;
+			matriz_kunfusionHam[persona-1][parecidoHam-1] +=1;
 		}else{
 			cout << to_string(persona) +" OK Con Hamming" << endl;	
 			exitosHam++;
+			matriz_kunfusionHam[persona-1][persona-1] += 1;
 		}
+
 		
 	}
 	
+	//matrices::mostrarMatriz(matriz_kunfusionHam,p,p);
+
 	
 	cout << "#Exitos Norma 2: " + to_string(exitosDis) << endl;
 	cout << "#Exitos Manhattan : " + to_string(exitosMan) << endl;
