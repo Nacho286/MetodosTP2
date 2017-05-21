@@ -14,6 +14,9 @@ kfold3={}
 kfold4={}
 kfold5={}
 kfolds=[kfold1,kfold2,kfold3,kfold4,kfold5]
+total="resultadosGenerales.out"
+archivoA=open(total,"w").close()
+archivoA=open(total,"a")
 for j in personas:
 	fotos=range(1,11)
 	for k in range(0,5):
@@ -42,3 +45,10 @@ for j in range(0,5):
 					aux="../data/ImagenesCaras"+(""if size==0 else"Red")+"/s"+str(persona)+"/"+str(foto)+".pgm "+str(persona)+"\n"
 					archivoW.write(aux)
 	archivoW.close()
+	os.system("./main "+archivo+" test"+str(j+1)+".out")
+	resultado="resultados.out"
+	archivoR=open(resultado,"r")
+	for i in range(0,3):
+		linea=archivoR.readline()
+		archivoA.write(linea+"\n")
+	archivoA.write("\n")
