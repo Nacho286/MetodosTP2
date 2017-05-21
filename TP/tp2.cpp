@@ -146,6 +146,36 @@ int encontrarPersonaHamming(const vector<vector<double> > &tc, const vector<doub
 	return maxComun;
 }
 
+void calcularMetricas(vector<vector<double> > & t, vector<double> &r, double p){
+ 		for(int i = 0;i<p;i++){
+
+	 		//precision_i
+	 		if(t[i][0] != 0) //hay algun tp
+	 			r[0] += t[i][0]/(t[i][0]+t[i][2])/p;
+	 		else if (t[i][2] != 0)
+	 			r[0] += 0.0;
+	 		else
+	 			r[0] += 1.0/p;
+
+	 		//recall_i
+	 		if(t[i][0] != 0)	//hay algun tp
+	 			r[1] += t[i][0]/(t[i][0]+t[i][1])/p;
+	 		else
+	 			r[1] += 1.0/p;
+
+	 		//specificity_i
+	 		if(t[i][3] != 0) //hay algun fp
+	 			r[2] += t[i][3]/(t[i][3]+t[i][2])/p;
+	 		else if (t[i][2] != 0)
+	 			r[2] += 0.0;
+	 		else
+	 			r[2] += 1.0/p;
+	 		//f1_i
+			r[3] += (2*(r[0]*r[1]/(r[0]+r[1])))/p;
+	 		
+ 		}
+
+ 	}
 int main(int args, char* argsv[]){
 	// Primer argumento: archivo de entrada, donde la primera linea especifica:
 	// path de los datos, x, y, #personas, #imagenes por persona, #componentes principales
@@ -317,79 +347,14 @@ int main(int args, char* argsv[]){
  	vector<double> resultadosP1(4);
  	vector<double> resultadosP2(4);
 
- 	matrices::mostrarMatriz(tablasHam,p,4);
+ 	//matrices::mostrarMatriz(tablasHam,p,4);
+ 	calcularMetricas(tablasHam,resultadosHam,(double)p);
+ 	calcularMetricas(tablasp1,resultadosP1,(double)p);
+ 	calcularMetricas(tablasp2,resultadosP2,(double)p);
 
  	//[tp,fn,fp,tn]
- 	for(int i = 0;i<p;i++){
- 		//precision_i
- 		if(tablasHam[i][0] != 0) //hay algun tp
- 			resultadosHam[0] += tablasHam[i][0]/(tablasHam[i][0]+tablasHam[i][2])/(double)p;
- 		else if (tablasHam[i][2] != 0)
- 			resultadosHam[0] += 0.0;
- 		else
- 			resultadosHam[0] += 1.0/(double)p;
-
- 		if(tablasp1[i][0] != 0) //hay algun tp
- 			resultadosP1 [0] += tablasp1[i][0]/(tablasp1[i][0]+tablasp1[i][2])/(double)p; 
- 		else if (tablasp1[i][2] != 0)
- 			resultadosP1[0] += 0.0;
- 		else
- 			resultadosP1[0] += 1.0/(double)p;
-
- 		if(tablasp2[i][0] != 0) //hay algun tp
- 			resultadosP2 [0] += tablasp2[i][0]/(tablasp2[i][0]+tablasp2[i][2])/(double)p; 
- 		else if (tablasp2[i][2] != 0)
- 			resultadosP2[0] += 0.0;
- 		else
- 			resultadosP2[0] += 1.0/(double)p;
-
-
- 		//recall_i
- 		if(tablasHam[i][0] != 0)	//hay algun tp
- 			resultadosHam[1] += tablasHam[i][0]/(tablasHam[i][0]+tablasHam[i][1])/(double)p;
- 		else
- 			resultadosHam[1] += 1.0/(double)p;
-
- 		if(tablasp1[i][0] != 0) 
- 			resultadosP1 [1] += tablasp1[i][0]/(tablasp1[i][0]+tablasp1[i][1])/(double)p;
- 		else
-			resultadosP1 [1] += 1.0/(double)p;
-
- 		if(tablasp2[i][0] != 0)  
- 			resultadosP2 [1] += tablasp2[i][0]/(tablasp2[i][0]+tablasp2[i][1])/(double)p;	
- 		else
-			resultadosP2 [1] += 1.0/(double)p;	
- 		
-
- 		//specificity_i
- 		if(tablasHam[i][3] != 0) //hay algun fp
- 			resultadosHam[2] += tablasHam[i][3]/(tablasHam[i][3]+tablasHam[i][2])/(double)p;
- 		else if (tablasHam[i][2] != 0)
- 			resultadosHam[2] += 0.0;
- 		else
- 			resultadosHam[2] += 1.0/(double)p;
-
- 		if(tablasp1[i][3] != 0) //hay algun fp
- 			resultadosP1 [2] += tablasp1[i][3]/(tablasp1[i][3]+tablasp1[i][2])/(double)p;  
- 		else if (tablasp1[i][2] != 0)
- 			resultadosP1[2] += 0.0;
- 		else
- 			resultadosP1[2] += 1.0/(double)p;
-
- 		if(tablasp2[i][3] != 0) //hay algun tp
- 			resultadosP2 [2] += tablasp2[i][3]/(tablasp2[i][3]+tablasp2[i][2])/(double)p;
- 		else if (tablasp2[i][2] != 0)
- 			resultadosP2[2] += 0.0;
- 		else
- 			resultadosP2[2] += 1.0/(double)p;
-
- 		//f1_i
-		resultadosHam[3] += (2*(resultadosHam[0]*resultadosHam[1]/(resultadosHam[0]+resultadosHam[1])))/(double)p;
- 		resultadosP1 [3] += (2*(resultadosP1[0]*resultadosP1[1]/(resultadosP1[0]+resultadosP1[1])))/(double)p;
- 		resultadosP2 [3] += (2*(resultadosP2[0]*resultadosP2[1]/(resultadosP2[0]+resultadosP2[1])))/(double)p;
- 	}
-		
  	
+ 	 
  	cout << "#";
  	
  	ofstream results;
