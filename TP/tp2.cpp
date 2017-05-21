@@ -362,23 +362,23 @@ int main(int args, char* argsv[]){
  		
 
  		//specificity_i
- 		if(tablasHam[i][2] != 0) //hay algun tp
+ 		if(tablasHam[i][3] != 0) //hay algun fp
  			resultadosHam[2] += tablasHam[i][3]/(tablasHam[i][3]+tablasHam[i][2])/(double)p;
- 		else if (tablasHam[i][3] != 0)
+ 		else if (tablasHam[i][2] != 0)
  			resultadosHam[2] += 0.0;
  		else
  			resultadosHam[2] += 1.0/(double)p;
 
- 		if(tablasp1[i][2] != 0) //hay algun tp
+ 		if(tablasp1[i][3] != 0) //hay algun fp
  			resultadosP1 [2] += tablasp1[i][3]/(tablasp1[i][3]+tablasp1[i][2])/(double)p;  
- 		else if (tablasp1[i][3] != 0)
+ 		else if (tablasp1[i][2] != 0)
  			resultadosP1[2] += 0.0;
  		else
  			resultadosP1[2] += 1.0/(double)p;
 
- 		if(tablasp2[i][2] != 0) //hay algun tp
+ 		if(tablasp2[i][3] != 0) //hay algun tp
  			resultadosP2 [2] += tablasp2[i][3]/(tablasp2[i][3]+tablasp2[i][2])/(double)p;
- 		else if (tablasp2[i][3] != 0)
+ 		else if (tablasp2[i][2] != 0)
  			resultadosP2[2] += 0.0;
  		else
  			resultadosP2[2] += 1.0/(double)p;
@@ -394,17 +394,20 @@ int main(int args, char* argsv[]){
  	
  	ofstream results;
 	results.open("resultados.out");
-
+	//formato resultados :  precision, recall, specificity, f1, hitrate(en realidad solo aciertos, aca no esta el parametro cantidad de tests)
 	for(int i = 0;i<4;i++)
 		results<< resultadosHam[i] << " ";
+	results<< exitosHam;
 	results<<endl;
 
 	for(int i = 0;i<4;i++)
 		results<< resultadosP1[i]<< " ";
+	results<< exitosMan;
 	results<<endl;
 	
 	for(int i = 0;i<4;i++)
 		results<< resultadosP2[i]<< " ";
+	results<< exitosDis;
 	results<<endl;
 	
 	results.close();
