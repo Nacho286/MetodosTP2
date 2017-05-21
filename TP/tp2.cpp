@@ -397,17 +397,17 @@ int main(int args, char* argsv[]){
 	//formato resultados :  precision, recall, specificity, f1, hitrate(en realidad solo aciertos, aca no esta el parametro cantidad de tests)
 	for(int i = 0;i<4;i++)
 		results<< resultadosHam[i] << " ";
-	results<< exitosHam;
+	results<< double(exitosHam)/double(ntest);
 	results<<endl;
 
 	for(int i = 0;i<4;i++)
 		results<< resultadosP1[i]<< " ";
-	results<< exitosMan;
+	results<< double(exitosMan)/double(ntest);
 	results<<endl;
 	
 	for(int i = 0;i<4;i++)
 		results<< resultadosP2[i]<< " ";
-	results<< exitosDis;
+	results<< double(exitosDis)/double(ntest);
 	results<<endl;
 	
 	results.close();
