@@ -270,8 +270,6 @@ int main(int args, char* argsv[]){
 		}
 		vector<double> tc_check = transformacionCaracteristica(autoVectores, imagen, k, m);
 		
-
-
 		int parecidoMan = encontrarPersona(tc, tc_check, n, k,nimgp, nimgp, p,1);
 		int parecidoDis = encontrarPersona(tc, tc_check, n, k,nimgp, nimgp, p,2);
 		int parecidoHam = encontrarPersonaHamming(tc, tc_check, n, k,nimgp, nimgp, p,750);	
@@ -319,30 +317,80 @@ int main(int args, char* argsv[]){
  	vector<double> resultadosP1(4);
  	vector<double> resultadosP2(4);
 
+ 	matrices::mostrarMatriz(tablasHam,p,4);
+
  	//[tp,fn,fp,tn]
  	for(int i = 0;i<p;i++){
  		//precision_i
- 		resultadosHam[0] += tablasHam[i][0]/(tablasHam[i][0]+tablasHam[i][2])/p;
- 		resultadosP1 [0] += tablasp1[i][0]/(tablasp1[i][0]+tablasp1[i][2])/p; 
- 		resultadosP2 [0] += tablasp2[i][0]/(tablasp2[i][0]+tablasp2[i][2])/p;
+ 		if(tablasHam[i][0] != 0) //hay algun tp
+ 			resultadosHam[0] += tablasHam[i][0]/(tablasHam[i][0]+tablasHam[i][2])/(double)p;
+ 		else if (tablasHam[i][2] != 0)
+ 			resultadosHam[0] += 0.0;
+ 		else
+ 			resultadosHam[0] += 1.0/(double)p;
+
+ 		if(tablasp1[i][0] != 0) //hay algun tp
+ 			resultadosP1 [0] += tablasp1[i][0]/(tablasp1[i][0]+tablasp1[i][2])/(double)p; 
+ 		else if (tablasHam[i][2] != 0)
+ 			resultadosP1[0] += 0.0;
+ 		else
+ 			resultadosP1[0] += 1.0/(double)p;
+
+ 		if(tablasp2[i][0] != 0) //hay algun tp
+ 			resultadosP2 [0] += tablasp2[i][0]/(tablasp2[i][0]+tablasp2[i][2])/(double)p; 
+ 		else if (tablasp2[i][2] != 0)
+ 			resultadosP2[0] += 0.0;
+ 		else
+ 			resultadosP2[0] += 1.0/(double)p;
+
 
  		//recall_i
- 		resultadosHam[1] += tablasHam[i][0]/(tablasHam[i][0]+tablasHam[i][1])/p;
- 		resultadosP1 [1] += tablasp1[i][0]/(tablasp1[i][0]+tablasp1[i][1])/p; 
- 		resultadosP2 [1] += tablasp2[i][0]/(tablasp2[i][0]+tablasp2[i][1])/p;
+ 		if(tablasp2[i][0] != 0)	//hay algun tp
+ 			resultadosHam[1] += tablasHam[i][0]/(tablasHam[i][0]+tablasHam[i][1])/(double)p;
+ 		else
+ 			resultadosHam[1] += 1.0/(double)p;
+
+ 		if(tablasp1[i][0] != 0) 
+ 			resultadosP1 [1] += tablasp1[i][0]/(tablasp1[i][0]+tablasp1[i][1])/(double)p;
+ 		else
+			resultadosP1 [1] += 1.0/(double)p;
+ 		if(tablasp2[i][0] != 0)  
+ 			resultadosP2 [1] += tablasp2[i][0]/(tablasp2[i][0]+tablasp2[i][1])/(double)p;	
+ 		else
+			resultadosP2 [1] += 1.0/(double)p;	
+ 		
 
  		//specificity_i
- 		resultadosHam[2] += tablasHam[i][3]/(tablasHam[i][3]+tablasHam[i][2])/p;
- 		resultadosP1 [2] += tablasp1[i][3]/(tablasp1[i][3]+tablasp1[i][2])/p; 
- 		resultadosP2 [2] += tablasp2[i][3]/(tablasp2[i][3]+tablasp2[i][2])/p;
+ 		if(tablasHam[i][2] != 0) //hay algun tp
+ 			resultadosHam[2] += tablasHam[i][3]/(tablasHam[i][3]+tablasHam[i][2])/(double)p;
+ 		else if (tablasHam[i][3] != 0)
+ 			resultadosHam[2] += 0.0;
+ 		else
+ 			resultadosHam[2] += 1.0/(double)p;
+
+ 		if(tablasp1[i][2] != 0) //hay algun tp
+ 			resultadosP1 [2] += tablasp1[i][3]/(tablasp1[i][3]+tablasp1[i][2])/(double)p;  
+ 		else if (tablasHam[i][3] != 0)
+ 			resultadosP1[2] += 0.0;
+ 		else
+ 			resultadosP1[2] += 1.0/(double)p;
+
+ 		if(tablasp2[i][2] != 0) //hay algun tp
+ 			resultadosP2 [2] += tablasp2[i][3]/(tablasp2[i][3]+tablasp2[i][2])/(double)p;
+ 		else if (tablasp2[i][3] != 0)
+ 			resultadosP2[2] += 0.0;
+ 		else
+ 			resultadosP2[2] += 1.0/(double)p;
 
  		//f1_i
-		resultadosHam[3] += (2*(resultadosHam[0]*resultadosHam[1]/(resultadosHam[0]+resultadosHam[1])))/p;
- 		resultadosP1 [3] += (2*(resultadosP1[0]*resultadosP1[1]/(resultadosP1[0]+resultadosP1[1])))/p;
- 		resultadosP2 [3] += (2*(resultadosP2[0]*resultadosP2[1]/(resultadosP2[0]+resultadosP2[1])))/p;
-
+		resultadosHam[3] += (2*(resultadosHam[0]*resultadosHam[1]/(resultadosHam[0]+resultadosHam[1])))/(double)p;
+ 		resultadosP1 [3] += (2*(resultadosP1[0]*resultadosP1[1]/(resultadosP1[0]+resultadosP1[1])))/(double)p;
+ 		resultadosP2 [3] += (2*(resultadosP2[0]*resultadosP2[1]/(resultadosP2[0]+resultadosP2[1])))/(double)p;
  	}
-
+		
+ 	
+ 	cout << "#";
+ 	
  	ofstream results;
 	results.open("resultados.out");
 
