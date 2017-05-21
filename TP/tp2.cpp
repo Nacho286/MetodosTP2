@@ -331,7 +331,7 @@ int main(int args, char* argsv[]){
 
  		if(tablasp1[i][0] != 0) //hay algun tp
  			resultadosP1 [0] += tablasp1[i][0]/(tablasp1[i][0]+tablasp1[i][2])/(double)p; 
- 		else if (tablasHam[i][2] != 0)
+ 		else if (tablasp1[i][2] != 0)
  			resultadosP1[0] += 0.0;
  		else
  			resultadosP1[0] += 1.0/(double)p;
@@ -345,7 +345,7 @@ int main(int args, char* argsv[]){
 
 
  		//recall_i
- 		if(tablasp2[i][0] != 0)	//hay algun tp
+ 		if(tablasHam[i][0] != 0)	//hay algun tp
  			resultadosHam[1] += tablasHam[i][0]/(tablasHam[i][0]+tablasHam[i][1])/(double)p;
  		else
  			resultadosHam[1] += 1.0/(double)p;
@@ -354,6 +354,7 @@ int main(int args, char* argsv[]){
  			resultadosP1 [1] += tablasp1[i][0]/(tablasp1[i][0]+tablasp1[i][1])/(double)p;
  		else
 			resultadosP1 [1] += 1.0/(double)p;
+
  		if(tablasp2[i][0] != 0)  
  			resultadosP2 [1] += tablasp2[i][0]/(tablasp2[i][0]+tablasp2[i][1])/(double)p;	
  		else
@@ -370,7 +371,7 @@ int main(int args, char* argsv[]){
 
  		if(tablasp1[i][2] != 0) //hay algun tp
  			resultadosP1 [2] += tablasp1[i][3]/(tablasp1[i][3]+tablasp1[i][2])/(double)p;  
- 		else if (tablasHam[i][3] != 0)
+ 		else if (tablasp1[i][3] != 0)
  			resultadosP1[2] += 0.0;
  		else
  			resultadosP1[2] += 1.0/(double)p;
