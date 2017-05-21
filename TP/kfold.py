@@ -37,12 +37,14 @@ for j in range(0,5):
 		aux+="\n"
 		archivoW.write(aux)
 	archivoW.write(str(cantPersonas*2)+"\n")
+	p=0
 	for persona in personas:
+		p+=1
 		for i in range(0,5):
 			if (i==j):
 				kfold = kfolds[i]
 				for foto in kfold[persona]: 
-					aux="../data/ImagenesCaras"+(""if size==0 else"Red")+"/s"+str(persona)+"/"+str(foto)+".pgm "+str(persona)+"\n"
+					aux="../data/ImagenesCaras"+(""if size==0 else"Red")+"/s"+str(persona)+"/"+str(foto)+".pgm "+str(p)+"\n"
 					archivoW.write(aux)
 	archivoW.close()
 	os.system("./main "+archivo+" test"+str(j+1)+".out")
