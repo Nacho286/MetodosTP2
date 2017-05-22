@@ -287,7 +287,8 @@ int main(int args, char* argsv[]){
 	int exitosDis = 0;
 	int exitosMan = 0;
 	int exitosHam = 0;
-	
+	vector<int> exitosNorma(1501,0);
+	vector<int> exitosCota(1501,0);
 	for (int i = 0; i < ntest; i++){
 		getline(entrada, linea);
 		datos = split(linea, ' ');
@@ -300,6 +301,19 @@ int main(int args, char* argsv[]){
 		}
 		vector<double> tc_check = transformacionCaracteristica(autoVectores, imagen, k, m);
 		
+		for(int j=1;j<1501;j++){
+			int prubaNorma = encontrarPersona(tc, tc_check, n, k,nimgp, nimgp, p,j);
+			prubaNorma++;
+			if (prubaNorma==persona){
+				exitosNorma[j]++;
+			}
+			int prubaCota = encontrarPersonaHamming(tc, tc_check, n, k,nimgp, nimgp, p,j);
+			prubaCota++;
+			if (prubaCota==persona){
+				exitosCota[j]++;
+			}
+		}
+
 		int parecidoMan = encontrarPersona(tc, tc_check, n, k,nimgp, nimgp, p,1);
 		int parecidoDis = encontrarPersona(tc, tc_check, n, k,nimgp, nimgp, p,2);
 		int parecidoHam = encontrarPersonaHamming(tc, tc_check, n, k,nimgp, nimgp, p,750);	
@@ -357,7 +371,7 @@ int main(int args, char* argsv[]){
  	 
  	cout << "#";
  	
- 	ofstream results;
+ 	ofstream results;	
 	results.open("resultados.out");
 	//formato resultados :  precision, recall, specificity, f1, hitrate(en realidad solo aciertos, aca no esta el parametro cantidad de tests)
 	for(int i = 0;i<4;i++)
@@ -377,6 +391,18 @@ int main(int args, char* argsv[]){
 	
 	results.close();
 
+	//informacion de aciertos de la cota y la norma
+
+	ofstream cantExitos;
+	cantExitos.open("cantExitos.out");
+	for(int i=1;i<1501;i++){
+		cantExitos<< exitosNorma[i]<<" ";
+	}
+	cantExitos<<endl;
+	for(int i=1;i<1501;i++){
+		cantExitos<< exitosCota[i]<<" ";
+	}
+	cantExitos.close();
 	//matrices::mostrarMatriz(matriz_kunfusionHam,p,p);
 	
 	cout << "#Exitos Norma 2: " + to_string(exitosDis) << endl;
