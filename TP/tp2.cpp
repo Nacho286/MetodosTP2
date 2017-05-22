@@ -396,11 +396,11 @@ int main(int args, char* argsv[]){
 	ofstream cantExitos;
 	cantExitos.open("cantExitos.out");
 	for(int i=1;i<1501;i++){
-		cantExitos<< exitosNorma[i]<<" ";
+		cantExitos<< double(exitosNorma[i])/double(ntest)<<" ";
 	}
 	cantExitos<<endl;
 	for(int i=1;i<1501;i++){
-		cantExitos<< exitosCota[i]<<" ";
+		cantExitos<< double(exitosCota[i])/double(ntest)<<" ";
 	}
 	cantExitos.close();
 	//matrices::mostrarMatriz(matriz_kunfusionHam,p,p);
