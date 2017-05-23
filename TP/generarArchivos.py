@@ -40,5 +40,8 @@ for i in range(1,cantTest+1):
 	archivoW.write(aux)
 
 archivoW.close()
-os.system('./main '+archivo+' Test.out');
+os.system('./main '+archivo+' test.out');
 
+archivoR=open("cantExitos.out","r")
+linea=archivoR.readline()
+print linea

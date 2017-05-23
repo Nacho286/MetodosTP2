@@ -24,8 +24,8 @@ for i in range(0,cantImgXPersonas):
 		fotosDePersonas[j].remove(fotoSeleccionada)
 	kfolds.append(kfoldAux)
 total="resultadosGeneralesKfoldImg.out"
-archivoA=open(total,"w").close()
-archivoA=open(total,"a")
+archivoA=open(total,"w")
+listaResultados=[[0.0,0.0,0.0,0.0],[0.0,0.0,0.0,0.0],[0.0,0.0,0.0,0.0]]
 for j in range(0,cantImgXPersonas):
 	archivo= "pruebaKFoldImgXPersonas_"+str(j+1)+"_"+ ("Big_" if size==0 else "Red_") + str(cantPersonas)+"_"+str(cantImgXPersonas-1)+"_"+str(cantAutovalores)+".in"
 	archivoW=open(archivo,"w")
@@ -48,10 +48,15 @@ for j in range(0,cantImgXPersonas):
 				aux="../data/ImagenesCaras"+(""if size==0 else"Red")+"/s"+str(persona)+"/"+str(kfold[persona])+".pgm "+str(p)+"\n"
 				archivoW.write(aux)
 	archivoW.close()
-	os.system("./main "+archivo+" test"+str(j+1)+".out")
+	os.system("./main "+archivo+" testKFoldImgXPersonas_"+str(j+1)+".out")
 	resultado="resultados.out"
 	archivoR=open(resultado,"r")
 	for i in range(0,3):
 		linea=archivoR.readline()
-		archivoA.write(linea+"\n")
+		linea=linea.split(" ")
+		for k in range(0,5):
+			listaResultados[i][k]+=float(linea[k])
+for i in range(0,3):
+	for k in range(0,5):
+		archivoA.write(str(listaResultados[i][k]/float(cantImgXPersonas))+" ")
 	archivoA.write("\n")

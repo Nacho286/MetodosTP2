@@ -15,8 +15,8 @@ kfold4={}
 kfold5={}
 kfolds=[kfold1,kfold2,kfold3,kfold4,kfold5]
 total="resultadosGenerales.out"
-archivoA=open(total,"w").close()
-archivoA=open(total,"a")
+archivoA=open(total,"w")
+listaResultados=[[0.0,0.0,0.0,0.0,0.0],[0.0,0.0,0.0,0.0,0.0],[0.0,0.0,0.0,0.0,0.0]]
 for j in personas:
 	fotos=range(1,11)
 	for k in range(0,5):
@@ -52,5 +52,10 @@ for j in range(0,5):
 	archivoR=open(resultado,"r")
 	for i in range(0,3):
 		linea=archivoR.readline()
-		archivoA.write(linea+"\n")
+		linea=linea.split(" ")
+		for k in range(0,5):
+			listaResultados[i][k]+=float(linea[k])
+for i in range(0,3):
+	for k in range(0,5):
+		archivoA.write(str(listaResultados[i][k]/float(5))+" ")
 	archivoA.write("\n")
