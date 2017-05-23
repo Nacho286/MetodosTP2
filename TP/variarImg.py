@@ -60,8 +60,8 @@ for i in keys:
 	hitrateNor.append(valoresNor[i][4])
 
 plt.xlabel("cantidad de imagenes por personas")
-plt.ylabel("precision")
-plt.title("precision segun la cantidad de imagenes por personas");
+plt.ylabel("precision") 
+plt.title("precision segun la cantidad de imagenes por personas, con "+str(cantPersonas)+" personas y usando "+str(cantAutovalores)+" autovalores");
 plt.plot(keys,precisionHam,label='Funcion de Hamming');
 plt.plot(keys,precisionMan,label='Distancia Manhattan');
 plt.plot(keys,precisionNor,label='Distancia Norma 2');
@@ -69,7 +69,7 @@ plt.show();
 
 plt.xlabel("cantidad de imagenes por personas")
 plt.ylabel("recall")
-plt.title("recall segun la cantidad de imagenes por personas");
+plt.title("recall segun la cantidad de imagenes por personas, con "+str(cantPersonas)+" personas y usando "+str(cantAutovalores)+" autovalores");
 plt.plot(keys,recallHam,label='Funcion de Hamming');
 plt.plot(keys,recallMan,label='Distancia Manhattan');
 plt.plot(keys,recallNor,label='Distancia Norma 2');
@@ -77,7 +77,7 @@ plt.show();
 
 plt.xlabel("cantidad de imagenes por personas")
 plt.ylabel("specificity")
-plt.title("specificity segun la cantidad de imagenes por personas");
+plt.title("specificity segun la cantidad de imagenes por personas, con "+str(cantPersonas)+" personas y usando "+str(cantAutovalores)+" autovalores");
 plt.plot(keys,specificityHam,label='Funcion de Hamming');
 plt.plot(keys,specificityMan,label='Distancia Manhattan');
 plt.plot(keys,specificityNor,label='Distancia Norma 2');
@@ -85,7 +85,7 @@ plt.show();
 
 plt.xlabel("cantidad de imagenes por personas")
 plt.ylabel("f1")
-plt.title("f1 segun la cantidad de imagenes por personas");
+plt.title("f1 segun la cantidad de imagenes por personas, con "+str(cantPersonas)+" personas y usando "+str(cantAutovalores)+" autovalores");
 plt.plot(keys,f1Ham,label='Funcion de Hamming');
 plt.plot(keys,f1Man,label='Distancia Manhattan');
 plt.plot(keys,f1Nor,label='Distancia Norma 2');
@@ -93,7 +93,7 @@ plt.show();
 
 plt.xlabel("cantidad de imagenes por personas")
 plt.ylabel("hitrate")
-plt.title("hitrate segun la cantidad de imagenes por personas");
+plt.title("hitrate segun la cantidad de imagenes por personas, con "+str(cantPersonas)+" personas y usando "+str(cantAutovalores)+" autovalores");
 plt.plot(keys,hitrateHam,label='Funcion de Hamming');
 plt.plot(keys,hitrateMan,label='Distancia Manhattan');
 plt.plot(keys,hitrateNor,label='Distancia Norma 2');
