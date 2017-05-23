@@ -13,15 +13,16 @@ for i in range(2,10):
 	os.system("python imgFold.py "+str(size)+" "+str(cantPersonas)+" "+str(i)+" "+str(cantAutovalores))
 	archivoR=open("resultadosGeneralesKfoldImg.out","r")
 	linea=archivoR.readline()
-	linea=linea.split(" ")
+	linea=linea.split()
+	print linea
 	listaFloats=[float(j) for j in linea]
 	valoresHam[i]=listaFloats
 	linea=archivoR.readline()
-	linea=linea.split(" ")
+	linea=linea.split()
 	listaFloats=[float(j) for j in linea]
 	valoresMan[i]=listaFloats
 	linea=archivoR.readline()
-	linea=linea.split(" ")
+	linea=linea.split()
 	listaFloats=[float(j) for j in linea]
 	valoresNor[i]=listaFloats
 	archivoR.close()

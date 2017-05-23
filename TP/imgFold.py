@@ -25,7 +25,7 @@ for i in range(0,cantImgXPersonas):
 	kfolds.append(kfoldAux)
 total="resultadosGeneralesKfoldImg.out"
 archivoA=open(total,"w")
-listaResultados=[[0.0,0.0,0.0,0.0],[0.0,0.0,0.0,0.0],[0.0,0.0,0.0,0.0]]
+listaResultados=[[0.0,0.0,0.0,0.0,0.0],[0.0,0.0,0.0,0.0,0.0],[0.0,0.0,0.0,0.0,0.0]]
 for j in range(0,cantImgXPersonas):
 	archivo= "pruebaKFoldImgXPersonas_"+str(j+1)+"_"+ ("Big_" if size==0 else "Red_") + str(cantPersonas)+"_"+str(cantImgXPersonas-1)+"_"+str(cantAutovalores)+".in"
 	archivoW=open(archivo,"w")

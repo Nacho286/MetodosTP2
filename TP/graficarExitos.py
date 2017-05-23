@@ -6,9 +6,9 @@ import matplotlib.pyplot as plt
 os.system("python kfold.py 0 41 15")
 archivoR = open("cantExitos.out","r")
 exitosNorma = archivoR.readline()
-exitosNorma = [float(i) for i in exitosNorma.split(" ")]
+exitosNorma = [float(i) for i in exitosNorma.split()]
 exitosCota = archivoR.readline()
-exitosCota = [float(i) for i in exitosCota.split(" ")]
+exitosCota = [float(i) for i in exitosCota.split()]
 keys=range(1,1501)
 
 plt.xlabel("norma o cota")

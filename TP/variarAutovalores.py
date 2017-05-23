@@ -14,15 +14,15 @@ for i in range(inicio,fin+1):
 	os.system("python kfold.py "+str(size)+" "+str(cantPersonas)+" "+str(i))
 	archivoR=open("resultados.out","r")
 	linea=archivoR.readline()
-	linea=linea.split(" ")
+	linea=linea.split()
 	listaFloats=[float(j) for j in linea]
 	valoresHam[i]=listaFloats
 	linea=archivoR.readline()
-	linea=linea.split(" ")
+	linea=linea.split()
 	listaFloats=[float(j) for j in linea]
 	valoresMan[i]=listaFloats
 	linea=archivoR.readline()
-	linea=linea.split(" ")
+	linea=linea.split()
 	listaFloats=[float(j) for j in linea]
 	valoresNor[i]=listaFloats
 	archivoR.close()
