@@ -16,4 +16,5 @@ plt.ylabel("hitrate")
 plt.title("hitrate segun el numero que se usa como cota en Hamming o la norma con la que se calcula la distancia");
 plt.plot(keys,exitosCota,label='Funcion de Hamming');
 plt.plot(keys,exitosNorma,label='Distancia Norma');
+plt.legend(bbox_to_anchor=(1.09,0.8));
 plt.show();

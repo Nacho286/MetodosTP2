@@ -66,6 +66,7 @@ plt.title("precision segun la cantidad de autovalores, con "+str(cantPersonas)+"
 plt.plot(keys,precisionHam,label='Funcion de Hamming');
 plt.plot(keys,precisionMan,label='Distancia Manhattan');
 plt.plot(keys,precisionNor,label='Distancia Norma 2');
+plt.legend(bbox_to_anchor=(1.09,0.8));
 plt.show();
 
 plt.xlabel("cantidad de autovalores")
@@ -74,6 +75,7 @@ plt.title("recall segun la cantidad de autovalores, con "+str(cantPersonas)+" pe
 plt.plot(keys,recallHam,label='Funcion de Hamming');
 plt.plot(keys,recallMan,label='Distancia Manhattan');
 plt.plot(keys,recallNor,label='Distancia Norma 2');
+plt.legend(bbox_to_anchor=(1.09,0.8));
 plt.show();
 
 plt.xlabel("cantidad de autovalores")
@@ -82,6 +84,7 @@ plt.title("specificity segun la cantidad de autovalores, con "+str(cantPersonas)
 plt.plot(keys,specificityHam,label='Funcion de Hamming');
 plt.plot(keys,specificityMan,label='Distancia Manhattan');
 plt.plot(keys,specificityNor,label='Distancia Norma 2');
+plt.legend(bbox_to_anchor=(1.09,0.8));
 plt.show();
 
 plt.xlabel("cantidad de autovalores")
@@ -90,6 +93,7 @@ plt.title("f1 segun la cantidad de autovalores, con "+str(cantPersonas)+" person
 plt.plot(keys,f1Ham,label='Funcion de Hamming');
 plt.plot(keys,f1Man,label='Distancia Manhattan');
 plt.plot(keys,f1Nor,label='Distancia Norma 2');
+plt.legend(bbox_to_anchor=(1.09,0.8));
 plt.show();
 
 plt.xlabel("cantidad de autovalores")
@@ -98,4 +102,5 @@ plt.title("hitrate segun la cantidad de autovalores, con "+str(cantPersonas)+" p
 plt.plot(keys,hitrateHam,label='Funcion de Hamming');
 plt.plot(keys,hitrateMan,label='Distancia Manhattan');
 plt.plot(keys,hitrateNor,label='Distancia Norma 2');
+plt.legend(bbox_to_anchor=(1.09,0.8));
 plt.show();
