@@ -9,7 +9,7 @@ cantAutovalores = int(sys.argv[3])
 valoresMan={}
 valoresNor={}
 valoresHam={}
-for i in range(2,10):
+for i in range(2,11):
 	os.system("python imgFold.py "+str(size)+" "+str(cantPersonas)+" "+str(i)+" "+str(cantAutovalores))
 	archivoR=open("resultadosGeneralesKfoldImg.out","r")
 	linea=archivoR.readline()
