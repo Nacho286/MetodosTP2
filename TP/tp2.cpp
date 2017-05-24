@@ -294,22 +294,23 @@ int main(int args, char* argsv[]){
 		}
 		vector<double> tc_check = transformacionCaracteristica(autoVectores, imagen, k, m);
 		
-		for(int j=1;j<1501;j++){
-			int prubaNorma = encontrarPersona(tc, tc_check, n, k,nimgp, nimgp, p,j);
-			prubaNorma++;
-			if (prubaNorma==persona){
-				exitosNorma[j]++;
-			}
-			int prubaCota = encontrarPersonaHamming(tc, tc_check, n, k,nimgp, nimgp, p,j);
-			prubaCota++;
-			if (prubaCota==persona){
-				exitosCota[j]++;
-			}
-		}
+		
+		// for(int j=1;j<1501;j++){
+		// 	int prubaNorma = encontrarPersona(tc, tc_check, n, k,nimgp, nimgp, p,j);
+		// 	prubaNorma++;
+		// 	if (prubaNorma==persona){
+		// 		exitosNorma[j]++;
+		// 	}
+		// 	int prubaCota = encontrarPersonaHamming(tc, tc_check, n, k,nimgp, nimgp, p,j);
+		// 	prubaCota++;
+		// 	if (prubaCota==persona){
+		// 		exitosCota[j]++;
+		// 	}
+		// }
 
 		int parecidoMan = encontrarPersona(tc, tc_check, n, k, nimgp, nimgp, p, 1);
 		int parecidoDis = encontrarPersona(tc, tc_check, n, k, nimgp, nimgp, p, 2);
-		int parecidoHam = encontrarPersonaHamming(tc, tc_check, n, k, nimgp, nimgp, p, 750);	
+		int parecidoHam = encontrarPersonaHamming(tc, tc_check, n, k, nimgp, nimgp, p, 250);	
 			
 		parecidoMan++;
 		parecidoDis++;
@@ -382,17 +383,17 @@ int main(int args, char* argsv[]){
 
 	//informacion de aciertos de la cota y la norma
 
-	ofstream cantExitos;
-	cantExitos.open("cantExitos.out");
-	for(int i=1;i<1501;i++){
-		cantExitos<< double(exitosNorma[i])/double(ntest)<<" ";
-	}
-	cantExitos<<endl;
-	for(int i=1;i<1501;i++){
-		cantExitos<< double(exitosCota[i])/double(ntest)<<" ";
-	}
-	cantExitos.close();
-		matrices::mostrarMatriz(matriz_kunfusionHam,p,p);
+	// ofstream cantExitos;
+	// cantExitos.open("cantExitos.out");
+	// for(int i=1;i<1501;i++){
+	// 	cantExitos<< double(exitosNorma[i])/double(ntest)<<" ";
+	// }
+	// cantExitos<<endl;
+	// for(int i=1;i<1501;i++){
+	// 	cantExitos<< double(exitosCota[i])/double(ntest)<<" ";
+	// }
+	// cantExitos.close();
+	// 	matrices::mostrarMatriz(matriz_kunfusionHam,p,p);
 	
 	cout << "#Exitos Norma 2: " + to_string(exitosDis) << endl;
 	cout << "#Exitos Manhattan: " + to_string(exitosMan) << endl;
