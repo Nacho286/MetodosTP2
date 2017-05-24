@@ -91,8 +91,10 @@ void calcularMetricas(vector<vector<double> > &t, vector<double> &r, int p){
  		else
  			r[2] += 1.0 / (double) p;
  		//f1_i
-		r[3] += (2 * (r[0] * r[1] / (r[0] + r[1]))) / (double) p;
 	}
+
+	r[3] += ((1.00625* ((r[0] * r[1]) / (0.0625*r[0] + r[1]))));
+
  }
 
 vector<double> transformacionCaracteristica(const vector<vector<double> > &autoVectores, const vector<double> &imagen, int k, int sizeImg){
@@ -278,8 +280,8 @@ int main(int args, char* argsv[]){
 	int exitosDis = 0;
 	int exitosMan = 0;
 	int exitosHam = 0;
-	//vector<int> exitosNorma(1501,0);
-	//vector<int> exitosCota(1501,0);
+	vector<int> exitosNorma(1501,0);
+	vector<int> exitosCota(1501,0);
 	for (int i = 0; i < ntest; i++){
 		getline(entrada, linea);
 		datos = split(linea, ' ');
@@ -292,18 +294,18 @@ int main(int args, char* argsv[]){
 		}
 		vector<double> tc_check = transformacionCaracteristica(autoVectores, imagen, k, m);
 		
-		// for(int j=1;j<1501;j++){
-		// 	int prubaNorma = encontrarPersona(tc, tc_check, n, k,nimgp, nimgp, p,j);
-		// 	prubaNorma++;
-		// 	if (prubaNorma==persona){
-		// 		exitosNorma[j]++;
-		// 	}
-		// 	int prubaCota = encontrarPersonaHamming(tc, tc_check, n, k,nimgp, nimgp, p,j);
-		// 	prubaCota++;
-		// 	if (prubaCota==persona){
-		// 		exitosCota[j]++;
-		// 	}
-		// }
+		for(int j=1;j<1501;j++){
+			int prubaNorma = encontrarPersona(tc, tc_check, n, k,nimgp, nimgp, p,j);
+			prubaNorma++;
+			if (prubaNorma==persona){
+				exitosNorma[j]++;
+			}
+			int prubaCota = encontrarPersonaHamming(tc, tc_check, n, k,nimgp, nimgp, p,j);
+			prubaCota++;
+			if (prubaCota==persona){
+				exitosCota[j]++;
+			}
+		}
 
 		int parecidoMan = encontrarPersona(tc, tc_check, n, k, nimgp, nimgp, p, 1);
 		int parecidoDis = encontrarPersona(tc, tc_check, n, k, nimgp, nimgp, p, 2);
@@ -351,12 +353,12 @@ int main(int args, char* argsv[]){
  	vector<double> resultadosP1(4);
  	vector<double> resultadosP2(4);
 
- 	//matrices::mostrarMatriz(tablasHam,p,4);
+ 	matrices::mostrarMatriz(tablasHam,p,4);
  	calcularMetricas(tablasHam, resultadosHam, p);
  	calcularMetricas(tablasp1, resultadosP1, p);
  	calcularMetricas(tablasp2, resultadosP2, p);
 
- 	//[tp,fn,fp,tn]
+ 	//[tp,fn,fp,tn]	
  	ofstream results;	
 	results.open("resultados.out");
 	//formato resultados :  precision, recall, specificity, f1, hitrate
@@ -377,19 +379,20 @@ int main(int args, char* argsv[]){
 	
 	results.close();
 
+
 	//informacion de aciertos de la cota y la norma
 
-	// ofstream cantExitos;
-	// cantExitos.open("cantExitos.out");
-	// for(int i=1;i<1501;i++){
-	// 	cantExitos<< double(exitosNorma[i])/double(ntest)<<" ";
-	// }
-	// cantExitos<<endl;
-	// for(int i=1;i<1501;i++){
-	// 	cantExitos<< double(exitosCota[i])/double(ntest)<<" ";
-	// }
-	// cantExitos.close();
-	//matrices::mostrarMatriz(matriz_kunfusionHam,p,p);
+	ofstream cantExitos;
+	cantExitos.open("cantExitos.out");
+	for(int i=1;i<1501;i++){
+		cantExitos<< double(exitosNorma[i])/double(ntest)<<" ";
+	}
+	cantExitos<<endl;
+	for(int i=1;i<1501;i++){
+		cantExitos<< double(exitosCota[i])/double(ntest)<<" ";
+	}
+	cantExitos.close();
+		matrices::mostrarMatriz(matriz_kunfusionHam,p,p);
 	
 	cout << "#Exitos Norma 2: " + to_string(exitosDis) << endl;
 	cout << "#Exitos Manhattan: " + to_string(exitosMan) << endl;
