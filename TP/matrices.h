@@ -5,15 +5,14 @@ using namespace std;
 
 namespace matrices{
 
-	void mostrarMatriz(const vector<vector<double > > &matriz, int filas, int cols){
-		
+	void mostrarMatriz(const vector<vector<double > > &matriz, int filas, int cols){		
 		for (int i = 0; i < filas; i++){
 			for (int j = 0; j < cols; j++)
 				cout<< matriz[i][j];
-			cout <<endl;
-
+			cout << endl;
 		}
 	}
+	
 	vector<vector<double> > trasponer(const vector<vector<double> >  &matriz, int filas, int cols){
 		vector<vector<double> > traspuesta(cols, vector<double>(filas));
 		for (int i = 0; i < cols; i++)
