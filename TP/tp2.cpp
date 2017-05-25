@@ -80,8 +80,10 @@ void calcularMetricas(vector<vector<double> > &t, vector<double> &r, int p){
  		//recall_i
  		if (t[i][0] != 0)	//hay algun tp
  			r[1] += t[i][0] / (t[i][0] + t[i][1]) / (double) p;
+ 		else if (t[i][1] !=0)
+ 			r[1] += 0;
  		else
- 			r[1] += 1.0 / (double) p;
+ 			r[1] += 1/(double)p;
 
  		//specificity_i
  		if (t[i][3] != 0) //hay algun fp
@@ -93,7 +95,7 @@ void calcularMetricas(vector<vector<double> > &t, vector<double> &r, int p){
  		//f1_i
 	}
 
-	r[3] += ((1.00625* ((r[0] * r[1]) / (0.0625*r[0] + r[1]))));
+	r[3] += ((2* ((r[0] * r[1]) / (r[0] + r[1]))));
 
  }
 
