@@ -3,7 +3,7 @@ import os
 import sys
 import matplotlib.pyplot as plt
 
-os.system("python kfold.py 0 41 15")
+# os.system("python kfold.py 0 41 15")
 archivoR = open("cantExitos.out","r")
 exitosNorma = archivoR.readline()
 exitosNorma = [float(i) for i in exitosNorma.split()]
@@ -16,5 +16,6 @@ plt.ylabel("hitrate")
 plt.title("hitrate segun el numero que se usa como cota en Hamming o la norma con la que se calcula la distancia");
 plt.plot(keys,exitosCota,label='Funcion de Hamming');
 plt.plot(keys,exitosNorma,label='Distancia Norma');
-plt.legend(bbox_to_anchor=(1.09,0.8));
+plt.axis([1,1501,0,1]);
+plt.legend(bbox_to_anchor=(0.33,1.0));
 plt.show();
