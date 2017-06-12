@@ -4,8 +4,8 @@
 #include <sstream>
 #include <vector>
 #include <cmath>
-#include <utility> 
-#include <queue>   
+#include <utility>
+#include <queue>
 
 using namespace std;
 
@@ -32,7 +32,7 @@ void split(const string &s, char delim, Out result) {
 	string item;
 	while (getline(ss, item, delim))
     	*(result++) = item;
-}	
+}
 
 vector<string> split(const string &s, char delim) {
 	vector<string> elems;
@@ -52,7 +52,7 @@ vector<vector<double> >	tablasDeConfusion(const vector<vector<double> > m, int s
 		for (int j = 0; j < size; j++)
 			if(j != i)
 				t_kunfusion[1] += m[i][j]; //fn
-		
+
 		for (int k = 0; k < size; k++)
 			if(k != i)
 				t_kunfusion[2] += m[k][i]; //fp
@@ -63,7 +63,7 @@ vector<vector<double> >	tablasDeConfusion(const vector<vector<double> > m, int s
 					t_kunfusion[3] += m[r][s]; //tn
 		tablas[i]= (t_kunfusion);
 	}
-	
+
 	return tablas;
 }
 
@@ -102,7 +102,7 @@ void calcularMetricas(vector<vector<double> > &t, vector<double> &r, int p){
 vector<double> transformacionCaracteristica(const vector<vector<double> > &autoVectores, const vector<double> &imagen, int k, int sizeImg){
 	vector<double> tc(k);
 	for(int i = 0; i < k; i++)
-		tc[i] = matrices::producto_escalar(autoVectores[i], imagen, sizeImg);	
+		tc[i] = matrices::producto_escalar(autoVectores[i], imagen, sizeImg);
 
 	return tc;
 }
@@ -116,16 +116,8 @@ int encontrarPersona(const vector<vector<double> > &tc, const vector<double> &tc
 	}
 
 	vector<double> personas(cantPersonas, 0);
-	//personas[(cola.top().a) / nimgp] += 1;	
 	for (int i = 0; i < knn; i++){
 		personas[(cola.top().a) / nimgp] += 1;
-/*		if (i == 0){
-			personas[(cola.top().a) / nimgp] += (2.0/3.0);	
-		} else if (i == 1){
-			personas[(cola.top().a) / nimgp] += (1.0/6.0);	
-		}else{
-			personas[(cola.top().a) / nimgp] += 1.0/(6.0*(knn-2));
-		}*/
 		cola.pop();
 	}
 
@@ -134,7 +126,60 @@ int encontrarPersona(const vector<vector<double> > &tc, const vector<double> &tc
 		if (personas[maxComun] < personas[i])
 			maxComun = i;
 	}
-	
+
+	return maxComun;
+}
+
+int encontrarPersonaPeso(const vector<vector<double> > &tc, const vector<double> &tc_check, int cantImg, int cantVectores, int knn, int nimgp, int cantPersonas, int norma){
+	priority_queue<par> cola;
+	for (int i = 0; i < cantImg; i++){
+		vector<double> resta = matrices::restarVector(tc[i], tc_check, cantVectores);
+		par p = {i, matrices::norma_v(resta, cantVectores, norma)};
+		cola.push(p);
+	}
+
+	vector<double> personas(cantPersonas, 0);
+	personas[(cola.top().a) / nimgp] += 1;
+	for (int i = 0; i < knn; i++){
+		personas[(cola.top().a) / nimgp] += 1;
+		cola.pop();
+	}
+
+	int maxComun = 0;
+	for (int i = 0; i < cantPersonas; i++){
+		if (personas[maxComun] < personas[i])
+			maxComun = i;
+	}
+
+	return maxComun;
+}
+
+int encontrarPersonaModa(const vector<vector<double> > &tc, const vector<double> &tc_check, int cantImg, int cantVectores, int knn, int nimgp, int cantPersonas, int norma){
+	priority_queue<par> cola;
+	for (int i = 0; i < cantImg; i++){
+		vector<double> resta = matrices::restarVector(tc[i], tc_check, cantVectores);
+		par p = {i, matrices::norma_v(resta, cantVectores, norma)};
+		cola.push(p);
+	}
+
+	vector<double> personas(cantPersonas, 0);
+	for (int i = 0; i < knn; i++){
+	if (i == 0){
+			personas[(cola.top().a) / nimgp] += (2.0/3.0);
+		} else if (i == 1){
+			personas[(cola.top().a) / nimgp] += (1.0/6.0);
+		}else{
+			personas[(cola.top().a) / nimgp] += 1.0/(6.0*(knn-2));
+		}
+		cola.pop();
+	}
+
+	int maxComun = 0;
+	for (int i = 0; i < cantPersonas; i++){
+		if (personas[maxComun] < personas[i])
+			maxComun = i;
+	}
+
 	return maxComun;
 }
 
@@ -153,9 +198,9 @@ int encontrarPersonaHamming(const vector<vector<double> > &tc, const vector<doub
 	}
 
 	vector<int> personas(cantPersonas, 0);
-	//personas[(cola.top().a) / nimgp] += 1;	
+	//personas[(cola.top().a) / nimgp] += 1;
 	for (int i = 0; i < knn; i++){
-		personas[(cola.top().a) / nimgp] += 1;		
+		personas[(cola.top().a) / nimgp] += 1;
 		cola.pop();
 	}
 
@@ -164,7 +209,7 @@ int encontrarPersonaHamming(const vector<vector<double> > &tc, const vector<doub
 		if (personas[maxComun] < personas[i])
 			maxComun = i;
 	}
-	
+
 	return maxComun;
 }
 
@@ -264,22 +309,20 @@ int main(int args, char* argsv[]){
 
 	//Matriz de n x k donde cada fila es el vector de la tc de cada imagen
 	vector<vector<double> > tc(n, vector<double>(k));
-	
+
 	//La matriz de confusion es cuadrada y la dimension corresponde a la cantidad de clases
-	vector<vector<double> > matriz_kunfusionHam(p, vector<double>(p));
-	vector<vector<double> > matriz_kunfusionp1(p, vector<double>(p));
-	vector<vector<double> > matriz_kunfusionp2(p, vector<double>(p));
+	vector<vector<double> > matriz_kunfusionSinPeso(p, vector<double>(p));
+	vector<vector<double> > matriz_kunfusionConPeso(p, vector<double>(p));
+	vector<vector<double> > matriz_kunfusionModa(p, vector<double>(p));
 
 	for(int i = 0; i < n; i++)
 	 	tc[i] = transformacionCaracteristica(autoVectores, imagenes[i], k, m);
-	
+
 	getline(entrada, linea);
 	int ntest = stoi(linea);			// Cantidad de imagenes a testear
-	int exitosDis = 0;
-	int exitosMan = 0;
-	int exitosHam = 0;
-	vector<int> exitosNorma(1501,0);
-	vector<int> exitosCota(1501,0);
+	int exitosModa = 0;
+	int exitosConPeso = 0;
+	int exitosSinPeso = 0;
 	for (int i = 0; i < ntest; i++){
 		getline(entrada, linea);
 		datos = split(linea, ' ');
@@ -291,92 +334,88 @@ int main(int args, char* argsv[]){
 			return 1;
 		}
 		vector<double> tc_check = transformacionCaracteristica(autoVectores, imagen, k, m);
-		int parecidoMan = encontrarPersona(tc, tc_check, n, k, nimgp, nimgp, p, 1);
-		int parecidoDis = encontrarPersona(tc, tc_check, n, k, nimgp, nimgp, p, 2);
-		int parecidoHam = encontrarPersonaHamming(tc, tc_check, n, k, nimgp, nimgp, p, 250);	
-			
-		parecidoMan++;
-		parecidoDis++;
-		parecidoHam++;
+		int parecidoConPeso = encontrarPersonaPeso(tc, tc_check, n, k, nimgp, nimgp, p, 2);
+		int parecidoModa = encontrarPersonaModa(tc, tc_check, n, k, nimgp, nimgp, p, 2);
+		int parecidoSinPeso = encontrarPersona(tc, tc_check, n, k, nimgp, nimgp, p, 2);
 
-		if (parecidoMan != persona){
-			cout << path_test + " Manhattan NO coincide. Persona: " + to_string(persona) + ". Parecido: " + to_string(parecidoMan) << endl;
-			matriz_kunfusionp1[persona - 1][parecidoMan - 1] += 1;
+		parecidoConPeso++;
+		parecidoModa++;
+		parecidoSinPeso++;
+
+		if (parecidoConPeso != persona){
+			cout << path_test + " Con peso NO coincide. Persona: " + to_string(persona) + ". Parecido: " + to_string(parecidoConPeso) << endl;
+			matriz_kunfusionConPeso[persona - 1][parecidoConPeso - 1] += 1;
 		}else{
-			cout << to_string(persona) +" OK Con Manhattan" << endl;	
-			exitosMan++;
-			matriz_kunfusionp1[persona - 1][persona - 1] += 1;
+			cout << to_string(persona) +" OK Con Peso" << endl;
+			exitosConPeso++;
+			matriz_kunfusionConPeso[persona - 1][persona - 1] += 1;
 		}
-		if (parecidoDis != persona){
-			cout << path_test + " Norma 2 NO coincide. Persona: " + to_string(persona) + ". Parecido: " + to_string(parecidoDis) << endl;
-			matriz_kunfusionp2[persona - 1][parecidoDis - 1] += 1;
+		if (parecidoModa != persona){
+			cout << path_test + " Moda NO coincide. Persona: " + to_string(persona) + ". Parecido: " + to_string(parecidoModa) << endl;
+			matriz_kunfusionModa[persona - 1][parecidoModa - 1] += 1;
 		}else{
-			cout << to_string(persona) +" OK Con Norma 2" << endl;	
-			exitosDis++;
-			matriz_kunfusionp2[persona - 1][persona - 1] += 1;
+			cout << to_string(persona) +" OK Con Moda" << endl;
+			exitosModa++;
+			matriz_kunfusionModa[persona - 1][persona - 1] += 1;
 		}
-		if (parecidoHam != persona){
-			cout << path_test + " Hamming NO coincide. Persona: " + to_string(persona) + ". Parecido: " + to_string(parecidoHam) << endl;
-			matriz_kunfusionHam[persona - 1][parecidoHam - 1] += 1;
+		if (parecidoSinPeso != persona){
+			cout << path_test + " Sin Peso NO coincide. Persona: " + to_string(persona) + ". Parecido: " + to_string(parecidoSinPeso) << endl;
+			matriz_kunfusionSinPeso[persona - 1][parecidoSinPeso - 1] += 1;
 		}else{
-			cout << to_string(persona) +" OK Con Hamming" << endl;	
-			exitosHam++;
-			matriz_kunfusionHam[persona - 1][persona - 1] += 1;
+			cout << to_string(persona) +" OK Sin Peso" << endl;
+			exitosSinPeso++;
+			matriz_kunfusionSinPeso[persona - 1][persona - 1] += 1;
 		}
 
-		
+
 	}
-	
+
 	//Reportar resultados: precision, recall, specifity, f1 (en ese orden)
-	vector<vector<double> > tablasHam(tablasDeConfusion(matriz_kunfusionHam, p));
- 	vector<vector<double> > tablasp1(tablasDeConfusion(matriz_kunfusionp1, p));
- 	vector<vector<double> > tablasp2(tablasDeConfusion(matriz_kunfusionp2, p));
+	vector<vector<double> > tablasSinPeso(tablasDeConfusion(matriz_kunfusionSinPeso, p));
+ 	vector<vector<double> > tablasConPeso(tablasDeConfusion(matriz_kunfusionConPeso, p));
+ 	vector<vector<double> > tablasModa(tablasDeConfusion(matriz_kunfusionModa, p));
 
  	//[precision, recall, spec, f1]
- 	vector<double> resultadosHam(4);
- 	vector<double> resultadosP1(4);
- 	vector<double> resultadosP2(4);
+ 	vector<double> resultadosSinPeso(4);
+ 	vector<double> resultadosConPeso(4);
+ 	vector<double> resultadosModa(4);
 
- 	calcularMetricas(tablasHam, resultadosHam, p);
- 	calcularMetricas(tablasp1, resultadosP1, p);
- 	calcularMetricas(tablasp2, resultadosP2, p);
+ 	calcularMetricas(tablasSinPeso, resultadosSinPeso, p);
+ 	calcularMetricas(tablasConPeso, resultadosConPeso, p);
+ 	calcularMetricas(tablasModa, resultadosModa, p);
 
- 	//[tp, fn, fp, tn]	
- 	ofstream results;	
+ 	//[tp, fn, fp, tn]
+ 	ofstream results;
 	results.open("resultados.out");
 	//formato resultados :  precision, recall, specificity, f1, hitrate
 	for(int i = 0;i < 4; i++)
-		results << resultadosHam[i] << " ";
-	results << double(exitosHam) / double(ntest);
+	results << resultadosSinPeso[i] << " ";
+	results << double(exitosSinPeso) / double(ntest);
 	results << endl;
 
 	for(int i = 0; i < 4; i++)
-		results << resultadosP1[i] << " ";
-	results << double(exitosMan) / double(ntest);
+	results << resultadosConPeso[i] << " ";
+	results << double(exitosConPeso) / double(ntest);
 	results << endl;
-	
+
 	for(int i = 0; i < 4; i++)
-		results << resultadosP2[i] << " ";
-	results << double(exitosDis) / double(ntest);
+	results << resultadosModa[i] << " ";
+	results << double(exitosModa) / double(ntest);
 	results << endl;
-	
+
 	results.close();
-	
-	cout << "#Exitos Norma 2: " + to_string(exitosDis) << endl;
-	cout << "#Exitos Manhattan: " + to_string(exitosMan) << endl;
-	cout << "#Exitos Hamming: " + to_string(exitosHam) << endl;
-	
+
+	cout << "#Exitos Sin Peso: " + to_string(exitosSinPeso) << endl;
+	cout << "#Exitos Con Peso: " + to_string(exitosConPeso) << endl;
+	cout << "#Exitos Con Moda: " + to_string(exitosModa) << endl;
+
 	ofstream archivoSalida;
 	archivoSalida.open(argsv[2]);
 	for(int i = 0; i < k; i++){
 		cout << "sqrt(Autovalor " + to_string(i + 1) + "): " + to_string(sqrt(autoValores[i])) << endl;
-		archivoSalida << to_string(sqrt(autoValores[i])) + "\n";	
+		archivoSalida << to_string(sqrt(autoValores[i])) + "\n";
 	}
-	archivoSalida.close();	
+	archivoSalida.close();
 
 	return 0;
 }
-
-
-
-
