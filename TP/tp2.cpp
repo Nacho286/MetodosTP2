@@ -110,7 +110,7 @@ vector<double> transformacionCaracteristica(const vector<vector<double> > &autoV
 int encontrarPersona(const vector<vector<double> > &tc, const vector<double> &tc_check, int cantImg, int cantVectores, int knn, int nimgp, int cantPersonas, int norma){
 	priority_queue<par> cola;
 	for (int i = 0; i < cantImg; i++){
-		vector<double> resta = matrices::restarVector(tc[i], tc_check, cantVectores);
+		vector<double> resta = matrices::restar(tc[i], tc_check, cantVectores);
 		par p = {i, matrices::norma_v(resta, cantVectores, norma)};
 		cola.push(p);
 	}
@@ -133,7 +133,7 @@ int encontrarPersona(const vector<vector<double> > &tc, const vector<double> &tc
 int encontrarPersonaPeso(const vector<vector<double> > &tc, const vector<double> &tc_check, int cantImg, int cantVectores, int knn, int nimgp, int cantPersonas, int norma){
 	priority_queue<par> cola;
 	for (int i = 0; i < cantImg; i++){
-		vector<double> resta = matrices::restarVector(tc[i], tc_check, cantVectores);
+		vector<double> resta = matrices::restar(tc[i], tc_check, cantVectores);
 		par p = {i, matrices::norma_v(resta, cantVectores, norma)};
 		cola.push(p);
 	}
@@ -157,7 +157,7 @@ int encontrarPersonaPeso(const vector<vector<double> > &tc, const vector<double>
 int encontrarPersonaModa(const vector<vector<double> > &tc, const vector<double> &tc_check, int cantImg, int cantVectores, int knn, int nimgp, int cantPersonas, int norma){
 	priority_queue<par> cola;
 	for (int i = 0; i < cantImg; i++){
-		vector<double> resta = matrices::restarVector(tc[i], tc_check, cantVectores);
+		vector<double> resta = matrices::restar(tc[i], tc_check, cantVectores);
 		par p = {i, matrices::norma_v(resta, cantVectores, norma)};
 		cola.push(p);
 	}
@@ -186,7 +186,7 @@ int encontrarPersonaModa(const vector<vector<double> > &tc, const vector<double>
 int encontrarPersonaHamming(const vector<vector<double> > &tc, const vector<double> &tc_check, int cantImg, int cantVectores, int knn, int nimgp, int cantPersonas, int cota){
 	priority_queue<par> cola;
 	for (int i = 0; i < cantImg; i++){
-		vector<double> resta = matrices::restarVector(tc[i], tc_check, cantVectores);
+		vector<double> resta = matrices::restar(tc[i], tc_check, cantVectores);
 		for (int j = 0; j < cantVectores; j++){
 			if (abs(resta[j]) < cota)
 				resta[j] = 0;
@@ -318,11 +318,29 @@ int main(int args, char* argsv[]){
 	for(int i = 0; i < n; i++)
 	 	tc[i] = transformacionCaracteristica(autoVectores, imagenes[i], k, m);
 
+	// Reconocimiento de objetos
+	bool objeto = false;
+	if (args > 4 && stoi(argsv[4]) == 1) 
+		objeto = true;
+
+	// mu es un vector que ya contiene el promedio de las imagenes, nos cae gratis
+	vector<double> tc_avg = transformacionCaracteristica(autoVectores, mu, k, m);
+
+	double cota_dis = 0.0;
+	if (objeto){
+		for (int i = 0; i < n; i++){
+			double dif = matrices::norma_v(matrices::restar(tc[i], tc_avg, k), k, 2);
+			if (dif > cota_dis)
+				cota_dis = dif;
+		}
+	}
+
 	getline(entrada, linea);
 	int ntest = stoi(linea);			// Cantidad de imagenes a testear
-	int exitosModa = 0;
+	int exitosModa    = 0;
 	int exitosConPeso = 0;
 	int exitosSinPeso = 0;
+	int exitosObj     = 0;
 	for (int i = 0; i < ntest; i++){
 		getline(entrada, linea);
 		datos = split(linea, ' ');
@@ -334,80 +352,109 @@ int main(int args, char* argsv[]){
 			return 1;
 		}
 		vector<double> tc_check = transformacionCaracteristica(autoVectores, imagen, k, m);
-		int parecidoConPeso = encontrarPersonaPeso(tc, tc_check, n, k, nimgp, nimgp, p, 2);
-		int parecidoModa = encontrarPersonaModa(tc, tc_check, n, k, nimgp, nimgp, p, 2);
-		int parecidoSinPeso = encontrarPersona(tc, tc_check, n, k, nimgp, nimgp, p, 2);
 
-		parecidoConPeso++;
-		parecidoModa++;
-		parecidoSinPeso++;
+		// Ahora se ejecuta una u otra operacion, dependiendo si se quiere clasificar un objeto o una persona
+		if (!objeto){
+			int parecidoConPeso = encontrarPersonaPeso(tc, tc_check, n, k, nimgp, nimgp, p, 2);
+			int parecidoModa = encontrarPersonaModa(tc, tc_check, n, k, nimgp, nimgp, p, 2);
+			int parecidoSinPeso = encontrarPersona(tc, tc_check, n, k, nimgp, nimgp, p, 2);
 
-		if (parecidoConPeso != persona){
-			cout << path_test + " Con peso NO coincide. Persona: " + to_string(persona) + ". Parecido: " + to_string(parecidoConPeso) << endl;
-			matriz_kunfusionConPeso[persona - 1][parecidoConPeso - 1] += 1;
-		}else{
-			cout << to_string(persona) +" OK Con Peso" << endl;
-			exitosConPeso++;
-			matriz_kunfusionConPeso[persona - 1][persona - 1] += 1;
+			parecidoConPeso++;
+			parecidoModa++;
+			parecidoSinPeso++;
+
+			if (parecidoConPeso != persona){
+				cout << path_test + " Con peso NO coincide. Persona: " + to_string(persona) + ". Parecido: " + to_string(parecidoConPeso) << endl;
+				matriz_kunfusionConPeso[persona - 1][parecidoConPeso - 1] += 1;
+			}else{
+				cout << to_string(persona) +" OK Con Peso" << endl;
+				exitosConPeso++;
+				matriz_kunfusionConPeso[persona - 1][persona - 1] += 1;
+			}
+			if (parecidoModa != persona){
+				cout << path_test + " Moda NO coincide. Persona: " + to_string(persona) + ". Parecido: " + to_string(parecidoModa) << endl;
+				matriz_kunfusionModa[persona - 1][parecidoModa - 1] += 1;
+			}else{
+				cout << to_string(persona) +" OK Con Moda" << endl;
+				exitosModa++;
+				matriz_kunfusionModa[persona - 1][persona - 1] += 1;
+			}
+			if (parecidoSinPeso != persona){
+				cout << path_test + " Sin Peso NO coincide. Persona: " + to_string(persona) + ". Parecido: " + to_string(parecidoSinPeso) << endl;
+				matriz_kunfusionSinPeso[persona - 1][parecidoSinPeso - 1] += 1;
+			}else{
+				cout << to_string(persona) +" OK Sin Peso" << endl;
+				exitosSinPeso++;
+				matriz_kunfusionSinPeso[persona - 1][persona - 1] += 1;
+			}
+		} else{
+			double max_dis = 0.0;
+			for (int i = 0; i < n; i++){
+				double dif = matrices::norma_v(matrices::restar(tc_check, tc_avg, k), k, 2);
+				if (dif > max_dis)
+					max_dis = dif;
+			}
+
+			bool esPersona = true;
+			if (max_dis > cota_dis)
+				esPersona = false;
+
+			if (persona == 1 && esPersona){
+				cout << "CARA OK" << endl;
+				exitosObj++;
+			}else if (persona == 0 && esPersona){
+				cout << path_test + " es OBJETO, predicho CARA." << endl;
+			}else if (persona == 1 && !(esPersona))
+				cout << path_test + " es CARA, predicho OBJETO." << endl;
+			else{
+				cout << "OBJETO OK" << endl;
+				exitosObj++;
+			}
 		}
-		if (parecidoModa != persona){
-			cout << path_test + " Moda NO coincide. Persona: " + to_string(persona) + ". Parecido: " + to_string(parecidoModa) << endl;
-			matriz_kunfusionModa[persona - 1][parecidoModa - 1] += 1;
-		}else{
-			cout << to_string(persona) +" OK Con Moda" << endl;
-			exitosModa++;
-			matriz_kunfusionModa[persona - 1][persona - 1] += 1;
-		}
-		if (parecidoSinPeso != persona){
-			cout << path_test + " Sin Peso NO coincide. Persona: " + to_string(persona) + ". Parecido: " + to_string(parecidoSinPeso) << endl;
-			matriz_kunfusionSinPeso[persona - 1][parecidoSinPeso - 1] += 1;
-		}else{
-			cout << to_string(persona) +" OK Sin Peso" << endl;
-			exitosSinPeso++;
-			matriz_kunfusionSinPeso[persona - 1][persona - 1] += 1;
-		}
-
-
 	}
 
-	//Reportar resultados: precision, recall, specifity, f1 (en ese orden)
-	vector<vector<double> > tablasSinPeso(tablasDeConfusion(matriz_kunfusionSinPeso, p));
- 	vector<vector<double> > tablasConPeso(tablasDeConfusion(matriz_kunfusionConPeso, p));
- 	vector<vector<double> > tablasModa(tablasDeConfusion(matriz_kunfusionModa, p));
+	if (!objeto){
+		//Reportar resultados: precision, recall, specifity, f1 (en ese orden)
+		vector<vector<double> > tablasSinPeso(tablasDeConfusion(matriz_kunfusionSinPeso, p));
+	 	vector<vector<double> > tablasConPeso(tablasDeConfusion(matriz_kunfusionConPeso, p));
+	 	vector<vector<double> > tablasModa(tablasDeConfusion(matriz_kunfusionModa, p));
 
- 	//[precision, recall, spec, f1]
- 	vector<double> resultadosSinPeso(4);
- 	vector<double> resultadosConPeso(4);
- 	vector<double> resultadosModa(4);
+	 	//[precision, recall, spec, f1]
+	 	vector<double> resultadosSinPeso(4);
+	 	vector<double> resultadosConPeso(4);
+	 	vector<double> resultadosModa(4);
 
- 	calcularMetricas(tablasSinPeso, resultadosSinPeso, p);
- 	calcularMetricas(tablasConPeso, resultadosConPeso, p);
- 	calcularMetricas(tablasModa, resultadosModa, p);
+	 	calcularMetricas(tablasSinPeso, resultadosSinPeso, p);
+	 	calcularMetricas(tablasConPeso, resultadosConPeso, p);
+	 	calcularMetricas(tablasModa, resultadosModa, p);
 
- 	//[tp, fn, fp, tn]
- 	ofstream results;
-	results.open("resultados.out");
-	//formato resultados :  precision, recall, specificity, f1, hitrate
-	for(int i = 0;i < 4; i++)
-	results << resultadosSinPeso[i] << " ";
-	results << double(exitosSinPeso) / double(ntest);
-	results << endl;
+	 	//[tp, fn, fp, tn]
+	 	ofstream results;
+		results.open("resultados.out");
+		//formato resultados :  precision, recall, specificity, f1, hitrate
+		for(int i = 0;i < 4; i++)
+			results << resultadosSinPeso[i] << " ";
+		results << double(exitosSinPeso) / double(ntest);
+		results << endl;
 
-	for(int i = 0; i < 4; i++)
-	results << resultadosConPeso[i] << " ";
-	results << double(exitosConPeso) / double(ntest);
-	results << endl;
+		for(int i = 0; i < 4; i++)
+			results << resultadosConPeso[i] << " ";
+		results << double(exitosConPeso) / double(ntest);
+		results << endl;
 
-	for(int i = 0; i < 4; i++)
-	results << resultadosModa[i] << " ";
-	results << double(exitosModa) / double(ntest);
-	results << endl;
+		for(int i = 0; i < 4; i++)
+			results << resultadosModa[i] << " ";
+		results << double(exitosModa) / double(ntest);
+		results << endl;
 
-	results.close();
+		results.close();
 
-	cout << "#Exitos Sin Peso: " + to_string(exitosSinPeso) << endl;
-	cout << "#Exitos Con Peso: " + to_string(exitosConPeso) << endl;
-	cout << "#Exitos Con Moda: " + to_string(exitosModa) << endl;
+		cout << "#Exitos Sin Peso: " + to_string(exitosSinPeso) << endl;
+		cout << "#Exitos Con Peso: " + to_string(exitosConPeso) << endl;
+		cout << "#Exitos Con Moda: " + to_string(exitosModa)    << endl;
+	} else{
+		cout << "#Exitos: " + to_string(exitosObj) + "/" + to_string(ntest) << endl;
+	}
 
 	ofstream archivoSalida;
 	archivoSalida.open(argsv[2]);

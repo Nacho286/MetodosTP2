@@ -89,7 +89,7 @@ namespace matrices{
 	}
 
 	// A (m x 1) - B (m x 1) = C (m x 1)
-	vector<double> restarVector(const vector<double> &A, const vector<double> &B, int m){
+	vector<double> restar(const vector<double> &A, const vector<double> &B, int m){
 		vector<double>  C(m);
 		for (int i = 0; i < m; i++)
 			C[i] = A[i] - B[i];
@@ -102,7 +102,7 @@ namespace matrices{
 		for (int i = 0; i < n; i++)
 			res += pow(abs(v[i]), p);
 
-		return pow(res,pow(p,-1));
+		return pow(res, pow(p, -1));
 	}
 
 	//v_t (1 x n) * w (n x 1) = a (1 x 1)
