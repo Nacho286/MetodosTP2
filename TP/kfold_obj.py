@@ -14,9 +14,9 @@ kfold3={}
 kfold4={}
 kfold5={}
 kfolds=[kfold1,kfold2,kfold3,kfold4,kfold5]
-total="resultadosGenerales.out"
+total="resultados_" + str(cantPersonas) + "_" + str(cantAutovalores) + ".out"
 archivoA=open(total,"w")
-listaResultados=[[0.0,0.0,0.0,0.0,0.0],[0.0,0.0,0.0,0.0,0.0],[0.0,0.0,0.0,0.0,0.0]]
+hitrate = 0.0
 for j in personas:
 	fotos=range(1,11)
 	for k in range(0,5):
@@ -57,15 +57,13 @@ for j in range(0,5):
 		aux="../data/ImagenesCaras" + ("" if size == 0 else "Red") + "/obj/" + str(i) + ".pgm 0 \n"
 		archivoW.write(aux)
 	archivoW.close()
-	#os.system("./main "+archivo+" test"+str(j+1)+".out")
-	#resultado="resultados.out"
-	#archivoR=open(resultado,"r")
-	#for i in range(0,3):
-	#	linea=archivoR.readline()
-	#	linea=linea.split(" ")
-	#	for k in range(0,5):
-	#		listaResultados[i][k]+=float(linea[k])
-#for i in range(0,3):
-	#for k in range(0,5):
-	#	archivoA.write(str(listaResultados[i][k]/float(5))+" ")
-	#archivoA.write("\n")
+	os.system("./main "+archivo+" test"+str(j+1)+".out 0 1")
+	resultado = "resultados.out"
+	archivoR  = open(resultado,"r")
+	linea     = archivoR.readline()
+	hitrate += float(linea)
+	os.remove(archivo)
+	os.remove("test" + str(j + 1) + ".out")
+	os.remove(resultado)
+archivoA.write(str(hitrate / float(5)))
+archivoA.close()

@@ -326,6 +326,7 @@ int main(int args, char* argsv[]){
 	// mu es un vector que ya contiene el promedio de las imagenes, nos cae gratis
 	vector<double> tc_avg = transformacionCaracteristica(autoVectores, mu, k, m);
 
+	// Obtengo la mayor diferencia entre la tc del promedio y las tc de las imágenes
 	double cota_dis = 0.0;
 	if (objeto){
 		for (int i = 0; i < n; i++){
@@ -388,15 +389,10 @@ int main(int args, char* argsv[]){
 				matriz_kunfusionSinPeso[persona - 1][persona - 1] += 1;
 			}
 		} else{
-			double max_dis = 0.0;
-			for (int i = 0; i < n; i++){
-				double dif = matrices::norma_v(matrices::restar(tc_check, tc_avg, k), k, 2);
-				if (dif > max_dis)
-					max_dis = dif;
-			}
+			double dif = matrices::norma_v(matrices::restar(tc_check, tc_avg, k), k, 2);
 
 			bool esPersona = true;
-			if (max_dis > cota_dis)
+			if (dif > cota_dis)
 				esPersona = false;
 
 			if (persona == 1 && esPersona){
@@ -454,6 +450,10 @@ int main(int args, char* argsv[]){
 		cout << "#Exitos Con Moda: " + to_string(exitosModa)    << endl;
 	} else{
 		cout << "#Exitos: " + to_string(exitosObj) + "/" + to_string(ntest) << endl;
+	 	ofstream results;
+		results.open("resultados.out");
+		results << double(exitosObj) / double(ntest);
+		results.close();
 	}
 
 	ofstream archivoSalida;
