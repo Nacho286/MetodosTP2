@@ -341,7 +341,8 @@ int main(int args, char* argsv[]){
 	int exitosModa    = 0;
 	int exitosConPeso = 0;
 	int exitosSinPeso = 0;
-	int exitosObj     = 0;
+	int exitosObj 	  = 0;
+	int tpObj, tnObj, fpObj, fnObj = 0;
 	for (int i = 0; i < ntest; i++){
 		getline(entrada, linea);
 		datos = split(linea, ' ');
@@ -397,13 +398,17 @@ int main(int args, char* argsv[]){
 
 			if (persona == 1 && esPersona){
 				cout << "CARA OK" << endl;
+				tpObj++;
 				exitosObj++;
 			}else if (persona == 0 && esPersona){
 				cout << path_test + " es OBJETO, predicho CARA." << endl;
-			}else if (persona == 1 && !(esPersona))
+				fpObj++;
+			}else if (persona == 1 && !(esPersona)){
 				cout << path_test + " es CARA, predicho OBJETO." << endl;
-			else{
+				fnObj++;
+			}else{
 				cout << "OBJETO OK" << endl;
+				tnObj++;
 				exitosObj++;
 			}
 		}
@@ -452,6 +457,10 @@ int main(int args, char* argsv[]){
 		cout << "#Exitos: " + to_string(exitosObj) + "/" + to_string(ntest) << endl;
 	 	ofstream results;
 		results.open("resultados.out");
+		// Formato resultados: precision, recall, specificity, hitrate.
+		results << to_string(double(tpObj) / double(tpObj + fpObj)) << " ";
+		results << to_string(double(tpObj) / double(tpObj + fnObj)) << " ";
+		results << to_string(double(tnObj) / double(tnObj + fpObj)) << " ";
 		results << double(exitosObj) / double(ntest);
 		results.close();
 	}
