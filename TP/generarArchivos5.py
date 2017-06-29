@@ -7,19 +7,19 @@ archivos={}
 for i in range (2,10):
 	personas=ran.sample(range(1,43),42)
 	fotosDePersonas={}
-	for i in personas:
+	for j in personas:
 		fotos=range(1,11)
-		fotosDePersonas[i]=fotos
+		fotosDePersonas[j]=fotos
 
 	kfolds=[]
 	for j in range(0,i):
 		kfoldAux={}
-		for j in personas:
-			fotoSeleccionada= ran.choice(fotosDePersonas[j])
+		for k in personas:
+			fotoSeleccionada= ran.choice(fotosDePersonas[k])
 			kfoldAux[j]=fotoSeleccionada
-			fotosDePersonas[j].remove(fotoSeleccionada)
+			fotosDePersonas[k].remove(fotoSeleccionada)
 		kfolds.append(kfoldAux)
-	arhivos[i]=kfolds
+	archivos[i]=kfolds
 print(archivos)
 # size = int(sys.argv[1])
 # cantPersonas = int(sys.argv[2])
