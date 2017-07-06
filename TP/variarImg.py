@@ -3,12 +3,7 @@ import os
 import sys
 import matplotlib.pyplot as plt
 
-size = int(sys.argv[1])
-cantPersonas = int(sys.argv[2])
-cantAutovalores = int(sys.argv[3])
-valoresMan={}
-valoresNor={}
-valoresHam={}
+os.system("python generarImagenes.py")
 for i in range(2,11):
 	os.system("python imgFold.py "+str(size)+" "+str(cantPersonas)+" "+str(i)+" "+str(cantAutovalores))
 	archivoR=open("resultadosGeneralesKfoldImg.out","r")

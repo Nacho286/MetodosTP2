@@ -3,10 +3,8 @@ import os
 import sys
 import random as ran
 
-size = int(sys.argv[1])
-cantPersonas = int(sys.argv[2])
-cantImgXPersonas = int(sys.argv[3])
-cantAutovalores = int(sys.argv[4])
+cantPersonas = 41
+cantImgXPersonas = int(sys.argv[1])
 
 
 personas=ran.sample(range(1,42),cantPersonas)
@@ -23,13 +21,28 @@ for i in range(0,cantImgXPersonas):
 		kfoldAux[j]=fotoSeleccionada
 		fotosDePersonas[j].remove(fotoSeleccionada)
 	kfolds.append(kfoldAux)
-total="resultadosGeneralesKfoldImg.out"
-archivoA=open(total,"w")
+# total="resultadosGeneralesKfoldImg.out"
+# archivoA=open(total,"w")
 listaResultados=[[0.0,0.0,0.0,0.0,0.0],[0.0,0.0,0.0,0.0,0.0],[0.0,0.0,0.0,0.0,0.0]]
 for j in range(0,cantImgXPersonas):
-	archivo= "pruebaKFoldImgXPersonas_"+str(j+1)+"_"+ ("Big_" if size==0 else "Red_") + str(cantPersonas)+"_"+str(cantImgXPersonas-1)+"_"+str(cantAutovalores)+".in"
-	archivoW=open(archivo,"w")
-	archivoW.write("../data/ImagenesCaras"+(""if size==0 else"Red")+"/ "+ ("112 92 " if size==0 else "28 23 ") + str(cantPersonas)+" "+str(cantImgXPersonas-1)+" "+str(cantAutovalores)+"\n")
+	archivoBig5= "pruebaKFoldImgXPersonas_"+str(j+1)+"_Big_"+ str(cantPersonas)+"_"+str(cantImgXPersonas-1)+"_5.in"
+	archivoRed5= "pruebaKFoldImgXPersonas_"+str(j+1)+"_Red_" + str(cantPersonas)+"_"+str(cantImgXPersonas-1)+"_5.in"
+	archivoBig10= "pruebaKFoldImgXPersonas_"+str(j+1)+"_Big_"+ str(cantPersonas)+"_"+str(cantImgXPersonas-1)+"_10.in"
+	archivoRed10= "pruebaKFoldImgXPersonas_"+str(j+1)+"_Red_" + str(cantPersonas)+"_"+str(cantImgXPersonas-1)+"_10.in"
+	archivoBig15= "pruebaKFoldImgXPersonas_"+str(j+1)+"_Big_"+ str(cantPersonas)+"_"+str(cantImgXPersonas-1)+"_15.in"
+	archivoRed15= "pruebaKFoldImgXPersonas_"+str(j+1)+"_Red_" + str(cantPersonas)+"_"+str(cantImgXPersonas-1)+"_15.in"
+	archivoWBig5=open(archivoBig5,"w")
+	archivoWRed5=open(archivoRed5,"w")
+	archivoWBig10=open(archivoBig10,"w")
+	archivoWRed10=open(archivoRed10,"w")
+	archivoWBig15=open(archivoBig15,"w")
+	archivoWRed15=open(archivoRed15,"w")
+	archivoWBig5.write("../data/ImagenesCaras/ 112 92 " + str(cantPersonas)+" "+str(cantImgXPersonas-1)+" 5\n")
+	archivoWRed5.write("../data/ImagenesCarasRed/ 28 23 " + str(cantPersonas)+" "+str(cantImgXPersonas-1)+" 5\n")
+	archivoWBig10.write("../data/ImagenesCaras/ 112 92 " + str(cantPersonas)+" "+str(cantImgXPersonas-1)+" 10\n")
+	archivoWRed10.write("../data/ImagenesCarasRed/ 28 23 " + str(cantPersonas)+" "+str(cantImgXPersonas-1)+" 10\n")
+	archivoWBig15.write("../data/ImagenesCaras/ 112 92 " + str(cantPersonas)+" "+str(cantImgXPersonas-1)+" 15\n")
+	archivoWRed15.write("../data/ImagenesCarasRed/ 28 23 " + str(cantPersonas)+" "+str(cantImgXPersonas-1)+" 15\n")
 	for persona in personas:
 		aux="s"+str(persona)+"/ "
 		for i in range(0,cantImgXPersonas):
@@ -37,26 +50,47 @@ for j in range(0,cantImgXPersonas):
 				kfold = kfolds[i]
 				aux+=str(kfold[persona])+" "
 		aux+="\n"
-		archivoW.write(aux)
-	archivoW.write(str(cantPersonas)+"\n")
+		archivoWBig5.write(aux)
+		archivoWRed5.write(aux)
+		archivoWBig10.write(aux)
+		archivoWRed10.write(aux)
+		archivoWBig15.write(aux)
+		archivoWRed15.write(aux)
+	archivoWBig5.write(str(cantPersonas)+"\n")
+	archivoWRed5.write(str(cantPersonas)+"\n")
+	archivoWBig10.write(str(cantPersonas)+"\n")
+	archivoWRed10.write(str(cantPersonas)+"\n")
+	archivoWBig15.write(str(cantPersonas)+"\n")
+	archivoWRed15.write(str(cantPersonas)+"\n")
 	p=0
 	for persona in personas:
 		p+=1
 		for i in range(0,cantImgXPersonas):
 			if (i==j):
 				kfold = kfolds[i]	 
-				aux="../data/ImagenesCaras"+(""if size==0 else"Red")+"/s"+str(persona)+"/"+str(kfold[persona])+".pgm "+str(p)+"\n"
-				archivoW.write(aux)
-	archivoW.close()
-	os.system("./main "+archivo+" testKFoldImgXPersonas_"+str(j+1)+".out")
-	resultado="resultados.out"
-	archivoR=open(resultado,"r")
-	for i in range(0,3):
-		linea=archivoR.readline()
-		linea=linea.split(" ")
-		for k in range(0,5):
-			listaResultados[i][k]+=float(linea[k])
-for i in range(0,3):
-	for k in range(0,5):
-		archivoA.write(str(listaResultados[i][k]/float(cantImgXPersonas))+" ")
-	archivoA.write("\n")
+				auxBig="../data/ImagenesCaras/s"+str(persona)+"/"+str(kfold[persona])+".pgm "+str(p)+"\n"
+				auxRed="../data/ImagenesCarasRed/s"+str(persona)+"/"+str(kfold[persona])+".pgm "+str(p)+"\n"
+				archivoWBig5.write(auxBig)
+				archivoWRed5.write(auxRed)
+				archivoWBig10.write(auxBig)
+				archivoWRed10.write(auxRed)
+				archivoWBig15.write(auxBig)
+				archivoWRed15.write(auxRed)
+	archivoWBig5.close()
+	archivoWRed5.close()
+	archivoWBig10.close()
+	archivoWRed10.close()
+	archivoWBig15.close()
+	archivoWRed15.close()
+# 	os.system("./main "+archivo+" testKFoldImgXPersonas_"+str(j+1)+".out")
+# 	resultado="resultados.out"
+# 	archivoR=open(resultado,"r")
+# 	for i in range(0,3):
+# 		linea=archivoR.readline()
+# 		linea=linea.split(" ")
+# 		for k in range(0,5):
+# 			listaResultados[i][k]+=float(linea[k])
+# for i in range(0,3):
+# 	for k in range(0,5):
+# 		archivoA.write(str(listaResultados[i][k]/float(cantImgXPersonas))+" ")
+# 	archivoA.write("\n")
