@@ -339,7 +339,7 @@ int main(int args, char* argsv[]){
 	getline(entrada, linea);
 	int ntest = stoi(linea);			// Cantidad de imagenes a testear
 	int exitosModa    = 0;
-	int exitosConPeso = 0;
+	//int exitosConPeso = 0;
 	int exitosSinPeso = 0;
 	int exitosObj 	  = 0;
 	int tpObj, tnObj, fpObj, fnObj = 0;
@@ -357,22 +357,22 @@ int main(int args, char* argsv[]){
 
 		// Ahora se ejecuta una u otra operacion, dependiendo si se quiere clasificar un objeto o una persona
 		if (!objeto){
-			int parecidoConPeso = encontrarPersonaPeso(tc, tc_check, n, k, nimgp, nimgp, p, 2);
+			//int parecidoConPeso = encontrarPersonaPeso(tc, tc_check, n, k, nimgp, nimgp, p, 2);
 			int parecidoModa = encontrarPersonaModa(tc, tc_check, n, k, nimgp, nimgp, p, 2);
 			int parecidoSinPeso = encontrarPersona(tc, tc_check, n, k, nimgp, nimgp, p, 2);
 
-			parecidoConPeso++;
+			//parecidoConPeso++;
 			parecidoModa++;
 			parecidoSinPeso++;
 
-			if (parecidoConPeso != persona){
-				cout << path_test + " Con peso NO coincide. Persona: " + to_string(persona) + ". Parecido: " + to_string(parecidoConPeso) << endl;
-				matriz_kunfusionConPeso[persona - 1][parecidoConPeso - 1] += 1;
-			}else{
-				cout << to_string(persona) +" OK Con Peso" << endl;
-				exitosConPeso++;
-				matriz_kunfusionConPeso[persona - 1][persona - 1] += 1;
-			}
+			// if (parecidoConPeso != persona){
+			// 	cout << path_test + " Con peso NO coincide. Persona: " + to_string(persona) + ". Parecido: " + to_string(parecidoConPeso) << endl;
+			// 	matriz_kunfusionConPeso[persona - 1][parecidoConPeso - 1] += 1;
+			// }else{
+			// 	cout << to_string(persona) +" OK Con Peso" << endl;
+			// 	exitosConPeso++;
+			// 	matriz_kunfusionConPeso[persona - 1][persona - 1] += 1;
+			// }
 			if (parecidoModa != persona){
 				cout << path_test + " Moda NO coincide. Persona: " + to_string(persona) + ". Parecido: " + to_string(parecidoModa) << endl;
 				matriz_kunfusionModa[persona - 1][parecidoModa - 1] += 1;
@@ -417,16 +417,16 @@ int main(int args, char* argsv[]){
 	if (!objeto){
 		//Reportar resultados: precision, recall, specifity, f1 (en ese orden)
 		vector<vector<double> > tablasSinPeso(tablasDeConfusion(matriz_kunfusionSinPeso, p));
-	 	vector<vector<double> > tablasConPeso(tablasDeConfusion(matriz_kunfusionConPeso, p));
+	 	//vector<vector<double> > tablasConPeso(tablasDeConfusion(matriz_kunfusionConPeso, p));
 	 	vector<vector<double> > tablasModa(tablasDeConfusion(matriz_kunfusionModa, p));
 
 	 	//[precision, recall, spec, f1]
 	 	vector<double> resultadosSinPeso(4);
-	 	vector<double> resultadosConPeso(4);
+	 	//vector<double> resultadosConPeso(4);
 	 	vector<double> resultadosModa(4);
 
 	 	calcularMetricas(tablasSinPeso, resultadosSinPeso, p);
-	 	calcularMetricas(tablasConPeso, resultadosConPeso, p);
+	 	//calcularMetricas(tablasConPeso, resultadosConPeso, p);
 	 	calcularMetricas(tablasModa, resultadosModa, p);
 
 	 	//[tp, fn, fp, tn]
@@ -438,10 +438,10 @@ int main(int args, char* argsv[]){
 		results << double(exitosSinPeso) / double(ntest);
 		results << endl;
 
-		for(int i = 0; i < 4; i++)
-			results << resultadosConPeso[i] << " ";
-		results << double(exitosConPeso) / double(ntest);
-		results << endl;
+		// for(int i = 0; i < 4; i++)
+		// 	results << resultadosConPeso[i] << " ";
+		// results << double(exitosConPeso) / double(ntest);
+		// results << endl;
 
 		for(int i = 0; i < 4; i++)
 			results << resultadosModa[i] << " ";
@@ -451,7 +451,7 @@ int main(int args, char* argsv[]){
 		results.close();
 
 		cout << "#Exitos Sin Peso: " + to_string(exitosSinPeso) << endl;
-		cout << "#Exitos Con Peso: " + to_string(exitosConPeso) << endl;
+		//cout << "#Exitos Con Peso: " + to_string(exitosConPeso) << endl;
 		cout << "#Exitos Con Moda: " + to_string(exitosModa)    << endl;
 	} else{
 		cout << "#Exitos: " + to_string(exitosObj) + "/" + to_string(ntest) << endl;
