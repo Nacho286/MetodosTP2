@@ -6,11 +6,15 @@ import sys
 ##Esto se correria una sola vez y despues se comenta, es para generar los resultados y guardarlos, si queremos modificar los graficos ya tenemos los resultados guardados
 os.system("python generarArchivos5.py")
 os.system("python generarArchivo10.py")
-resultadosBig=open("resultadosBig","w")
-resultadosRed=open("resultadosRed","w")
+resultadosBig5=open("resultadosBig5","w")
+resultadosRed5=open("resultadosRed5","w")
+resultadosBig10=open("resultadosBig10","w")
+resultadosRed10=open("resultadosRed10","w")
 for i in range(1,51):
-	listaResultadosBig=[[0.0,0.0,0.0,0.0,0.0],[0.0,0.0,0.0,0.0,0.0]]
-	listaResultadosRed=[[0.0,0.0,0.0,0.0,0.0],[0.0,0.0,0.0,0.0,0.0]]
+	listaResultadosBig5=[[0.0,0.0,0.0,0.0,0.0],[0.0,0.0,0.0,0.0,0.0]]
+	listaResultadosRed5=[[0.0,0.0,0.0,0.0,0.0],[0.0,0.0,0.0,0.0,0.0]]
+	listaResultadosBig10=[[0.0,0.0,0.0,0.0,0.0],[0.0,0.0,0.0,0.0,0.0]]
+	listaResultadosRed10=[[0.0,0.0,0.0,0.0,0.0],[0.0,0.0,0.0,0.0,0.0]]
 	for j in range(1,6):
 		os.system("./main "+"autovalores5_"+str(j)+"_Big_41_"+str(i)+".in" +"test.out")
 		archivoR=open("resultados.out","r")
@@ -18,47 +22,74 @@ for i in range(1,51):
 			linea=archivoR.readline()
 			linea=linea.split(" ")
 			for k in range(0,5):
-				listaResultadosBig[n][k]+=float(linea[k])
+				listaResultadosBig5[n][k]+=float(linea[k])
 		archivoR.close()
-		os.system("./main "+"autovalores5_"+str(j)+"_Big_41_"+str(i)+".in" +"test.out")
+		os.system("./main "+"autovalores5_"+str(j)+"_Red_41_"+str(i)+".in" +"test.out")
 		archivoR=open("resultados.out","r")
 		for n in range(0,2):
 			linea=archivoR.readline()
 			linea=linea.split(" ")
 			for k in range(0,5):
-				listaResultadosRed[n][k]+=float(linea[k])
+				listaResultadosRed5[n][k]+=float(linea[k])
+		archivoR.close()
+		os.system("./main "+"autovalores10_"+str(j)+"_Big_41_"+str(i)+".in" +"test.out")
+		archivoR=open("resultados.out","r")
+		for n in range(0,2):
+			linea=archivoR.readline()
+			linea=linea.split(" ")
+			for k in range(0,5):
+				listaResultadosBig10[n][k]+=float(linea[k])
+		archivoR.close()
+		os.system("./main "+"autovalores10_"+str(j)+"_Red_41_"+str(i)+".in" +"test.out")
+		archivoR=open("resultados.out","r")
+		for n in range(0,2):
+			linea=archivoR.readline()
+			linea=linea.split(" ")
+			for k in range(0,5):
+				listaResultadosRed10[n][k]+=float(linea[k])
 		archivoR.close()
 	for n in range(0,2):
 		for k in range(0,5):
-			resultadosBig.write(str(listaResultadosBig[i][k]/float(5))+" ")
-			resultadosRed.write(str(listaResultadosBig[i][k]/float(5))+" ")
-		resultadosRed.write("\n")
-		resultadosBig.write("\n")
-resultadosBig.close()
-resultadosRed.close()
-valoresMan={}
-valoresNor={}
-valoresHam={}
+			resultadosBig5.write(str(listaResultadosBig5[i][k]/float(5))+" ")
+			resultadosRed5.write(str(listaResultadosRed5[i][k]/float(5))+" ")
+			resultadosBig10.write(str(listaResultadosBig10[i][k]/float(5))+" ")
+			resultadosRed10.write(str(listaResultadosRed10[i][k]/float(5))+" ")
+		resultadosRed5.write("\n")
+		resultadosBig5.write("\n")
+		resultadosRed10.write("\n")
+		resultadosBig10.write("\n")
+resultadosBig5.close()
+resultadosRed5.close()
+resultadosBig10.close()
+resultadosRed10.close()
+valoresSPesoRed5={}
+valoresModaRed5={}
+valoresSPesoBig5={}
+valoresModaBig5={}
+valoresSPesoRed10={}
+valoresModaRed10={}
+valoresSPesoBig10={}
+valoresModaBig10={}
+resultadosBig5=open("resultadosBig5","r")
+resultadosRed5=open("resultadosRed5","r")
+resultadosBig10=open("resultadosBig10","r")
+resultadosRed10=open("resultadosRed10","r")
+for i in range(1,51):
+	linea=archivoBig5.readline()
+	linea=linea.split()
+	listaFloats=[float(j) for j in linea]
+	valoresHam[i]=listaFloats
+	linea=archivoBig5.readline()
+	linea=linea.split()
+	listaFloats=[float(j) for j in linea]
+	valoresMan[i]=listaFloats
+	linea=archivoR.readline()
+	linea=linea.split()
+	listaFloats=[float(j) for j in linea]
+	valoresNor[i]=listaFloats
+	archivoR.close()
 
-# for i in range(inicio,fin+1):
-# 	os.system("python kfold.py "+str(size)+" "+str(cantPersonas)+" "+str(i))
-# 	archivoR=open("resultados.out","r")
-# 	linea=archivoR.readline()
-# 	linea=linea.split()
-# 	listaFloats=[float(j) for j in linea]
-# 	valoresHam[i]=listaFloats
-# 	linea=archivoR.readline()
-# 	linea=linea.split()
-# 	listaFloats=[float(j) for j in linea]
-# 	valoresMan[i]=listaFloats
-# 	linea=archivoR.readline()
-# 	linea=linea.split()
-# 	listaFloats=[float(j) for j in linea]
-# 	valoresNor[i]=listaFloats
-# 	archivoR.close()
 
-resultadosBig=open("resultadosBig","r")
-resultadosRed=open("resultadosRed","r")
 
 keys=range(1,51)
 precisionSPesoBig=[]
