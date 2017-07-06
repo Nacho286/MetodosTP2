@@ -25,24 +25,24 @@ for i in range(0,cantImgXPersonas):
 # archivoA=open(total,"w")
 listaResultados=[[0.0,0.0,0.0,0.0,0.0],[0.0,0.0,0.0,0.0,0.0],[0.0,0.0,0.0,0.0,0.0]]
 for j in range(0,cantImgXPersonas):
-	archivoBig5= "pruebaKFoldImgXPersonas_"+str(j+1)+"_Big_"+ str(cantPersonas)+"_"+str(cantImgXPersonas-1)+"_5.in"
-	archivoRed5= "pruebaKFoldImgXPersonas_"+str(j+1)+"_Red_" + str(cantPersonas)+"_"+str(cantImgXPersonas-1)+"_5.in"
-	archivoBig10= "pruebaKFoldImgXPersonas_"+str(j+1)+"_Big_"+ str(cantPersonas)+"_"+str(cantImgXPersonas-1)+"_10.in"
-	archivoRed10= "pruebaKFoldImgXPersonas_"+str(j+1)+"_Red_" + str(cantPersonas)+"_"+str(cantImgXPersonas-1)+"_10.in"
-	archivoBig15= "pruebaKFoldImgXPersonas_"+str(j+1)+"_Big_"+ str(cantPersonas)+"_"+str(cantImgXPersonas-1)+"_15.in"
-	archivoRed15= "pruebaKFoldImgXPersonas_"+str(j+1)+"_Red_" + str(cantPersonas)+"_"+str(cantImgXPersonas-1)+"_15.in"
+	archivoBig5= "ImgXPersonas_"+str(cantImgXPersonas-1)+"_"+str(j+1)+"_Big_41_5.in"
+	archivoRed5= "ImgXPersonas_"+str(cantImgXPersonas-1)+"_"+str(j+1)+"_Red_41_5.in"
+	archivoBig10= "ImgXPersonas_"+str(cantImgXPersonas-1)+"_"+str(j+1)+"_Big_41_10.in"
+	archivoRed10= "ImgXPersonas_"+str(cantImgXPersonas-1)+"_"+str(j+1)+"_Red_41_10.in"
+	archivoBig15= "ImgXPersonas_"+str(cantImgXPersonas-1)+"_"+str(j+1)+"_Big_41_15.in"
+	archivoRed15= "ImgXPersonas_"+str(cantImgXPersonas-1)+"_"+str(j+1)+"_Red_41_15.in"
 	archivoWBig5=open(archivoBig5,"w")
 	archivoWRed5=open(archivoRed5,"w")
 	archivoWBig10=open(archivoBig10,"w")
 	archivoWRed10=open(archivoRed10,"w")
 	archivoWBig15=open(archivoBig15,"w")
 	archivoWRed15=open(archivoRed15,"w")
-	archivoWBig5.write("../data/ImagenesCaras/ 112 92 " + str(cantPersonas)+" "+str(cantImgXPersonas-1)+" 5\n")
-	archivoWRed5.write("../data/ImagenesCarasRed/ 28 23 " + str(cantPersonas)+" "+str(cantImgXPersonas-1)+" 5\n")
-	archivoWBig10.write("../data/ImagenesCaras/ 112 92 " + str(cantPersonas)+" "+str(cantImgXPersonas-1)+" 10\n")
-	archivoWRed10.write("../data/ImagenesCarasRed/ 28 23 " + str(cantPersonas)+" "+str(cantImgXPersonas-1)+" 10\n")
-	archivoWBig15.write("../data/ImagenesCaras/ 112 92 " + str(cantPersonas)+" "+str(cantImgXPersonas-1)+" 15\n")
-	archivoWRed15.write("../data/ImagenesCarasRed/ 28 23 " + str(cantPersonas)+" "+str(cantImgXPersonas-1)+" 15\n")
+	archivoWBig5.write("../data/ImagenesCaras/ 112 92 41 "+str(cantImgXPersonas-1)+" 5\n")
+	archivoWRed5.write("../data/ImagenesCarasRed/ 28 23 41 "+str(cantImgXPersonas-1)+" 5\n")
+	archivoWBig10.write("../data/ImagenesCaras/ 112 92 41 "+str(cantImgXPersonas-1)+" 10\n")
+	archivoWRed10.write("../data/ImagenesCarasRed/ 28 23 41 "+str(cantImgXPersonas-1)+" 10\n")
+	archivoWBig15.write("../data/ImagenesCaras/ 112 92 41 "+str(cantImgXPersonas-1)+" 15\n")
+	archivoWRed15.write("../data/ImagenesCarasRed/ 28 23 41 "+str(cantImgXPersonas-1)+" 15\n")
 	for persona in personas:
 		aux="s"+str(persona)+"/ "
 		for i in range(0,cantImgXPersonas):
