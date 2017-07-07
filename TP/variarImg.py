@@ -11,12 +11,12 @@ iterar("Red",5)
 iterar("Red",10)
 iterar("Red",15)
 
-valoresRed5=valores("resultadosRed5")
-valoresBig5=valores("resultadosBig5")
-valoresRed10=valores("resultadosRed10")
-valoresBig10=valores("resultadosBig10")
-valoresRed15=valores("resultadosRed15")
-valoresBig15=valores("resultadosBig15")
+valoresRed5=valores("resultadosImgRed5")
+valoresBig5=valores("resultadosImgBig5")
+valoresRed10=valores("resultadosImgRed10")
+valoresBig10=valores("resultadosImgBig10")
+valoresRed15=valores("resultadosImgRed15")
+valoresBig15=valores("resultadosImgBig15")
 
 keys=range(1,10)
 
@@ -66,7 +66,7 @@ keys=range(1,10)
 # plt.show();
 
 def iterar(size,autovalores):
-	archivoW=open("resultados"+size+autovalores,"w")
+	archivoW=open("resultadosImg"+size+autovalores,"w")
 	for i in range(1,10):
 		listaResultados=[[0.0,0.0,0.0,0.0,0.0],[0.0,0.0,0.0,0.0,0.0]]
 		for j in range(1,i+2):

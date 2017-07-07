@@ -6,10 +6,10 @@ import sys
 ##Esto se correria una sola vez y despues se comenta, es para generar los resultados y guardarlos, si queremos modificar los graficos ya tenemos los resultados guardados
 os.system("python generarArchivos5.py")
 os.system("python generarArchivo10.py")
-resultadosBig5=open("resultadosBig5","w")
-resultadosRed5=open("resultadosRed5","w")
-resultadosBig10=open("resultadosBig10","w")
-resultadosRed10=open("resultadosRed10","w")
+resultadosBig5=open("resultadosAutoBig5","w")
+resultadosRed5=open("resultadosAutoRed5","w")
+resultadosBig10=open("resultadosAutoBig10","w")
+resultadosRed10=open("resultadosAutoRed10","w")
 for i in range(1,51):
 	listaResultadosBig5=[[0.0,0.0,0.0,0.0,0.0],[0.0,0.0,0.0,0.0,0.0]]
 	listaResultadosRed5=[[0.0,0.0,0.0,0.0,0.0],[0.0,0.0,0.0,0.0,0.0]]
@@ -66,10 +66,10 @@ resultadosRed10.close()
 
 
 
-valoresRed5=valores("resultadosRed5")
-valoresBig5=valores("resultadosBig5")
-valoresRed10=valores("resultadosRed10")
-valoresBig10=valores("resultadosBig10")
+valoresRed5=valores("resultadosAutoRed5")
+valoresBig5=valores("resultadosAutoBig5")
+valoresRed10=valores("resultadosAutoRed10")
+valoresBig10=valores("resultadosAutoBig10")
 keys=range(1,51)
 
 
