@@ -114,44 +114,70 @@ plt.ylabel("precision")
 plt.title("precision segun la cantidad de autovalores, con 41 personas");
 plt.plot(keys,valoresRed5[0],label='Funcion sin peso,Fotos reducidas y 5 fotos');
 plt.plot(keys,valoresRed5[1],label='Funcion con moda,Fotos reducidas y 5 fotos');
-plt.legend(bbox_to_anchor=(0.33,1.0));
+plt.plot(keys,valoresBig5[0],label='Funcion sin peso,Fotos grandes y 5 fotos');
+plt.plot(keys,valoresBig5[1],label='Funcion con moda,Fotos grandes y 5 fotos');
+plt.plot(keys,valoresRed10[0],label='Funcion sin peso,Fotos reducidas y 8 fotos');
+plt.plot(keys,valoresRed10[1],label='Funcion con moda,Fotos reducidas y 8 fotos');
+plt.plot(keys,valoresBig10[0],label='Funcion sin peso,Fotos grandes y 8 fotos');
+plt.plot(keys,valoresBig10[1],label='Funcion con moda,Fotos grandes y 8 fotos');
+plt.legend(bbox_to_anchor=(1.0,0.6));
 plt.show();
 
-# plt.xlabel("cantidad de autovalores")
-# plt.ylabel("recall")
-# plt.title("recall segun la cantidad de autovalores, con "+str(cantPersonas)+" personas");
-# plt.plot(keys,recallHam,label='Funcion de Hamming');
-# plt.plot(keys,recallMan,label='Distancia Manhattan');
-# plt.plot(keys,recallNor,label='Distancia Norma 2');
-# plt.legend(bbox_to_anchor=(0.33,1.0));
-# plt.show();
+plt.xlabel("cantidad de autovalores")
+plt.ylabel("recall")
+plt.title("recall segun la cantidad de autovalores, con 41 personas");
+plt.plot(keys,valoresRed5[2],label='Funcion sin peso,Fotos reducidas y 5 fotos');
+plt.plot(keys,valoresRed5[3],label='Funcion con moda,Fotos reducidas y 5 fotos');
+plt.plot(keys,valoresBig5[2],label='Funcion sin peso,Fotos grandes y 5 fotos');
+plt.plot(keys,valoresBig5[3],label='Funcion con moda,Fotos grandes y 5 fotos');
+plt.plot(keys,valoresRed10[2],label='Funcion sin peso,Fotos reducidas y 8 fotos');
+plt.plot(keys,valoresRed10[3],label='Funcion con moda,Fotos reducidas y 8 fotos');
+plt.plot(keys,valoresBig10[2],label='Funcion sin peso,Fotos grandes y 8 fotos');
+plt.plot(keys,valoresBig10[3],label='Funcion con moda,Fotos grandes y 8 fotos');
+plt.legend(bbox_to_anchor=(1.0,0.6));
+plt.show();
 
-# plt.xlabel("cantidad de autovalores")
-# plt.ylabel("specificity")
-# plt.title("specificity segun la cantidad de autovalores, con "+str(cantPersonas)+" personas");
-# plt.plot(keys,specificityHam,label='Funcion de Hamming');
-# plt.plot(keys,specificityMan,label='Distancia Manhattan');
-# plt.plot(keys,specificityNor,label='Distancia Norma 2');
-# plt.legend(bbox_to_anchor=(0.33,1.0));
-# plt.show();
+plt.xlabel("cantidad de autovalores")
+plt.ylabel("specificity")
+plt.title("specificity segun la cantidad de autovalores, con 41 personas");
+plt.plot(keys,valoresRed5[4],label='Funcion sin peso,Fotos reducidas y 5 fotos');
+plt.plot(keys,valoresRed5[5],label='Funcion con moda,Fotos reducidas y 5 fotos');
+plt.plot(keys,valoresBig5[4],label='Funcion sin peso,Fotos grandes y 5 fotos');
+plt.plot(keys,valoresBig5[5],label='Funcion con moda,Fotos grandes y 5 fotos');
+plt.plot(keys,valoresRed10[4],label='Funcion sin peso,Fotos reducidas y 8 fotos');
+plt.plot(keys,valoresRed10[5],label='Funcion con moda,Fotos reducidas y 8 fotos');
+plt.plot(keys,valoresBig10[4],label='Funcion sin peso,Fotos grandes y 8 fotos');
+plt.plot(keys,valoresBig10[5],label='Funcion con moda,Fotos grandes y 8 fotos');
+plt.legend(bbox_to_anchor=(1.0,0.6));
+plt.show();
 
-# plt.xlabel("cantidad de autovalores")
-# plt.ylabel("f1")
-# plt.title("f1 segun la cantidad de autovalores, con "+str(cantPersonas)+" personas");
-# plt.plot(keys,f1Ham,label='Funcion de Hamming');
-# plt.plot(keys,f1Man,label='Distancia Manhattan');
-# plt.plot(keys,f1Nor,label='Distancia Norma 2');
-# plt.legend(bbox_to_anchor=(0.33,1.0));
-# plt.show();
+plt.xlabel("cantidad de autovalores")
+plt.ylabel("f1")
+plt.title("f1 segun la cantidad de autovalores, con 41 personas");
+plt.plot(keys,valoresRed5[6],label='Funcion sin peso,Fotos reducidas y 5 fotos');
+plt.plot(keys,valoresRed5[7],label='Funcion con moda,Fotos reducidas y 5 fotos');
+plt.plot(keys,valoresBig5[6],label='Funcion sin peso,Fotos grandes y 5 fotos');
+plt.plot(keys,valoresBig5[7],label='Funcion con moda,Fotos grandes y 5 fotos');
+plt.plot(keys,valoresRed10[6],label='Funcion sin peso,Fotos reducidas y 8 fotos');
+plt.plot(keys,valoresRed10[7],label='Funcion con moda,Fotos reducidas y 8 fotos');
+plt.plot(keys,valoresBig10[6],label='Funcion sin peso,Fotos grandes y 8 fotos');
+plt.plot(keys,valoresBig10[7],label='Funcion con moda,Fotos grandes y 8 fotos');
+plt.legend(bbox_to_anchor=(1.0,0.6));
+plt.show();
 
-# plt.xlabel("cantidad de autovalores")
-# plt.ylabel("hitrate")
-# plt.title("hitrate segun la cantidad de autovalores, con "+str(cantPersonas)+" personas");
-# plt.plot(keys,hitrateHam,label='Funcion de Hamming');
-# plt.plot(keys,hitrateMan,label='Distancia Manhattan');
-# plt.plot(keys,hitrateNor,label='Distancia Norma 2');
-# plt.legend(bbox_to_anchor=(0.33,1.0));
-# plt.show();
+plt.xlabel("cantidad de autovalores")
+plt.ylabel("hitrate")
+plt.title("hitrate segun la cantidad de autovalores, con 41 personas");
+plt.plot(keys,valoresRed5[8],label='Funcion sin peso,Fotos reducidas y 5 fotos');
+plt.plot(keys,valoresRed5[9],label='Funcion con moda,Fotos reducidas y 5 fotos');
+plt.plot(keys,valoresBig5[8],label='Funcion sin peso,Fotos grandes y 5 fotos');
+plt.plot(keys,valoresBig5[9],label='Funcion con moda,Fotos grandes y 5 fotos');
+plt.plot(keys,valoresRed10[8],label='Funcion sin peso,Fotos reducidas y 8 fotos');
+plt.plot(keys,valoresRed10[9],label='Funcion con moda,Fotos reducidas y 8 fotos');
+plt.plot(keys,valoresBig10[8],label='Funcion sin peso,Fotos grandes y 8 fotos');
+plt.plot(keys,valoresBig10[9],label='Funcion con moda,Fotos grandes y 8 fotos');
+plt.legend(bbox_to_anchor=(1.0,0.6));
+plt.show();
 
 
 
