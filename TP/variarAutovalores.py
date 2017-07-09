@@ -109,73 +109,103 @@ valoresBig10=valores("resultadosAutoBig10")
 keys=range(1,51)
 
 
-plt.xlabel("cantidad de autovalores")
-plt.ylabel("precision")
-plt.title("precision segun la cantidad de autovalores, con 41 personas");
-plt.plot(keys,valoresRed5[0],label='Funcion sin peso,Fotos reducidas y 5 fotos');
-plt.plot(keys,valoresRed5[1],label='Funcion con moda,Fotos reducidas y 5 fotos');
-plt.plot(keys,valoresBig5[0],label='Funcion sin peso,Fotos grandes y 5 fotos');
-plt.plot(keys,valoresBig5[1],label='Funcion con moda,Fotos grandes y 5 fotos');
-plt.plot(keys,valoresRed10[0],label='Funcion sin peso,Fotos reducidas y 8 fotos');
-plt.plot(keys,valoresRed10[1],label='Funcion con moda,Fotos reducidas y 8 fotos');
-plt.plot(keys,valoresBig10[0],label='Funcion sin peso,Fotos grandes y 8 fotos');
-plt.plot(keys,valoresBig10[1],label='Funcion con moda,Fotos grandes y 8 fotos');
+plt.xlabel("cantidad de autovalores");
+plt.ylabel("precision");
+plt.title("precision segun la cantidad de autovalores, con 41 personas y 5 fotos");
+plt.plot(keys,valoresRed5[0],label='kNN,imgs red');
+plt.plot(keys,valoresRed5[1],label='kNN pesado,imgs red');
+plt.plot(keys,valoresBig5[0],label='kNN,imgs big');
+plt.plot(keys,valoresBig5[1],label='kNN pesado,imgs big');
 plt.legend(bbox_to_anchor=(1.0,0.6));
 plt.show();
 
-plt.xlabel("cantidad de autovalores")
-plt.ylabel("recall")
-plt.title("recall segun la cantidad de autovalores, con 41 personas");
-plt.plot(keys,valoresRed5[2],label='Funcion sin peso,Fotos reducidas y 5 fotos');
-plt.plot(keys,valoresRed5[3],label='Funcion con moda,Fotos reducidas y 5 fotos');
-plt.plot(keys,valoresBig5[2],label='Funcion sin peso,Fotos grandes y 5 fotos');
-plt.plot(keys,valoresBig5[3],label='Funcion con moda,Fotos grandes y 5 fotos');
-plt.plot(keys,valoresRed10[2],label='Funcion sin peso,Fotos reducidas y 8 fotos');
-plt.plot(keys,valoresRed10[3],label='Funcion con moda,Fotos reducidas y 8 fotos');
-plt.plot(keys,valoresBig10[2],label='Funcion sin peso,Fotos grandes y 8 fotos');
-plt.plot(keys,valoresBig10[3],label='Funcion con moda,Fotos grandes y 8 fotos');
+plt.xlabel("cantidad de autovalores");
+plt.ylabel("precision");
+plt.title("precision segun la cantidad de autovalores, con 41 personas y 8 fotos");
+plt.plot(keys,valoresRed10[0],label='kNN,imgs red');
+plt.plot(keys,valoresRed10[1],label='kNN pesado,imgs red');
+plt.plot(keys,valoresBig10[0],label='kNN,imgs big');
+plt.plot(keys,valoresBig10[1],label='kNN pesado,imgs big');
 plt.legend(bbox_to_anchor=(1.0,0.6));
 plt.show();
 
-plt.xlabel("cantidad de autovalores")
-plt.ylabel("specificity")
-plt.title("specificity segun la cantidad de autovalores, con 41 personas");
-plt.plot(keys,valoresRed5[4],label='Funcion sin peso,Fotos reducidas y 5 fotos');
-plt.plot(keys,valoresRed5[5],label='Funcion con moda,Fotos reducidas y 5 fotos');
-plt.plot(keys,valoresBig5[4],label='Funcion sin peso,Fotos grandes y 5 fotos');
-plt.plot(keys,valoresBig5[5],label='Funcion con moda,Fotos grandes y 5 fotos');
-plt.plot(keys,valoresRed10[4],label='Funcion sin peso,Fotos reducidas y 8 fotos');
-plt.plot(keys,valoresRed10[5],label='Funcion con moda,Fotos reducidas y 8 fotos');
-plt.plot(keys,valoresBig10[4],label='Funcion sin peso,Fotos grandes y 8 fotos');
-plt.plot(keys,valoresBig10[5],label='Funcion con moda,Fotos grandes y 8 fotos');
+plt.xlabel("cantidad de autovalores");
+plt.ylabel("recall");
+plt.title("recall segun la cantidad de autovalores, con 41 personas y 5 fotos");
+plt.plot(keys,valoresRed5[2],label='kNN,imgs red');
+plt.plot(keys,valoresRed5[3],label='kNN pesado,imgs red');
+plt.plot(keys,valoresBig5[2],label='kNN,imgs big');
+plt.plot(keys,valoresBig5[3],label='skNN pesado,imgs big');
+plt.legend(bbox_to_anchor=(1.0,0.6))
+plt.show();
+
+plt.xlabel("cantidad de autovalores");
+plt.ylabel("recall");
+plt.title("recall segun la cantidad de autovalores, con 41 personas y 8 fotos");
+plt.plot(keys,valoresRed10[2],label='kNN,imgs red');
+plt.plot(keys,valoresRed10[3],label='kNN pesado,imgs red');
+plt.plot(keys,valoresBig10[2],label='kNN,imgs big');
+plt.plot(keys,valoresBig10[3],label='kNN pesado,imgs big');
 plt.legend(bbox_to_anchor=(1.0,0.6));
 plt.show();
 
-plt.xlabel("cantidad de autovalores")
-plt.ylabel("f1")
-plt.title("f1 segun la cantidad de autovalores, con 41 personas");
-plt.plot(keys,valoresRed5[6],label='Funcion sin peso,Fotos reducidas y 5 fotos');
-plt.plot(keys,valoresRed5[7],label='Funcion con moda,Fotos reducidas y 5 fotos');
-plt.plot(keys,valoresBig5[6],label='Funcion sin peso,Fotos grandes y 5 fotos');
-plt.plot(keys,valoresBig5[7],label='Funcion con moda,Fotos grandes y 5 fotos');
-plt.plot(keys,valoresRed10[6],label='Funcion sin peso,Fotos reducidas y 8 fotos');
-plt.plot(keys,valoresRed10[7],label='Funcion con moda,Fotos reducidas y 8 fotos');
-plt.plot(keys,valoresBig10[6],label='Funcion sin peso,Fotos grandes y 8 fotos');
-plt.plot(keys,valoresBig10[7],label='Funcion con moda,Fotos grandes y 8 fotos');
+plt.xlabel("cantidad de autovalores");
+plt.ylabel("specificity");
+plt.title("specificity segun la cantidad de autovalores, con 41 personas y 5 fotos");
+plt.plot(keys,valoresRed5[4],label='kNN,imgs red');
+plt.plot(keys,valoresRed5[5],label='kNN pesado,imgs red');
+plt.plot(keys,valoresBig5[4],label='kNN,imgs big');
+plt.plot(keys,valoresBig5[5],label='kNN pesado,imgs big');
+plt.legend(bbox_to_anchor=(1.0,0.6));
+plt.show();
+plt.xlabel("cantidad de autovalores");
+plt.ylabel("specificity");
+plt.title("specificity segun la cantidad de autovalores, con 41 personas y 8 fotos");
+plt.plot(keys,valoresRed10[4],label='kNN,imgs red');
+plt.plot(keys,valoresRed10[5],label='kNN pesado,imgs red');
+plt.plot(keys,valoresBig10[4],label='kNN,imgs big');
+plt.plot(keys,valoresBig10[5],label='kNN pesado,imgs big');
 plt.legend(bbox_to_anchor=(1.0,0.6));
 plt.show();
 
-plt.xlabel("cantidad de autovalores")
-plt.ylabel("hitrate")
-plt.title("hitrate segun la cantidad de autovalores, con 41 personas");
-plt.plot(keys,valoresRed5[8],label='Funcion sin peso,Fotos reducidas y 5 fotos');
-plt.plot(keys,valoresRed5[9],label='Funcion con moda,Fotos reducidas y 5 fotos');
-plt.plot(keys,valoresBig5[8],label='Funcion sin peso,Fotos grandes y 5 fotos');
-plt.plot(keys,valoresBig5[9],label='Funcion con moda,Fotos grandes y 5 fotos');
-plt.plot(keys,valoresRed10[8],label='Funcion sin peso,Fotos reducidas y 8 fotos');
-plt.plot(keys,valoresRed10[9],label='Funcion con moda,Fotos reducidas y 8 fotos');
-plt.plot(keys,valoresBig10[8],label='Funcion sin peso,Fotos grandes y 8 fotos');
-plt.plot(keys,valoresBig10[9],label='Funcion con moda,Fotos grandes y 8 fotos');
+plt.xlabel("cantidad de autovalores");
+plt.ylabel("f1");
+plt.title("f1 segun la cantidad de autovalores, con 41 personas y 5 fotos");
+plt.plot(keys,valoresRed5[6],label='kNN,imgs red');
+plt.plot(keys,valoresRed5[7],label='kNN pesado,imgs red');
+plt.plot(keys,valoresBig5[6],label='kNN,imgs big');
+plt.plot(keys,valoresBig5[7],label='kNN pesado,imgs big');
+plt.legend(bbox_to_anchor=(1.0,0.6));
+plt.show();
+
+plt.xlabel("cantidad de autovalores");
+plt.ylabel("f1");
+plt.title("f1 segun la cantidad de autovalores, con 41 personas y 8 fotos");
+plt.plot(keys,valoresRed10[6],label='kNN,imgs red');
+plt.plot(keys,valoresRed10[7],label='kNN pesado,imgs red');
+plt.plot(keys,valoresBig10[6],label='kNN,imgs big');
+plt.plot(keys,valoresBig10[7],label='kNN pesado,imgs big');
+plt.legend(bbox_to_anchor=(1.0,0.6));
+plt.show();
+
+plt.xlabel("cantidad de autovalores");
+plt.ylabel("hitrate");
+plt.title("hitrate segun la cantidad de autovalores, con 41 personas y 5 fotos");
+plt.plot(keys,valoresRed5[8],label='kNN,imgs red');
+plt.plot(keys,valoresRed5[9],label='kNN pesado,imgs red');
+plt.plot(keys,valoresBig5[8],label='kNN,imgs big');
+plt.plot(keys,valoresBig5[9],label='kNN pesado,imgs big');
+plt.legend(bbox_to_anchor=(1.0,0.6));
+plt.show();
+
+
+plt.xlabel("cantidad de autovalores");
+plt.ylabel("hitrate");
+plt.title("hitrate segun la cantidad de autovalores, con 41 personas y 8 fotos");
+plt.plot(keys,valoresRed10[8],label='kNN,imgs red');
+plt.plot(keys,valoresRed10[9],label='kNN pesado,imgs red');
+plt.plot(keys,valoresBig10[8],label='kNN,imgs big');
+plt.plot(keys,valoresBig10[9],label='kNN pesado,imgs big');
 plt.legend(bbox_to_anchor=(1.0,0.6));
 plt.show();
 
