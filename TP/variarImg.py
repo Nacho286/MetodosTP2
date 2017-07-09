@@ -79,71 +79,105 @@ keys=range(1,10)
 
 plt.xlabel("cantidad de imagenes por personas")
 plt.ylabel("precision") 
-plt.title("precision segun la cantidad de imagenes por personas, con 41 personas");
-plt.plot(keys,valoresRed5[0],label='Funcion sin peso,Fotos reducidas y 5 autovalores');
-plt.plot(keys,valoresRed5[1],label='Funcion con moda,Fotos reducidas y 5 autovalores');
-plt.plot(keys,valoresBig5[0],label='Funcion sin peso,Fotos grandes y 5 autovalores');
-plt.plot(keys,valoresBig5[1],label='Funcion con moda,Fotos grandes y 5 autovalores');
-plt.plot(keys,valoresRed10[0],label='Funcion sin peso,Fotos reducidas y 10 autovalores');
-plt.plot(keys,valoresRed10[1],label='Funcion con moda,Fotos reducidas y 10 autovalores');
-plt.plot(keys,valoresBig10[0],label='Funcion sin peso,Fotos grandes y 10 autovalores');
-plt.plot(keys,valoresBig10[1],label='Funcion con moda,Fotos grandes y 10 autovalores');
+plt.title("precision segun la cantidad de imagenes por personas, con 41 personas y 5 autovalores");
+plt.plot(keys,valoresRed5[0],label='kNN,imgs red ');
+plt.plot(keys,valoresRed5[1],label='kNN pesado,imgs red ');
+plt.plot(keys,valoresBig5[0],label='kNN,imgs big ');
+plt.plot(keys,valoresBig5[1],label='kNN pesado,imgs big ');
+plt.legend(bbox_to_anchor=(1.1,0.4));
+plt.show();
+
+
+
+plt.xlabel("cantidad de imagenes por personas")
+plt.ylabel("precision") 
+plt.title("precision segun la cantidad de imagenes por personas, con 41 personas y 10 autovalores");
+plt.plot(keys,valoresRed10[0],label='kNN,imgs red ');
+plt.plot(keys,valoresRed10[1],label='kNN pesado,imgs red ');
+plt.plot(keys,valoresBig10[0],label='kNN,imgs big ');
+plt.plot(keys,valoresBig10[1],label='kNN pesado,imgs big ');
 plt.legend(bbox_to_anchor=(1.1,0.4));
 plt.show();
 
 plt.xlabel("cantidad de imagenes por personas")
 plt.ylabel("recall")
-plt.title("recall segun la cantidad de imagenes por personas, con 41 personas");
-plt.plot(keys,valoresRed5[2],label='Funcion sin peso,Fotos reducidas y 5 autovalores');
-plt.plot(keys,valoresRed5[3],label='Funcion con moda,Fotos reducidas y 5 autovalores');
-plt.plot(keys,valoresBig5[2],label='Funcion sin peso,Fotos grandes y 5 autovalores');
-plt.plot(keys,valoresBig5[3],label='Funcion con moda,Fotos grandes y 5 autovalores');
-plt.plot(keys,valoresRed10[2],label='Funcion sin peso,Fotos reducidas y 10 autovalores');
-plt.plot(keys,valoresRed10[3],label='Funcion con moda,Fotos reducidas y 10 autovalores');
-plt.plot(keys,valoresBig10[2],label='Funcion sin peso,Fotos grandes y 10 autovalores');
-plt.plot(keys,valoresBig10[3],label='Funcion con moda,Fotos grandes y 10 autovalores');
+plt.title("recall segun la cantidad de imagenes por personas, con 41 personas y 5 autovalores");
+plt.plot(keys,valoresRed5[2],label='kNN,imgs red ');
+plt.plot(keys,valoresRed5[3],label='kNN pesado,imgs red ');
+plt.plot(keys,valoresBig5[2],label='kNN,imgs big ');
+plt.plot(keys,valoresBig5[3],label='kNN pesado,imgs big ');
+plt.legend(bbox_to_anchor=(1.1,0.4));
+plt.show();
+
+plt.xlabel("cantidad de imagenes por personas")
+plt.ylabel("recall")
+plt.title("recall segun la cantidad de imagenes por personas, con 41 personas y 10 autovalores");
+plt.plot(keys,valoresRed10[2],label='kNN,imgs red ');
+plt.plot(keys,valoresRed10[3],label='kNN pesado,imgs red ');
+plt.plot(keys,valoresBig10[2],label='kNN,imgs big ');
+plt.plot(keys,valoresBig10[3],label='kNN pesado,imgs big ');
 plt.legend(bbox_to_anchor=(1.1,0.4));
 plt.show();
 
 plt.xlabel("cantidad de imagenes por personas")
 plt.ylabel("specificity")
-plt.title("specificity segun la cantidad de imagenes por personas, con 41 personas");
-plt.plot(keys,valoresRed5[4],label='Funcion sin peso,Fotos reducidas y 5 autovalores');
-plt.plot(keys,valoresRed5[5],label='Funcion con moda,Fotos reducidas y 5 autovalores');
-plt.plot(keys,valoresBig5[4],label='Funcion sin peso,Fotos grandes y 5 autovalores');
-plt.plot(keys,valoresBig5[5],label='Funcion con moda,Fotos grandes y 5 autovalores');
-plt.plot(keys,valoresRed10[4],label='Funcion sin peso,Fotos reducidas y 10 autovalores');
-plt.plot(keys,valoresRed10[5],label='Funcion con moda,Fotos reducidas y 10 autovalores');
-plt.plot(keys,valoresBig10[4],label='Funcion sin peso,Fotos grandes y 10 autovalores');
-plt.plot(keys,valoresBig10[5],label='Funcion con moda,Fotos grandes y 10 autovalores');
+plt.title("specificity segun la cantidad de imagenes por personas, con 41 personas y 5 autovalores");
+plt.plot(keys,valoresRed5[4],label='kNN,imgs red ');
+plt.plot(keys,valoresRed5[5],label='kNN pesado,imgs red ');
+plt.plot(keys,valoresBig5[4],label='kNN,imgs big ');
+plt.plot(keys,valoresBig5[5],label='kNN pesado,imgs big ');
+plt.legend(bbox_to_anchor=(1.1,0.4));
+plt.show();
+
+
+plt.xlabel("cantidad de imagenes por personas")
+plt.ylabel("specificity")
+plt.title("specificity segun la cantidad de imagenes por personas, con 41 personas y 10 autovalores ");
+plt.plot(keys,valoresRed10[4],label='kNN,imgs red ');
+plt.plot(keys,valoresRed10[5],label='kNN pesado,imgs red ');
+plt.plot(keys,valoresBig10[4],label='kNN,imgs big ');
+plt.plot(keys,valoresBig10[5],label='kNN pesado,imgs big ');
 plt.legend(bbox_to_anchor=(1.1,0.4));
 plt.show();
 
 plt.xlabel("cantidad de imagenes por personas")
 plt.ylabel("f1")
-plt.title("f1 segun la cantidad de imagenes por personas, con 41 personas");
-plt.plot(keys,valoresRed5[6],label='Funcion sin peso,Fotos reducidas y 5 autovalores');
-plt.plot(keys,valoresRed5[7],label='Funcion con moda,Fotos reducidas y 5 autovalores');
-plt.plot(keys,valoresBig5[6],label='Funcion sin peso,Fotos grandes y 5 autovalores');
-plt.plot(keys,valoresBig5[7],label='Funcion con moda,Fotos grandes y 5 autovalores');
-plt.plot(keys,valoresRed10[6],label='Funcion sin peso,Fotos reducidas y 10 autovalores');
-plt.plot(keys,valoresRed10[7],label='Funcion con moda,Fotos reducidas y 10 autovalores');
-plt.plot(keys,valoresBig10[6],label='Funcion sin peso,Fotos grandes y 10 autovalores');
-plt.plot(keys,valoresBig10[7],label='Funcion con moda,Fotos grandes y 10 autovalores');
+plt.title("f1 segun la cantidad de imagenes por personas, con 41 personas y 5 autovalores");
+plt.plot(keys,valoresRed5[6],label='kNN,imgs red ');
+plt.plot(keys,valoresRed5[7],label='kNN pesado,imgs red ');
+plt.plot(keys,valoresBig5[6],label='kNN,imgs big ');
+plt.plot(keys,valoresBig5[7],label='kNN pesado,imgs big ');
+plt.legend(bbox_to_anchor=(1.1,0.4));
+plt.show();
+
+plt.xlabel("cantidad de imagenes por personas")
+plt.ylabel("f1")
+plt.title("f1 segun la cantidad de imagenes por personas, con 41 personas y 10 autovalores");
+plt.plot(keys,valoresRed10[6],label='kNN,imgs red ');
+plt.plot(keys,valoresRed10[7],label='kNN pesado,imgs red ');
+plt.plot(keys,valoresBig10[6],label='kNN,imgs big ');
+plt.plot(keys,valoresBig10[7],label='kNN pesado,imgs big ');
 plt.legend(bbox_to_anchor=(1.1,0.4));
 plt.show();
 
 plt.xlabel("cantidad de imagenes por personas")
 plt.ylabel("hitrate")
-plt.title("hitrate segun la cantidad de imagenes por personas, con 41 personas");
-plt.plot(keys,valoresRed5[8],label='Funcion sin peso,Fotos reducidas y 5 autovalores');
-plt.plot(keys,valoresRed5[9],label='Funcion con moda,Fotos reducidas y 5 autovalores');
-plt.plot(keys,valoresBig5[8],label='Funcion sin peso,Fotos grandes y 5 autovalores');
-plt.plot(keys,valoresBig5[9],label='Funcion con moda,Fotos grandes y 5 autovalores');
-plt.plot(keys,valoresRed10[8],label='Funcion sin peso,Fotos reducidas y 10 autovalores');
-plt.plot(keys,valoresRed10[9],label='Funcion con moda,Fotos reducidas y 10 autovalores');
-plt.plot(keys,valoresBig10[8],label='Funcion sin peso,Fotos grandes y 10 autovalores');
-plt.plot(keys,valoresBig10[9],label='Funcion con moda,Fotos grandes y 10 autovalores');
+plt.title("hitrate segun la cantidad de imagenes por personas, con 41 personas y 5 autovalores");
+plt.plot(keys,valoresRed5[8],label='kNN,imgs red ');
+plt.plot(keys,valoresRed5[9],label='kNN pesado,imgs red ');
+plt.plot(keys,valoresBig5[8],label='kNN,imgs big ');
+plt.plot(keys,valoresBig5[9],label='kNN pesado,imgs big ');
+plt.legend(bbox_to_anchor=(1.1,0.4));
+plt.show();
+
+
+plt.xlabel("cantidad de imagenes por personas")
+plt.ylabel("hitrate")
+plt.title("hitrate segun la cantidad de imagenes por personas, con 41 personas y 10 autovalores");
+plt.plot(keys,valoresRed10[8],label='kNN,imgs red ');
+plt.plot(keys,valoresRed10[9],label='kNN pesado,imgs red ');
+plt.plot(keys,valoresBig10[8],label='kNN,imgs big ');
+plt.plot(keys,valoresBig10[9],label='kNN pesado,imgs big ');
 plt.legend(bbox_to_anchor=(1.1,0.4));
 plt.show();
 
